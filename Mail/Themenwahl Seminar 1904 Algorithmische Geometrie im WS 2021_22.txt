@@ -1,0 +1,144 @@
+Liebe Seminarteilnehmerinnen und -teilnehmer,
+
+unten finden Sie die Liste unserer Seminarthemen zum Seminar 1904 Algorithmische Geometrie im WS 2021/22.
+
+Bitte wählen Sie möglichst mindestens drei gewünschte Vorschläge aus und antworten in den nächsten Tagen per E-Mail, bitte geben Sie nur die Nummern(!) zwischen 1 und 8 in der Reihenfolge Ihrer Prioritäten an, z. B. 1, 2, 3. Sie können auch angeben, warum Sie ein bestimmtes Thema unbedingt haben wollen, z. B. besondere Vorkenntnisse oder berufliche Anwendungen.
+
+Die Themen werden möglichst bald zugeteilt. Soweit es passt, bekommen Sie eines Ihrer Wunschthemen und die Ausgangsliteratur, die meisten werden wohl an Zweiergruppen gehen. Wenn Sie Ihr Team schon gefunden haben, antworten Sie bitte nur einmal für die Gruppe.
+
+Falls Sie trotz Anmeldung nicht teilnehmen möchten, schicken Sie uns bitte umgehend Ihre Absage.
+
+
+Viele Grüße von den Seminarbetreuern
+
+Lihong Ma und Christian Icking
+
+==============================================================
+1. Bewegungsplanung von Robotern
+
+   Wir betrachten das grundlegende Problem der Bewegungsplanung
+   um Hindernisse herum. In dieser Arbeit sollen die wichtigsten Konzepte
+   wie Arbeitsraum, Konfigurationsraum, Trapezkarte, Minkowski-Summe,
+   Translation und Rotation vorgestellt werden.
+
+   M. de Berg, O. Cheong, M. van Kreveld, M. H. Overmars
+   Computational Geometry: Algorithms and Applications, Chapter 13, Springer-Verlag 2008.
+
+
+2. Das No-Fit-Polygon 
+
+   Einen konvexen Roboter um Hindernisse herum zu bewegen ist äquivalent dazu,
+   den Roboter als Punkt zu betrachten und die Hindernisse passend zu vergrößern,
+   dies wird auch als Konfigurationsraum bezeichnet.
+   Eine solche Vergrößerung eines Polygons nennt man No-Fit-Polygon, das auch beim
+   möglichst sparsamen Ausschneiden von Formen aus einem ebenen Material benutzt
+   werden kann (stock cutting problem).
+   Hier soll der Orbiting-Algorithmus zur Berechnung des No-Fit-Polygons vorgestellt werden.
+
+   E. K. Burke, R. S. R. Heillier, G. Kendall, G. Whitwell
+   Complete and robust no-fit polygon generation for the irregular stock cutting problem
+   European Journal of Operational Research 2007.
+
+
+3. Gleichmäßige Flächenaufteilung von Polygonen
+
+   Ein polygonales Gebiet soll in möglichst gleich große Teilflächen aufgeteilt werden.
+   Anwendungen dafür gibt es viele, z. B. für Wahlkreise oder Postverteilbezirke usw.
+   Hier stellen wir uns vor, n Roboter sollen von ihren verteilten Startpunkten aus
+   ihr jeweiliges Teilgebiet abdecken (putzen, mähen, etc.), so dass sie sich nicht zu
+   weit von den Startpunkten entfernen. Wie kann man eine passende Aufteilung berechnen?
+
+   S. Hert, V. Lumelsky
+   Polygon Area Decomposition for Multiple-Robot Workspace Division
+   International Journal of Computational Geometry & Applications Vol. 08, No. 04
+   World Scientific 1998.
+
+
+4. Verfeinerte Delaunay-Triangulationen
+
+   Delaunay-Triangulationen wurden im Kurs 1840 eingeführt, insbesondere
+   ihr enger Zusammenhang mit Voronoi-Diagrammen, ihre charakteristischen
+   Eigenschaften wie die Winkeloptimalität und leere Umkreise sowie ihre
+   Berechnung. Für Anwendungszwecke wie Interpolationen oder Finite Elemente
+   benötigt man besonders gleichmäßige Triangulationen, zum Beispiel in
+   Bezug zu allen vorkommenden Winkeln oder Flächeninhalten.
+
+   In diesem Beitrag werden Techniken zur Verfeinerung der Delaunay-Triangulation
+   vorgestellt, die auf der einen Seite die schönen Delaunay-Eigenschaften
+   bewahren und zusätzlich Untergrenzen für Winkel garantieren sowie
+   die Flächen der Dreiecke möglichst gleich groß werden lassen.
+
+   J. R. Shewchuk
+   Delaunay Refinement Algorithms for Triangular Mesh Generation
+   University of California at Berkeley, 2001.
+
+
+5. Alpha-Shapes
+
+   Punkte in der Ebene oder im Raum können zusammen eine Figur darstellen;
+   für das menschliche Auge ist es kein Problem, die Form dieser Figur zu
+   "sehen", also Verbindungskanten zwischen manchen Punkten zu ergänzen,
+   so dass sich eine Kontur ergibt.
+
+   Hier soll eine Methode vorgestellt werden, wie so etwas über einen Algorithmus
+   berechnet werden kann. Die sogenannten Alpha-Shapes sind eine Verallgemeinerung
+   der konvexen Hülle und eine Teilmenge der Delaunay-Triangulation. Sie können
+   für die Rekonstruktion der Oberflächen von Punktwolken eingesetzt werden,
+   in zwei oder drei Dimensionen.
+
+   H. Edelsbrunner, D. Kirkpatrick, R. Seidel
+   On the Shape of a Set of Points in the Plane
+   IEEE Transactions on Information Theory 29 (4), pp. 551-559, 1983.
+   www.pi6.fernuni-hagen.de/downloads/Geometry/AlphaShape/eks-sspp-83.pdf
+
+   H. Edelsbrunner, E. Mücke
+   Three Dimensional Alpha Shapes
+   ACM Transactions on Graphics 13 (1), pp. 43-72, 1994.
+   www.pi6.fernuni-hagen.de/downloads/Geometry/AlphaShape/em-tdas-94.pdf
+
+
+6. Gewichtete Delaunay-Triangulationen
+
+   Wenn man Orte verschieden gewichtet, möchte man damit unterschiedliche
+   Bedeutungen, Kapazitäten oder Ähnliches repräsentieren. Die Power-Gewichtung
+   hat den großen Vorteil, dass Bisektoren von zwei Orten wie im ungewichteten Fall
+   Geraden sind. So kann man sogenannte Power-Diagramme und, was hier vorgestellt
+   werden soll, dazu duale Power-Triangulationen definieren und das bekannte
+   Prinzip des inkrementellen Edge-Flip-Algorithmus auf diese Strukturen verallgemeinern.
+   Im angegebenen Artikel wird das Ganze gleich in beliebigen Dimensionen dargestellt,
+   im Seminarbeitrag wollen wir uns aber auf den 2-dimensionalen Fall beschränken.
+
+   H. Edelsbrunner, N. R. Shah
+   Incremental Topological Flipping Works for Regular Triangulations
+   Algorithmica 15 (1996), pp. 223-241.
+
+
+7. Die konvexe Hülle in 3D und das sphärische Voronoi-Diagramm
+
+   In diesem Beitrag soll gezeigt werden, wie die konvexe Hülle von
+   Punkten in 3D mittels Divide & Conquer in Zeit O(n log n) konstruiert
+   werden kann. Interessanterweise kann dadurch das Voronoi-Diagramm von
+   Punkten auf der Kugeloberfläche überraschend einfach berechnet werden.
+
+   F. P. Preparata, M. Shamos
+   Computational Geometry: An Introduction, Chapter 3.4.3
+   Springer-Verlag 1985
+
+   K. Q. Brown
+   Geometric Transforms for Fast Geometric Algorithms, Chapter 4.2
+   Carnegie-Mellon University, Ph.D. Thesis 1979.
+
+
+8. Lokale Delaunay-Triangulationen
+
+   Wir modellieren ein Sensornetzwerk in der Ebene, in dem jeder Sensor nur seine
+   Koordinaten und seine über eine begrenzte Reichweite kontaktierbaren Nachbarsensoren
+   kennt. Dieses Netzwerk soll nun Nachrichten zu einem Zielknoten leiten können.
+   Dafür wird das Konzept der lokalen Delaunay-Triangulation vorgestellt und ein
+   Routing-Verfahren, das auf dieser Kantenmenge operiert.
+
+   Y. Sun, Q. F. Jiang, M. Singhal 
+   An Edge-Constrained Localized Delaunay Graph for Geographic Routing in Mobile Ad Hoc and Sensor Networks
+   IEEE Transactions on Mobile Computing Vol. 9. No. 4, April 2010
+
+

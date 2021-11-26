@@ -1,0 +1,22 @@
+Hallo Herr Loder und Herr Jendrny,
+
+zum Seminar 1904 Algorithmischen Geometrie bekommen Sie Ihr gewünschtes
+
+  Thema 3 "Gleichmäßige Flächenaufteilung von Polygonen"
+
+Bitte arbeiten Sie (sebastian.loder@outlook.com, sjendrny@posteo.de) zusammen als unser Team 3, ausgehend von dem Artikel
+
+  S. Hert, V. Lumelsky
+  Polygon Area Decomposition for Multiple-Robot Workspace Division
+  International Journal of Computational Geometry & Applications Vol. 08, No. 04
+  World Scientific 1998,
+
+den Sie bei uns herunterladen können:
+  http://www.pi6.fernuni-hagen.de/downloads/Seminare/Geom2021/HertLumelsky-PolygonAreaDecompositionMultpleRobotWorkspace-1998.pdf
+
+
+Weitere Details in Kürze.
+
+
+Viele Grüße
+Christian Icking

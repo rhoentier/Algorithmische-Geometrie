@@ -1,0 +1,39 @@
+Liebe Fernstudierende,
+
+wir begrüßen Sie zum Seminar 1904 Algorithmische Geometrie im Wintersemester 2021/22 und möchten Ihnen ein paar organisatorische Details erläutern.
+
+Bitte geben Sie uns zunächst möglichst bald folgende Informationen (nur für die, mit denen noch kein Kontakt mit uns Betreuern zum Seminarinhalt bestand und sorry, die Fragen sind wichtig für uns, weil in diesem Semester das Verteilverfahren ohne jeden Einfluss von uns Betreuern vom Prüfungsamt durchgezogen wurde):
+
+- Möchten Sie wirklich am Seminar "Algorithmische Geometrie" teilnehmen? Welche Kenntnisse haben Sie in diesem Bereich? (Beachten Sie, dass zu jedem Thema, siehe unten, gewisse Vorkenntnisse erforderlich sind, die Sie gegebenenfalls selbstständig erarbeiten müssen.)
+
+- Haben Sie besondere Wünsche zu Seminarthemen oder haben Sie eigene Themenvorschläge, gerne auch aus einem Anwendungsbereich, den Sie kennen?
+
+
+Bisher vorgesehene Themenbereiche:
+Roboterbewegungen, Berechnungen und Optimierungen Verallgemeinerungen von Delaunay-Triangulation und Voronoi-Diagramm Alpha-Shapes Konvexe Hülle in höheren Dimensionen
+
+
+Zur Themenwahl werden wir Ihnen in Kürze eine Liste zukommen lassen und die Themen dann unter Berücksichtigung Ihrer Präferenzen zuteilen, nach Möglichkeit werden Themen an Zweiergruppen vergeben.
+
+
+Vortragstermin:
+
+Die angekündigte Veranstaltung in Ingolstadt wird sich wahrscheinlich nicht wie geplant durchführen lassen. Vorgesehen ist im Moment eine Zoom-Konferenz am Montag/Dienstag 14. und 15. Februar 2022. Ihre Anwesenheit bei der Veranstaltung ist unbedingt erforderlich.
+
+
+Ausarbeitung und Vortrag:
+
+Zum Seminarthema bekommen Sie einen oder mehrere Artikel als Grundlage, dazu sollen Sie weitere Recherchen anstellen. Ihre Seminarleistung besteht aus einer wissenschaftlichen Ausarbeitung (mit LaTeX geschrieben) und einem Vortrag am genannten Termin. Zweiergruppen sollen den Text gemeinsam erstellen und gemeinsam einen Vortrag halten. Ihre individuelle Leistung wird mit einer Note zwischen 1 und 5 bewertet, wobei wir die Ausarbeitung mit 2/3 gewichten wollen, bei abgelehnten Ausarbeitungen (5,0) wird auf den Vortrag verzichtet.
+
+In Ihrem Text sollen Sie Ihr Thema in geeigneter Form aufbereiten, d. h. Sie sollen die Hauptaussagen zum Thema in einer gut verständlichen schriftlichen Ausarbeitung (LaTeX) festhalten und in einem Vortrag den Inhalt präsentieren. Der Vortrag soll ca. 35 Minuten lang sein, der Umfang der Ausarbeitung lässt sich nicht so leicht vorgeben, aber 10 Seiten sind normalerweise ein guter Wert, 20 Seiten können auch vorkommen, sind aber schon recht viel.
+
+Bei Abgabe der Ausarbeitung müssen Sie laut Prüfungsordnung eine Selbstständigkeitserklärung abgeben, bitte nehmen Sie die Anforderungen ernst, insbesondere zum Thema "Plagiat"!
+
+Eine Vorabversion der Ausarbeitung sollte ungefähr Mitte Dezember vorliegen, die endgültige Fassung bitte spätestens zum 1. Februar 2022. Die Ausarbeitungen werden als Seminarband an alle verteilt.
+
+Falls Sie trotz Anmeldung nicht teilnehmen möchten, schicken Sie uns bitte umgehend Ihre Absage. Bitte beachten Sie, dass Sie sich nur bis 31. Oktober ohne ein "nicht bestanden" vom Seminar abmelden können.
+
+
+Viele Grüße von den Seminarbetreuern
+
+Lihong Ma und Christian Icking
