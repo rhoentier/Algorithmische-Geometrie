@@ -2,12 +2,13 @@ from shapely import geometry
 from shapely.geometry import Polygon
 import matplotlib.pyplot as plt
 import random
+import math
 
 ###
 # Beschreibung:     Erzeugt eine zufällige Punktemenge und bildet die konvexe Hülle dieser Menge.
 # Eingabe:          num_of_points {int}:    Anzahl der Punkte, die im Polygon liegen sollen
 #                   border{int}:            Grenzen, in denen die Punkte liegen sollen 
-# Ausgabe:          {shapely.geometry.Polygon} Konfexes Polygon
+# Ausgabe:          {shapely.geometry.Polygon} Konvexes Polygon
 ###
 def get_random_convex_polygon(num_of_points, border):
 
@@ -31,6 +32,7 @@ def get_random_convex_polygon(num_of_points, border):
     points = get_outer_hull(points)
     polygon = Polygon(points)
     polygon = polygon.convex_hull
+    polygon = geometry.polygon.orient(polygon, sign=1.0)
     return polygon
 
 
@@ -91,6 +93,34 @@ def get_outer_hull(points):
     return outer_hull
     
 
+
+###
+# Beschreibung:     Erzeugt für ein Polygon eine zufällige Menge von festen Standorten auf dem Polygon.
+# Eingabe:          polygon {shapely.geometry.Polygon} Konvexes Polygon  
+#                   num_of_sites (int) Anzahl der festen Standorte
+# Ausgabe:          {list(tuple(int,int))} Liste von festen Standorten auf dem Rand eines Polygons
+###
+def create_sites(polygon, num_of_sites):
+
+    polygon = list(polygon.exterior.coords)
+    sites = []
+
+    for i in range(num_of_sites):
+        position = random.uniform(0, len(polygon) - 1)
+        index = math.floor(position)
+        position = position - index
+        if polygon[index][0] < polygon[index + 1][0]:
+            gradient = (polygon[index + 1][1] - polygon[index][1]) / (polygon[index + 1][0] - polygon[index][0])
+            site = (polygon[index][0] + position, polygon[index][1] + (gradient * position))
+        if polygon[index][0] > polygon[index + 1][0]:
+            gradient = (polygon[index][1] - polygon[index + 1][1]) / (polygon[index][0] - polygon[index + 1][0])
+            site = (polygon[index + 1][0] + position, polygon[index + 1][1] + (gradient * position))
+        if polygon[index][0] == polygon[index + 1][0]:
+            site = (polygon[index][0], polygon[index][1])
+        plt.scatter(site[0], site[1]) 
+        sites.append(site)
+
+
 ###
 # Beschreibung:     convex_divide implementiert den Algorithmus "ConvexDivide" (S.6) [Hert, Lumelsky]. Ein Polygon wird in zwei flächen-vollständige-Polygone geteilt.
 #                   In unserem Fall sind alle Flächen gleich groß.
@@ -138,7 +168,8 @@ def plot_polygon(polygon):
 
 
 if __name__ == "__main__":
-    for i in range(2):
+    for i in range(8):
         polygon = get_random_convex_polygon(12,30)
         #print(list(polygon.exterior.coords))
+        sites = create_sites(polygon, 4)
         plot_polygon(polygon)
