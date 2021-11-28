@@ -2,12 +2,13 @@ from shapely import geometry
 from shapely.geometry import Polygon
 import matplotlib.pyplot as plt
 import random
+import math
 
 ###
 # Beschreibung:     Erzeugt eine zufällige Punktemenge und bildet die konvexe Hülle dieser Menge.
 # Eingabe:          num_of_points {int}:    Anzahl der Punkte, die im Polygon liegen sollen
-#                   border{int}:            Grenzen, in denen die Punkte liegen sollen 
-# Ausgabe:          {shapely.geometry.Polygon} Konfexes Polygon
+#                   border {int}:            Grenzen, in denen die Punkte liegen sollen 
+# Ausgabe:          {shapely.geometry.Polygon} Konvexes Polygon
 ###
 def get_random_convex_polygon(num_of_points, border):
 
@@ -31,6 +32,7 @@ def get_random_convex_polygon(num_of_points, border):
     points = get_outer_hull(points)
     polygon = Polygon(points)
     polygon = polygon.convex_hull
+    polygon = geometry.polygon.orient(polygon, sign=1.0)
     return polygon
 
 
@@ -89,12 +91,102 @@ def get_outer_hull(points):
     outer_hull.extend(upper_left)
 
     return outer_hull
+
+
+###
+# Beschreibung:     Erzeugt für ein Polygon eine zufällige Menge von festen Standorten auf dem Polygon.
+# Eingabe:          polygon {shapely.geometry.Polygon} Konvexes Polygon  
+#                   num_of_sites (int) Anzahl der festen Standorte
+# Ausgabe:          {list(tuple(float,float))} Liste von festen Standorten auf dem Rand eines Polygons
+###
+def create_sites(polygon, num_of_sites):
+
+    polygon = list(polygon.exterior.coords)
+    sites = []
+
+    for i in range(num_of_sites):
+        position = random.uniform(0, len(polygon) - 1)
+        index = math.floor(position)
+        position = position - index
+        if polygon[index][0] < polygon[index + 1][0]:
+            x_distance = polygon[index + 1][0] - polygon[index][0]
+            y_distance = polygon[index + 1][1] - polygon[index][1]
+            x_coord = polygon[index][0] + (x_distance * position)
+            y_coord = polygon[index][1] + (y_distance * position)
+            site = (x_coord, y_coord)
+        if polygon[index][0] > polygon[index + 1][0]:
+            x_distance = polygon[index][0] - polygon[index + 1][0]
+            y_distance =polygon[index][1] - polygon[index + 1][1]
+            x_coord = polygon[index + 1][0] + (x_distance * position)
+            y_coord = polygon[index + 1][1] + (y_distance * position)
+            site = (x_coord, y_coord)
+        if polygon[index][0] == polygon[index + 1][0]:
+            site = (polygon[index][0], polygon[index][1])
+        plt.scatter(site[0], site[1]) 
+        sites.append(site)
+
+    return sites
+
+
+###
+# Beschreibung:     Fügt die Standorte in ein Polygon ein.
+# Eingabe:          polygon {shapely.geometry.Polygon} Konvexes Polygon  
+#                   sites {list(tuple(float,float))} Liste der festen Standorte
+# Ausgabe:          {list(tuple(float,float)) , list(tuple(float,float))} Liste mit Standorten und geometrischen Punkten in CCW und Liste mit Standorten in CCW
+###
+def combine_sites_polygon(polygon, sites):
     
+    polygon = list(polygon.exterior.coords)
+    list_w = []
+    sorted_sites = []
+    
+    for i in range(len(polygon)-1):
+        list_w.append(polygon[i])
+        current_sites = []
+        found_site = False
+        for site in sites:
+            if site[0] >= polygon[i][0] and site[0] <= polygon[i + 1][0]:
+                small_index = True
+                if site[1] >= polygon[i][1] and site[1] <= polygon[i + 1][1]:
+                    current_sites.append(site)
+                    found_site = True
+                elif site[1] < polygon[i][1] and site[1] > polygon[i + 1][1]:
+                    current_sites.append(site)
+                    found_site = True
+            elif site[0] < polygon[i][0] and site[0] > polygon[i + 1][0]:
+                small_index = False
+                if site[1] >= polygon[i][1] and site[1] <= polygon[i + 1][1]:
+                    current_sites.append(site)
+                    found_site = True
+                elif site[1] < polygon[i][1] and site[1] > polygon[i + 1][1]:
+                    current_sites.append(site)
+                    found_site = True
+        if found_site:
+            if small_index:
+                current_sites.sort(key=get_x_coordinate)
+            else:
+                current_sites.sort(key=get_x_coordinate, reverse=True)
+            list_w.extend(current_sites)
+            sorted_sites.extend(current_sites)
+    
+    list_w.append(polygon[len(polygon)-1])
+    return list_w, sorted_sites
+
+
+###
+# Beschreibung:     Erzeugt für ein Polygon und eine Menge von Standorten die jeweiligen benötigten Flächen
+# Eingabe:          polygon {shapely.geometry.Polygon} Konvexes Polygon
+#                   sites {list(tuple(float,float))} Liste der festen Standorte
+# Ausgabe:          {list(tuple(tuple(float,float), float) Liste mit Standorten und derer jeweils benötigten Fläche
+###
+def create_area_requirement(polygon, sites):
+    pass
+
 
 ###
 # Beschreibung:     convex_divide implementiert den Algorithmus "ConvexDivide" (S.6) [Hert, Lumelsky]. Ein Polygon wird in zwei flächen-vollständige-Polygone geteilt.
 #                   In unserem Fall sind alle Flächen gleich groß.
-# Eingabe:          Ein Polygon, deren Knoten in CCC-Folge gegeben sind
+# Eingabe:          Ein Polygon und die Standorte, deren Knoten in CCW-Folge gegeben sind
 # Ausgabe:          Zwei Polygone, die flächen-vollständig sind
 ###
 def convex_divide(polygon):
@@ -103,8 +195,8 @@ def convex_divide(polygon):
 
 ###
 # Beschreibung:     Gibt die X-Koordinate eines Punktes wieder
-# Eingabe:          {tuple(int, int)} Punkt
-# Ausgabe:          {int} X-Coordinate eines Punktes
+# Eingabe:          {tuple(<type>, <type>)} Punkt
+# Ausgabe:          {<ype>} X-Coordinate eines Punktes
 ###
 def get_x_coordinate(point):
     return point[0]
@@ -130,15 +222,19 @@ def plot_polygon(polygon):
     ax.spines['left'].set_visible(False)
 
     #hide x-axis
-    ax.get_xaxis().set_visible(False)
+    # ax.get_xaxis().set_visible(False)
     #hide y-axis 
-    ax.get_yaxis().set_visible(False)
+    # ax.get_yaxis().set_visible(False)
 
     plt.show()
 
 
 if __name__ == "__main__":
-    for i in range(2):
+    for i in range(1):
         polygon = get_random_convex_polygon(12,30)
         #print(list(polygon.exterior.coords))
+        sites = create_sites(polygon, 4)
+        list_w, sites = combine_sites_polygon(polygon, sites)
+        print("List_w: " + str(list_w))
+        print("Sites: " + str(sites))
         plot_polygon(polygon)
