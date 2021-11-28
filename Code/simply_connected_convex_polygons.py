@@ -132,12 +132,13 @@ def create_sites(polygon, num_of_sites):
 # Beschreibung:     Fügt die Standorte in ein Polygon ein.
 # Eingabe:          polygon {shapely.geometry.Polygon} Konvexes Polygon  
 #                   sites {list(tuple(float,float))} Liste der festen Standorte
-# Ausgabe:          {list(tuple(float,float))} Liste mit Standorten und geometrischen Punkten in CCW
+# Ausgabe:          {list(tuple(float,float)) , list(tuple(float,float))} Liste mit Standorten und geometrischen Punkten in CCW und Liste mit Standorten in CCW
 ###
 def combine_sites_polygon(polygon, sites):
     
     polygon = list(polygon.exterior.coords)
     list_w = []
+    sorted_sites = []
     
     for i in range(len(polygon)-1):
         list_w.append(polygon[i])
@@ -166,9 +167,20 @@ def combine_sites_polygon(polygon, sites):
             else:
                 current_sites.sort(key=get_x_coordinate, reverse=True)
             list_w.extend(current_sites)
+            sorted_sites.extend(current_sites)
     
     list_w.append(polygon[len(polygon)-1])
-    return(list_w)
+    return list_w, sorted_sites
+
+
+###
+# Beschreibung:     Erzeugt für ein Polygon und eine Menge von Standorten die jeweiligen benötigten Flächen
+# Eingabe:          polygon {shapely.geometry.Polygon} Konvexes Polygon
+#                   sites {list(tuple(float,float))} Liste der festen Standorte
+# Ausgabe:          {list(tuple(tuple(float,float), float) Liste mit Standorten und derer jeweils benötigten Fläche
+###
+def create_area_requirement(polygon, sites):
+    pass
 
 
 ###
@@ -222,5 +234,7 @@ if __name__ == "__main__":
         polygon = get_random_convex_polygon(12,30)
         #print(list(polygon.exterior.coords))
         sites = create_sites(polygon, 4)
-        list_w = combine_sites_polygon(polygon, sites)
+        list_w, sites = combine_sites_polygon(polygon, sites)
+        print("List_w: " + str(list_w))
+        print("Sites: " + str(sites))
         plot_polygon(polygon)
