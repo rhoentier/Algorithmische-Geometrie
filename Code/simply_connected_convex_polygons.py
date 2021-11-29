@@ -169,7 +169,6 @@ def combine_sites_polygon(polygon, sites):
             list_w.extend(current_sites)
             sorted_sites.extend(current_sites)
     
-    list_w.append(polygon[len(polygon)-1])
     return list_w, sorted_sites
 
 
@@ -180,17 +179,211 @@ def combine_sites_polygon(polygon, sites):
 # Ausgabe:          {list(tuple(tuple(float,float), float) Liste mit Standorten und derer jeweils benötigten Fläche
 ###
 def create_area_requirement(polygon, sites):
-    pass
+    
+    area_requirement_p = polygon.area
+    num_of_sites = len(sites)
+    area_requirement_s = area_requirement_p / num_of_sites
+    list_s = []
+
+    for site in sites:
+        list_s.append((site, area_requirement_s))
+
+    return list_s
 
 
 ###
 # Beschreibung:     convex_divide implementiert den Algorithmus "ConvexDivide" (S.6) [Hert, Lumelsky]. Ein Polygon wird in zwei flächen-vollständige-Polygone geteilt.
 #                   In unserem Fall sind alle Flächen gleich groß.
-# Eingabe:          Ein Polygon und die Standorte, deren Knoten in CCW-Folge gegeben sind
+# Eingabe:          list_w  {list(tuple(float,float))} Ein Polygon und die Standorte, deren Knoten in CCW-Folge gegeben sind
+#                   list_s  {list(tuple(tuple(float,float), float) Liste mit Standorten und derer jeweils benötigten Fläche
 # Ausgabe:          Zwei Polygone, die flächen-vollständig sind
 ###
-def convex_divide(polygon):
-    pass
+def convex_divide(list_w, list_s):
+    
+    increment = 0.01
+    epsilon = 1.0
+
+    line_l = (list_w[0], list_s[0][0])
+    sites_p_r = [list_s[0]]
+    print(line_l)
+    polygon_p_l, polygon_p_r = cut_polygon(list_w, line_l)
+
+    if len(polygon_p_r) < 3:
+        area_p_r = 0
+    else:
+        polygon_p_r = Polygon(polygon_p_r)
+        area_p_r = polygon_p_r.area
+
+    required_area_p_r = 0
+    for site in sites_p_r:
+        required_area_p_r = required_area_p_r + site[1]
+    
+    k = 1
+    while area_p_r < required_area_p_r and line_l[1] != list_s[len(list_s) - 1][0]:
+        sites_p_r.append(list_s[k])
+        line_l = (list_w[0], list_s[k][0])
+        k = k + 1
+
+        polygon_p_l, polygon_p_r = cut_polygon(list_w, line_l)
+        if len(polygon_p_r) < 3:
+            area_p_r = 0
+        else:
+            polygon_p_r = Polygon(polygon_p_r)
+            area_p_r = polygon_p_r.area
+
+        required_area_p_r = 0
+        for site in sites_p_r:
+            required_area_p_r = required_area_p_r + site[1]
+
+        if area_p_r != 0:
+            ###### FOR DEBUGGING ######
+            for site in list_s:
+                plt.scatter(site[0][0], site[0][1])
+            x,y = polygon_p_r.exterior.xy
+            plt.plot(x,y, linestyle='--')
+
+            polygon_p_l = Polygon(polygon_p_l)
+            x,y = polygon_p_l.exterior.xy
+            plt.plot(x,y, linestyle=':')
+            print("")
+            plt.show()
+            ###### FOR DEBUGGING ######
+    
+    if line_l[1] == list_s[0][0] and area_p_r > required_area_p_r:
+        while area_p_r > (required_area_p_r + epsilon):
+            index_in_w = list_w.index(list_s[0][0])
+            x_difference = list_w[index_in_w + 1][0] - list_w[index_in_w][0]
+            y_difference = list_w[index_in_w + 1][1] - list_w[index_in_w][1]
+
+            line_l = ((line_l[0][0] + x_difference * increment, line_l[0][1] + y_difference * increment), line_l[1])
+            
+            polygon_p_l, polygon_p_r = cut_polygon(list_w, line_l)
+            if len(polygon_p_r) < 3:
+                area_p_r = 0
+            else:
+                polygon_p_r = Polygon(polygon_p_r)
+                area_p_r = polygon_p_r.area
+
+            required_area_p_r = 0
+            for site in sites_p_r:
+                required_area_p_r = required_area_p_r + site[1]
+
+    elif line_l[1] == list_s[len(list_s) - 1][0] and area_p_r > required_area_p_r:
+        while area_p_r > (required_area_p_r + epsilon):
+            index_in_w = list_w.index(list_s[len(list_s) - 1][0])
+            x_difference = list_w[index_in_w - 1][0] - list_w[index_in_w][0]
+            y_difference = list_w[index_in_w - 1][1] - list_w[index_in_w][1]
+
+            line_l = (line_l[0], (line_l[1][0] + x_difference * increment, line_l[1][1] + y_difference * increment))
+            
+            polygon_p_l, polygon_p_r = cut_polygon(list_w, line_l)
+            if len(polygon_p_r) < 3:
+                area_p_r = 0
+            else:
+                polygon_p_r = Polygon(polygon_p_r)
+                area_p_r = polygon_p_r.area
+
+            required_area_p_r = 0
+            for site in sites_p_r:
+                required_area_p_r = required_area_p_r + site[1]
+
+
+
+###
+# Beschreibung:     Teilt ein Polygon durch eine Linie L
+# Eingabe:          list_w  {list(tuple(float,float))} Ein Polygon und die Standorte, deren Knoten in CCW-Folge gegeben sind
+#                   line_l  {tuple(tuple(float,float), tuple(float,float))} Eine Linie, die beide Endpunkte auf dem Rand des Polygons hat
+# Ausgabe:          {list(tuple(float,float)), list(tuple(float,float))} Zwei Polygone
+###
+def cut_polygon(list_w, line_l):
+    
+    if line_l[0] in list_w and line_l[1] in list_w:
+        index_in_w_0 = list_w.index(line_l[0])
+        index_in_w_1 = list_w.index(line_l[1])
+
+        difference = abs(index_in_w_0 - index_in_w_1)
+        if difference == 1:
+            if line_l[0][1] < line_l[1][1]:
+                list_w_r = list_w
+                list_w_l = line_l
+                return list_w_l, list_w_r
+            else:
+                list_w_r = line_l
+                list_w_l = list_w
+                return list_w_l, list_w_r
+
+
+    changed_direction = False
+    if line_l[0][0] < line_l[1][0]:
+        if line_l[0][1] < line_l[1][1]:
+            list_w_r = [line_l[0]]
+        elif line_l[0][1] > line_l[1][1]:
+            list_w_r = [line_l[1]]
+            changed_direction = True
+        elif line_l[0][1] == line_l[1][1]:
+            list_w_r = [line_l[1]]
+            changed_direction = True
+    elif line_l[0][0] > line_l[1][0]:
+        if line_l[0][1] < line_l[1][1]:
+            list_w_r = [line_l[0]]
+        elif line_l[0][1] > line_l[1][1]:
+            list_w_r = [line_l[1]]
+            changed_direction = True
+        elif line_l[0][1] == line_l[1][1]:
+            list_w_r = [line_l[0]]
+    elif line_l[0][0] == line_l[1][0]:
+        if line_l[0][1] < line_l[1][1]:
+            list_w_r = [line_l[0]]
+        elif line_l[0][1] > line_l[1][1]:
+            list_w_r = [line_l[1]]
+            changed_direction = True
+
+    starting_index = len(list_w)-1
+    for i in range(len(list_w) - 1):
+        if list_w_r[0] == list_w[i]:
+            starting_index = i
+            break
+        elif list_w_r[0][0] > list_w[i][0] and list_w_r[0][0] < list_w[i + 1][0]:
+            starting_index = i+1
+            break
+        elif list_w_r[0][0] == list_w[i][0] and list_w_r[0][0] == list_w[i + 1][0]:
+            starting_index = i+1
+            break
+    
+
+    if changed_direction:
+        end_point = line_l[0]
+        starting_point = line_l[1]
+    else:
+        end_point = line_l[1]
+        starting_point = line_l[0]
+
+
+    end_index = len(list_w) - 1
+    for i in range(len(list_w) - 1):
+        if end_point == list_w[i]:
+            end_index = i
+            break
+        elif end_point[0] < list_w[i][0] and end_point[0] > list_w[i + 1][0]:
+            end_index = i - 1
+            break
+        elif end_point[0] == list_w[i][0] and end_point[0] == list_w[i + 1][0]:
+            end_index = i - 1
+            break
+
+    list_w_r.extend(list_w[starting_index:end_index])
+    list_w_r.append(end_point)
+    if list_w_r[0] == list_w_r[1]:
+        list_w_r.pop(1)
+    
+    list_w_l = [end_point]
+    list_w_l.extend(list_w[end_index:])
+    list_w_l.extend(list_w[:starting_index])
+    list_w_l.append(starting_point)
+    if list_w_l[len(list_w_l) - 1] == list_w_l[len(list_w_l) - 2]:
+        list_w_r.pop(len(list_w_l) - 1)
+
+    return list_w_l, list_w_r
 
 
 ###
@@ -233,8 +426,8 @@ if __name__ == "__main__":
     for i in range(1):
         polygon = get_random_convex_polygon(12,30)
         #print(list(polygon.exterior.coords))
-        sites = create_sites(polygon, 4)
+        sites = create_sites(polygon, 5)
         list_w, sites = combine_sites_polygon(polygon, sites)
-        print("List_w: " + str(list_w))
-        print("Sites: " + str(sites))
-        plot_polygon(polygon)
+        list_s = create_area_requirement(polygon, sites)
+        convex_divide(list_w, list_s)
+        #plot_polygon(polygon)
