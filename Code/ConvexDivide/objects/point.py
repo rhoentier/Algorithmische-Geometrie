@@ -40,7 +40,7 @@ class Point:
 
     def equal(self, otherPoint):
         delta = 0.01
-        if abs(self.x - otherPoint.x) < delta and abs(self.y - otherPoint.y < delta):
+        if abs(self.x - otherPoint.x) < delta and abs(self.y - otherPoint.y) < delta:
             return True
         return False
 
