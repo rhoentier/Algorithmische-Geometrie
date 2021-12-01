@@ -1,4 +1,5 @@
 import random
+import numpy as np
 
 def side(p, LS, LE):
     epsilon = 0.001
@@ -10,7 +11,9 @@ def side(p, LS, LE):
     if d > 0:
         return "r"
 
-# Line class
+# Problem class
+# A "Problem" is defined as a set of ordered points (V) (a polygon) and a set of sites (S) positioned on the polygon
+# The initialization can either be done with W (including points and sites) or separated with V (points) and S (sites)
 class Problem:
     def __init__(self, **kwargs):
         self.W = kwargs.get('W', None)
@@ -22,11 +25,13 @@ class Problem:
             self.S = [x for x in self.W if x.type() == "Site"]
 
         elif self.W == None and self.V != None and self.S != None:
+
             num_pts = len(self.V)
             tmp = []
             for i, v in enumerate(self.V):
                 tmp.append(v)
                 for s in self.S:
+
                     if side(s, v, self.V[(i + 1) % num_pts]) == "o":
                         tmp.append(s)
                         break
@@ -59,3 +64,23 @@ class Problem:
         print("")
         self.V = [x for x in self.W if x.type() == "Point"]
         self.S = [x for x in self.W if x.type() == "Site"]
+
+    def area(self):
+        x = [p.x for p in self.V]
+        y = [p.y for p in self.V]
+        return 0.5 * np.abs(np.dot(x, np.roll(y, 1)) - np.dot(y, np.roll(x, 1)))
+
+    def requiredArea(self, P_area):
+        return sum([s.c * P_area for s in self.S])
+
+    def appendPoint(self, p):
+        self.V.append(p)
+        self.updateW()
+
+    def appendSite(self, s):
+        self.S.append(s)
+        self.updateW()
+
+    def updateW(self):
+        pass
+        # to be done

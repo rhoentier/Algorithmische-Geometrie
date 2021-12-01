@@ -3,7 +3,6 @@ from objects.point import Point
 from objects.site import Site
 from objects.line import Line
 from objects.polygon import Polygon
-from objects.pl import PL
 from objects.problem import Problem
 import external
 import math
@@ -27,7 +26,10 @@ def intersection(p1, p2, p3, p4):
     return Point(p1.x + t*(p2.x-p1.x), p1.y + t * (p2.y-p1.y), "Intersection")
 
 def cut(V, LS, LE):
-    # https://geidav.wordpress.com/2015/03/21/splitting-an-arbitrary-polygon-by-a-line/
+    # V = list with polygon points (of class Point)
+    # LS = starting point (class Point)
+    # LE = ending point (class Point)
+    # Basic idea can be found here: https://geidav.wordpress.com/2015/03/21/splitting-an-arbitrary-polygon-by-a-line/
 
     V.append(V[0])
     PrL = []
@@ -58,6 +60,8 @@ def cut(V, LS, LE):
             prevSide = s
 
     V.pop()
+
+    # returns two lists with objects of class point
     return PrL, PlL
 
 def length(p1, p2):

@@ -1,11 +1,9 @@
 import copy
-
 import matplotlib.pyplot as plt
 from objects.point import Point
 from objects.site import Site
 from objects.line import Line
 from objects.polygon import Polygon
-from objects.pl import PL
 from objects.problem import Problem
 from external import move, numSites, cut
 
@@ -58,10 +56,12 @@ if __name__ == '__main__':
         #L = Line(LS, LE)
         #L.plot()
 
-        PrL, PlL = cut(V, LS, LE)
+        V_PrL, V_PlL = cut(V, LS, LE)
+        PrL = Problem(V = V_PrL, S = [S[0]])
+        PlL = Problem(V = V_PlL, S = S[1:])
 
         # Init PrL
-        PrL = PL(PrL, "r", [S[0]])
+        # PrL = PL(PrL, "r", [S[0]])
 
         # Move line CCW
 
@@ -73,7 +73,7 @@ if __name__ == '__main__':
             LE = W[k0 + k].copy("LE")
             PrL.appendPoint(W[k0 + k])
 
-        tmpR = copy.deepcopy(PrL.sites)
+        tmpR = copy.deepcopy(PrL.S)
         l = len(tmpR)
         tmpL = S[l:]
 
@@ -83,24 +83,24 @@ if __name__ == '__main__':
         if LE.equal(S[0]) and PrL.area() > PrL.requiredArea(P.area()):
             while PrL.area() > PrL.requiredArea(P.area()):
                 move(LS, V, "CCW", 0.001)
-                PrL, PlL = cut(V, LS, LE)
-                PrL = PL(PrL, "r", tmpR)
-                PlL = PL(PlL, "l", tmpL)
+                V_PrL, V_PlL = cut(V, LS, LE)
+                PrL = Problem(V = V_PrL, S = tmpR)
+                PlL = Problem(V = V_PlL, S = tmpL)
         elif LE.equal(S[-1]) and PrL.area() < PrL.requiredArea(P.area()):
             while PrL.area() < PrL.requiredArea(P.area()):
                 move(LS, V, "CW", 0.001)
-                PrL, PlL = cut(V, LS, LE)
-                PrL = PL(PrL, "r", tmpR)
-                PlL = PL(PlL, "l", tmpL)
+                V_PrL, V_PlL = cut(V, LS, LE)
+                PrL = Problem(V = V_PrL, S = tmpR)
+                PlL = Problem(V = V_PlL, S = tmpL)
         else:
             while PrL.area() > PrL.requiredArea(P.area()):
                 move(LE, V, "CW", 0.001)
-                PrL, PlL = cut(V, LS, LE)
-                PrL = PL(PrL, "r", tmpR)
-                PlL = PL(PlL, "l", tmpL)
+                V_PrL, V_PlL = cut(V, LS, LE)
+                PrL = Problem(V = V_PrL, S = tmpR)
+                PlL = Problem(V = V_PlL, S = tmpL)
 
-        P1 = Problem(V = PrL.points, S = PrL.sites)
-        P2 = Problem(V = PlL.points, S = PlL.sites)
+        P1 = Problem(V = PrL.V, S = PrL.S)
+        P2 = Problem(V = PlL.V, S = PlL.S)
 
         # For fun, nicer images if shuffeled?
         #P1.shuffle()
