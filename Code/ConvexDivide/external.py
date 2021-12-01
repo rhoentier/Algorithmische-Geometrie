@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 from objects.point import Point
 from objects.site import Site
 from objects.line import Line
-from objects.polygon import Polygon
 from objects.problem import Problem
 import external
 import math

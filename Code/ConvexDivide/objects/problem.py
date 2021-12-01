@@ -1,5 +1,6 @@
 import random
 import numpy as np
+import matplotlib.pyplot as plt
 
 def side(p, LS, LE):
     epsilon = 0.001
@@ -84,3 +85,16 @@ class Problem:
     def updateW(self):
         pass
         # to be done
+
+    def plotV(self, **kwargs):
+
+        color = kwargs.get('color', "k")
+
+        xs = [p.x for p in self.V]
+        ys = [p.y for p in self.V]
+        xs.append(xs[0])
+        ys.append(ys[0])
+        plt.plot(xs, ys, color = color, zorder=5)
+
+        for p in self.V:
+            p.plot(color)

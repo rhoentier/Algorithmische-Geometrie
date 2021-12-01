@@ -3,10 +3,9 @@ import matplotlib.pyplot as plt
 from objects.point import Point
 from objects.site import Site
 from objects.line import Line
-from objects.polygon import Polygon
 from objects.problem import Problem
 from external import move, numSites, cut
-
+import random
 import numpy as np
 
 if __name__ == '__main__':
@@ -23,7 +22,18 @@ if __name__ == '__main__':
     ax.set_xlabel('x-Achse')
     ax.set_ylabel('y-Achse')
 
-    P_init = Problem(V=[Point(8, 9, "P1"), Point(0, 7, "P2"), Point(0, 4, "P3"), Point(2, 0, "P4"), Point(7, 0, "P5"), Point(10, 3, "P6")], S=[Site(4, 8, "S1", 0.15), Site(1, 2, "S2", 0.3), Site(4, 0, "S3", 0.15), Site(6, 0, "S4", 0.15), Site(8, 1, "S5", 0.5)])
+    c1 = random.random()
+    c2 = random.random()
+    c3 = random.random()
+    print(c1)
+    print(c2)
+    print(c3)
+
+    c1 = 0.6167459380236905
+    c2 = 0.6325729272455425
+    c3 = 0.5933091568485259
+
+    P_init = Problem(V=[Point(8, 9, "P1"), Point(0, 7, "P2"), Point(0, 4, "P3"), Point(2, 0, "P4"), Point(7, 0, "P5"), Point(10, 3, "P6")], S=[Site(4, 8, "S1", c1), Site(1, 2, "S2", c2), Site(9, 6, "S3", c3)])
     P_init.normalize()
 
     for s in P_init.S:
@@ -40,8 +50,7 @@ if __name__ == '__main__':
         S = P.S
 
         [s.plot("r", marker="^", size=70) for s in S]   # Plot sites
-        P = Polygon(V)                                  # Plot polygon
-        P.plot(color = "skyblue")
+        P.plotV(color = "skyblue")
 
         LS = W[0].copy("LS")
 
@@ -53,15 +62,9 @@ if __name__ == '__main__':
                 break
             k0 += 1              # index of first site
 
-        #L = Line(LS, LE)
-        #L.plot()
-
         V_PrL, V_PlL = cut(V, LS, LE)
         PrL = Problem(V = V_PrL, S = [S[0]])
         PlL = Problem(V = V_PlL, S = S[1:])
-
-        # Init PrL
-        # PrL = PL(PrL, "r", [S[0]])
 
         # Move line CCW
 
@@ -76,9 +79,6 @@ if __name__ == '__main__':
         tmpR = copy.deepcopy(PrL.S)
         l = len(tmpR)
         tmpL = S[l:]
-
-            #L = Line(LS, LE)
-            #L.plot()
 
         if LE.equal(S[0]) and PrL.area() > PrL.requiredArea(P.area()):
             while PrL.area() > PrL.requiredArea(P.area()):
