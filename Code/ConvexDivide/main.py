@@ -22,35 +22,38 @@ if __name__ == '__main__':
     ax.set_xlabel('x-Achse')
     ax.set_ylabel('y-Achse')
 
-    c1 = random.random()
-    c2 = random.random()
-    c3 = random.random()
-    print(c1)
-    print(c2)
-    print(c3)
+    P_init = Problem(V=[Point(8, 9, "P1"), Point(0, 7, "P2"), Point(0, 4, "P3"), Point(2, 0, "P4"), Point(7, 0, "P5"), Point(10, 3, "P6")], S=[])
+    num = 5
+    while num > 0:
+        P_init.addRandomSite()
+        num -= 1
 
-    c1 = 0.6167459380236905
-    c2 = 0.6325729272455425
-    c3 = 0.5933091568485259
+    #P_init.addSite(Site(5.187074674214591,8.296768668553648, "xx", 0.77334445885401248))
+    #P_init.addSite(Site(0.0,4.550525314434614, "xx", 0.2851059559985002))
 
-    P_init = Problem(V=[Point(8, 9, "P1"), Point(0, 7, "P2"), Point(0, 4, "P3"), Point(2, 0, "P4"), Point(7, 0, "P5"), Point(10, 3, "P6")], S=[Site(4, 8, "S1", c1), Site(1, 2, "S2", c2), Site(9, 6, "S3", c3)])
     P_init.normalize()
 
     for s in P_init.S:
         print(s)
-    P_main = [P_init]
 
-    while numSites(P_main) != -1:   # As long as there are Problems with more than one Site
+    openProblems = []
+    finishedProblems = []
+    openProblems.append(P_init)
 
-        P = P_main.pop(numSites(P_main))
+    while len(openProblems) > 0:   # As long as there are Problems with more than one Site
+
+        P = openProblems.pop()
 
         # Input
         W = P.W
         V = P.V
         S = P.S
 
-        [s.plot("r", marker="^", size=70) for s in S]   # Plot sites
+        [s.plot("r", marker="x", size=70) for s in S]   # Plot sites
         P.plotV(color = "skyblue")
+
+
+
 
         LS = W[0].copy("LS")
 
@@ -64,17 +67,19 @@ if __name__ == '__main__':
 
         V_PrL, V_PlL = cut(V, LS, LE)
         PrL = Problem(V = V_PrL, S = [S[0]])
-        PlL = Problem(V = V_PlL, S = S[1:])
 
         # Move line CCW
 
         k = 0
         while PrL.area() < PrL.requiredArea(P.area()) and LE.notEqual(S[-1]):
-            if k > 1 and W[k0 + k - 1].type() == "Site":
-                PrL.appendSite(W[k0 + k - 1])
+            if k > 1 and W[k0 + k].type() == "Site":
+                PrL.appendSite(W[k0 + k])
             k += 1
             LE = W[k0 + k].copy("LE")
             PrL.appendPoint(W[k0 + k])
+
+            prlarea = PrL.area()
+            prlreq = PrL.requiredArea(P.area())
 
         tmpR = copy.deepcopy(PrL.S)
         l = len(tmpR)
@@ -83,24 +88,29 @@ if __name__ == '__main__':
         if LE.equal(S[0]) and PrL.area() > PrL.requiredArea(P.area()):
             while PrL.area() > PrL.requiredArea(P.area()):
                 move(LS, V, "CCW", 0.001)
-                V_PrL, V_PlL = cut(V, LS, LE)
-                PrL = Problem(V = V_PrL, S = tmpR)
-                PlL = Problem(V = V_PlL, S = tmpL)
+                V_PrL = cut(V, LS, LE)
+                PrL = Problem(V = V_PrL[0], S = PrL.S)
+
         elif LE.equal(S[-1]) and PrL.area() < PrL.requiredArea(P.area()):
             while PrL.area() < PrL.requiredArea(P.area()):
                 move(LS, V, "CW", 0.001)
-                V_PrL, V_PlL = cut(V, LS, LE)
-                PrL = Problem(V = V_PrL, S = tmpR)
-                PlL = Problem(V = V_PlL, S = tmpL)
+                V_PrL = cut(V, LS, LE)
+                PrL = Problem(V = V_PrL[0], S = PrL.S)
+                #LS.plot("g")
+                #plt.savefig('polygon.png')
+
         else:
             while PrL.area() > PrL.requiredArea(P.area()):
                 move(LE, V, "CW", 0.001)
-                V_PrL, V_PlL = cut(V, LS, LE)
-                PrL = Problem(V = V_PrL, S = tmpR)
-                PlL = Problem(V = V_PlL, S = tmpL)
+                V_PrL = cut(V, LS, LE)
+                PrL = Problem(V = V_PrL[0], S = PrL.S)
 
-        P1 = Problem(V = PrL.V, S = PrL.S)
-        P2 = Problem(V = PlL.V, S = PlL.S)
+
+        V_PrL, V_PlL = cut(V, LS, LE)
+
+
+        P1 = Problem(V = V_PrL, S = PrL.S)
+        P2 = Problem(V = V_PlL, S = S[len(PrL.S):])
 
         # For fun, nicer images if shuffeled?
         #P1.shuffle()
@@ -109,8 +119,15 @@ if __name__ == '__main__':
         P1.normalize()
         P2.normalize()
 
-        P_main.append(P1)
-        P_main.append(P2)
+        if P1.numSites() > 1:
+            openProblems.append(P1)
+        else:
+            finishedProblems.append(P2)
+
+        if P2.numSites() > 1:
+            openProblems.append(P2)
+        else:
+            finishedProblems.append(P2)
 
         L = Line(LS, LE)
         L.plot(color = "r")

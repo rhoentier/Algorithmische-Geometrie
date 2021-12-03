@@ -30,35 +30,35 @@ def cut(V, LS, LE):
     # LE = ending point (class Point)
     # Basic idea can be found here: https://geidav.wordpress.com/2015/03/21/splitting-an-arbitrary-polygon-by-a-line/
 
-    V.append(V[0])
     PrL = []
     PlL = []
-    prevSide = None
-    prevPoint = None
 
-    for i, v in enumerate(V):
-        s = side(v, LS, LE)
+    # Special case if P1 and P2 are on line -> all to the left
+    if side(V[0], LS, LE) == "o" and side(V[1], LS, LE) == "o":
+        PrL = [V[0]]
+        PlL = V
+        return PrL, PlL
+    elif side(V[0], LS, LE) == "o" and side(V[-1], LS, LE) == "o":
+        PrL = V
+        PlL = []
+        return PrL, PlL
+    else:
+        for i, v in enumerate(V):
+            j = (i + 1) % len(V)
 
-        if i > 0:
-            tmp = prevSide + s
+            si = side(V[i], LS, LE)
+            sj = side(V[j], LS, LE)
+
+            if si == "o" or si == "r":
+                PrL.append(v)
+            elif si == "o" or si == "l":
+                PlL.append(v)
+
+            tmp = si + sj
             if tmp == "lr" or tmp == "rl":
-                p_inter = intersection(prevPoint, v, LS, LE)
+                p_inter = intersection(V[i], V[j], LS, LE)
                 PrL.append(p_inter)
                 PlL.append(p_inter)
-
-        if i < len(V) - 1:
-            if s == "o":
-                PrL.append(v)
-                PlL.append(v)
-            elif s == "r":
-                PrL.append(v)
-            elif s == "l":
-                PlL.append(v)
-
-            prevPoint = v
-            prevSide = s
-
-    V.pop()
 
     # returns two lists with objects of class point
     return PrL, PlL
@@ -71,14 +71,15 @@ def move(p, V, direction, dist):
     on_point = False
 
     i = 0
-    for v in V:
-        if p.equal(v):
+    for i in range(num_pts):
+        if p.equal(V[i]):
             on_point = True
+
             break
-        i += 1
 
     if direction == "CW":
         j = (i - 1 + num_pts) % num_pts
+
     elif direction == "CCW":
         j = (i + 1) % num_pts
 
@@ -96,14 +97,13 @@ def move(p, V, direction, dist):
         elif direction == "CCW":
             j = (i + 1) % num_pts
 
-    dx = V[j].x - V[i].x
-    dy = V[j].y - V[i].y
-    l = math.sqrt(dx**2 + dy**2)
-    dx = dx * dist/l
-    dy = dy * dist/l
+    dx = V[i].x - V[j].x
+    dy = V[i].y - V[j].y
 
-    p.x = p.x + dx
-    p.y = p.y + dy
+    l = math.sqrt(dx**2 + dy**2)
+
+    p.x = V[j].x + dx * (dist/l)
+    p.y = V[j].y + dy * (dist/l)
 
     return p
 

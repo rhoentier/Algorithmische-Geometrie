@@ -1,6 +1,7 @@
 import random
 import numpy as np
 import matplotlib.pyplot as plt
+from objects.site import Site
 
 def side(p, LS, LE):
     epsilon = 0.001
@@ -43,7 +44,7 @@ class Problem:
             print("Initialization only with W or (V and S) -> exit")
             exit()
 
-    def getNumSites(self):
+    def numSites(self):
         return len(self.S)
 
     def normalize(self):
@@ -83,8 +84,14 @@ class Problem:
         self.updateW()
 
     def updateW(self):
-        pass
-        # to be done
+        self.W = []
+        for i, v in enumerate(self.V):
+            j = (i + 1) % len(self.V)
+            self.W.append(self.V[i])
+            tmpS = [s for s in self.S if side(s, self.V[i], self.V[j]) == "o"]
+            tmpS.sort(key=lambda x: self.V[i].distance(x))
+            for s in tmpS:
+                self.W.append(s)
 
     def plotV(self, **kwargs):
 
@@ -92,9 +99,28 @@ class Problem:
 
         xs = [p.x for p in self.V]
         ys = [p.y for p in self.V]
+
         xs.append(xs[0])
         ys.append(ys[0])
         plt.plot(xs, ys, color = color, zorder=5)
 
         for p in self.V:
             p.plot(color)
+
+    def addRandomSite(self):
+        pos = random.randint(0, len(self.V) - 1)
+
+        pi = self.V[pos]
+        pj = self.V[(pos + 1) % len(self.V)]
+
+        dec = random.random()
+        x = pi.x + (pj.x - pi.x) * dec
+        y = pi.y + (pj.y - pi.y) * dec
+
+        dec = random.random()
+        self.S.append(Site(x, y, "R", dec))
+        self.updateW()
+
+    def addSite(self, s):
+        self.S.append(s)
+        self.updateW()
