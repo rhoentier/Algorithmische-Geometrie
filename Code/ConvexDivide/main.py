@@ -24,12 +24,12 @@ if __name__ == '__main__':
 
     P_init = Problem(V=[Point(8, 9, "P1"), Point(0, 7, "P2"), Point(0, 4, "P3"), Point(2, 0, "P4"), Point(7, 0, "P5"), Point(10, 3, "P6")], S=[])
     num = 5
-    while num > 0:
-        P_init.addRandomSite()
-        num -= 1
+  #  while num > 0:
+ #       P_init.addRandomSite()
+#        num -= 1
 
-    #P_init.addSite(Site(5.187074674214591,8.296768668553648, "xx", 0.77334445885401248))
-    #P_init.addSite(Site(0.0,4.550525314434614, "xx", 0.2851059559985002))
+    P_init.addSite(Site(0, 5, "S1", 0.6))
+    P_init.addSite(Site(9, 6, "S2", 0.4))
 
     P_init.normalize()
 
@@ -101,6 +101,8 @@ if __name__ == '__main__':
 
         else:
             while PrL.area() > PrL.requiredArea(P.area()):
+                prlarea = PrL.area()
+                prlreq = PrL.requiredArea(P.area())
                 move(LE, V, "CW", 0.001)
                 V_PrL = cut(V, LS, LE)
                 PrL = Problem(V = V_PrL[0], S = PrL.S)

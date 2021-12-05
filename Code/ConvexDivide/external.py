@@ -97,13 +97,23 @@ def move(p, V, direction, dist):
         elif direction == "CCW":
             j = (i + 1) % num_pts
 
-    dx = V[i].x - V[j].x
-    dy = V[i].y - V[j].y
 
-    l = math.sqrt(dx**2 + dy**2)
-
-    p.x = V[j].x + dx * (dist/l)
-    p.y = V[j].y + dy * (dist/l)
+    if direction == "CW":
+        dx = V[j].x - V[i].x
+        dy = V[j].y - V[i].y
+        l = math.sqrt(dx ** 2 + dy ** 2)
+        dx = dx * (l-dist)/l
+        dy = dy * (l-dist)/l
+        p.x = V[i].x + dx
+        p.y = V[i].y + dy
+    elif direction == "CCW":
+        dx = V[i].x - V[j].x
+        dy = V[i].y - V[j].y
+        l = math.sqrt(dx ** 2 + dy ** 2)
+        dx = dx * (l - dist) / l
+        dy = dy * (l - dist) / l
+        p.x = V[j].x + dx
+        p.y = V[j].y + dy
 
     return p
 
