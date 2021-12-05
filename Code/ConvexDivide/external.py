@@ -9,7 +9,7 @@ import math
 import numpy as np
 
 def side(p, LS, LE):
-    epsilon = 0.001
+    epsilon = 0.03  # epsilon nicht direkt als Abstand
     d = (p.x - LS.x)*(LE.y-LS.y)-(p.y-LS.y)*(LE.x-LS.x)
     if d > -epsilon and d < epsilon:
         return "o"
@@ -33,11 +33,12 @@ def cut(V, LS, LE):
     PrL = []
     PlL = []
 
-    # Special case if P1 and P2 are on line -> all to the left
+    # Special case if LS and LE are on the same line and all other points are to the left
     if side(V[0], LS, LE) == "o" and side(V[1], LS, LE) == "o":
-        PrL = [V[0]]
+        PrL = [V[0], LE]
         PlL = V
         return PrL, PlL
+    # Special case if LS and LE are on the same line and all other points are to the right
     elif side(V[0], LS, LE) == "o" and side(V[-1], LS, LE) == "o":
         PrL = V
         PlL = []
@@ -51,7 +52,7 @@ def cut(V, LS, LE):
 
             if si == "o" or si == "r":
                 PrL.append(v)
-            elif si == "o" or si == "l":
+            if si == "o" or si == "l":
                 PlL.append(v)
 
             tmp = si + sj
@@ -74,18 +75,19 @@ def move(p, V, direction, dist):
     for i in range(num_pts):
         if p.equal(V[i]):
             on_point = True
-
             break
 
-    if direction == "CW":
-        j = (i - 1 + num_pts) % num_pts
+    if on_point == True:
+        if direction == "CW":
+            j = (i - 1 + num_pts) % num_pts
 
-    elif direction == "CCW":
-        j = (i + 1) % num_pts
+        elif direction == "CCW":
+            j = (i + 1) % num_pts
 
-    if on_point == False:
-        i = 0
-        for v in V:
+    elif on_point == False:
+        for i, v in enumerate(V):
+            von = V[i]
+            zu = V[(i+1) % num_pts]
             s = side(p, V[i], V[(i+1) % num_pts])
             if s == "o":
                 break
@@ -98,22 +100,22 @@ def move(p, V, direction, dist):
             j = (i + 1) % num_pts
 
 
-    if direction == "CW":
-        dx = V[j].x - V[i].x
-        dy = V[j].y - V[i].y
-        l = math.sqrt(dx ** 2 + dy ** 2)
-        dx = dx * (l-dist)/l
-        dy = dy * (l-dist)/l
-        p.x = V[i].x + dx
-        p.y = V[i].y + dy
-    elif direction == "CCW":
-        dx = V[i].x - V[j].x
-        dy = V[i].y - V[j].y
-        l = math.sqrt(dx ** 2 + dy ** 2)
-        dx = dx * (l - dist) / l
-        dy = dy * (l - dist) / l
-        p.x = V[j].x + dx
-        p.y = V[j].y + dy
+    #if direction == "CW":
+    dx = p.x - V[j].x
+    dy = p.y - V[j].y
+    l = math.sqrt(dx ** 2 + dy ** 2)
+    dx = dx * (l-dist)/l
+    dy = dy * (l-dist)/l
+    p.x = V[j].x + dx
+    p.y = V[j].y + dy
+    #elif direction == "CCW":
+    #    dx = V[i].x - V[j].x
+    #    dy = V[i].y - V[j].y
+    #    l = math.sqrt(dx ** 2 + dy ** 2)
+    #    dx = dx * (l - dist) / l
+    #    dy = dy * (l - dist) / l
+    #    p.x = V[j].x + dx
+    #    p.y = V[j].y + dy
 
     return p
 

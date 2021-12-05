@@ -22,22 +22,24 @@ class Problem:
         self.V = kwargs.get('V', None)
         self.S = kwargs.get('S', None)
 
-        if self.W != None and self.V == None and self.S == None:
+        if self.W != None and self.V == None and self.S == None:    # init with W
             self.V = [x for x in self.W if x.type() == "Point"]
             self.S = [x for x in self.W if x.type() == "Site"]
 
-        elif self.W == None and self.V != None and self.S != None:
-
-            num_pts = len(self.V)
-            tmp = []
-            for i, v in enumerate(self.V):
-                tmp.append(v)
-                for s in self.S:
-
-                    if side(s, v, self.V[(i + 1) % num_pts]) == "o":
-                        tmp.append(s)
-                        break
-            self.W = tmp
+        elif self.W == None and self.V != None and self.S != None:  # init with V and S
+            self.updateW()
+            #pass
+            #tmpS = self.S.copy()
+            #num_pts = len(self.V)
+            #tmp = []
+            #for i, v in enumerate(self.V):
+            #    tmp.append(v)
+            #    for j, s in enumerate(tmpS):
+            #        if side(s, v, self.V[(i + 1) % num_pts]) == "o":
+            #            tmp.append(s)
+            #            tmpS.pop(j)
+            #            break
+            #self.W = tmp
 
         else:
             # not defined
@@ -90,8 +92,7 @@ class Problem:
             self.W.append(self.V[i])
             tmpS = [s for s in self.S if side(s, self.V[i], self.V[j]) == "o"]
             tmpS.sort(key=lambda x: self.V[i].distance(x))
-            for s in tmpS:
-                self.W.append(s)
+            self.W = self.W + tmpS
 
     def plotV(self, **kwargs):
 

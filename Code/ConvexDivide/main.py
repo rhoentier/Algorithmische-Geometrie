@@ -8,6 +8,7 @@ from external import move, numSites, cut
 import random
 import numpy as np
 
+step = 0.001
 if __name__ == '__main__':
 
     # Initialize plot
@@ -24,12 +25,16 @@ if __name__ == '__main__':
 
     P_init = Problem(V=[Point(8, 9, "P1"), Point(0, 7, "P2"), Point(0, 4, "P3"), Point(2, 0, "P4"), Point(7, 0, "P5"), Point(10, 3, "P6")], S=[])
     num = 5
-  #  while num > 0:
- #       P_init.addRandomSite()
-#        num -= 1
+    while num > 0:
+        P_init.addRandomSite()
+        num -= 1
 
-    P_init.addSite(Site(0, 5, "S1", 0.6))
-    P_init.addSite(Site(9, 6, "S2", 0.4))
+#    P_init.addSite(Site(4, 8, "S1", 0.6))
+#    P_init.addSite(Site(0, 5, "S3", 0.1))
+#    P_init.addSite(Site(9, 6, "S2", 0.4))
+
+    #P_init = Problem(V=[Point(8, 9, "P1"), Point(0, 7, "P2"), Point(0, 4, "P3")], S=[Site(3.9128,7.9782,"xx", 0.180), Site(0.7864, 7.1966,"xx", 0.04230), Site(0, 5.02371, "xx", 0.1694)])
+    #P_init = Problem(V=[Point(8, 9, "P1"), Point(0, 7, "P2"), Point(0, 5.3037, "P3")], S=[Site(3.9128, 7.9782, "xx", 0.0971), Site(0.7864, 7.1966, "xx", 0.1902)])
 
     P_init.normalize()
 
@@ -51,10 +56,7 @@ if __name__ == '__main__':
 
         [s.plot("r", marker="x", size=70) for s in S]   # Plot sites
         P.plotV(color = "skyblue")
-
-
-
-
+        #plt.savefig('polygon.png')
         LS = W[0].copy("LS")
 
         # Find first site in W and copy it to new point "LE", k0 = index of first site
@@ -68,11 +70,15 @@ if __name__ == '__main__':
         V_PrL, V_PlL = cut(V, LS, LE)
         PrL = Problem(V = V_PrL, S = [S[0]])
 
-        # Move line CCW
+        # Move line CCW from point to point
+
+        prlarea = PrL.area()
+        prlreq = PrL.requiredArea(P.area())
 
         k = 0
         while PrL.area() < PrL.requiredArea(P.area()) and LE.notEqual(S[-1]):
-            if k > 1 and W[k0 + k].type() == "Site":
+            if k > 0 and W[k0 + k].type() == "Site":
+
                 PrL.appendSite(W[k0 + k])
             k += 1
             LE = W[k0 + k].copy("LE")
@@ -81,42 +87,34 @@ if __name__ == '__main__':
             prlarea = PrL.area()
             prlreq = PrL.requiredArea(P.area())
 
-        tmpR = copy.deepcopy(PrL.S)
-        l = len(tmpR)
-        tmpL = S[l:]
-
         if LE.equal(S[0]) and PrL.area() > PrL.requiredArea(P.area()):
             while PrL.area() > PrL.requiredArea(P.area()):
-                move(LS, V, "CCW", 0.001)
+                LS = move(LS, V, "CCW", step)
                 V_PrL = cut(V, LS, LE)
                 PrL = Problem(V = V_PrL[0], S = PrL.S)
 
         elif LE.equal(S[-1]) and PrL.area() < PrL.requiredArea(P.area()):
             while PrL.area() < PrL.requiredArea(P.area()):
-                move(LS, V, "CW", 0.001)
+                LS = move(LS, V, "CW", step)
                 V_PrL = cut(V, LS, LE)
                 PrL = Problem(V = V_PrL[0], S = PrL.S)
-                #LS.plot("g")
-                #plt.savefig('polygon.png')
+                prlarea = PrL.area()
+                prlreq = PrL.requiredArea(P.area())
 
         else:
             while PrL.area() > PrL.requiredArea(P.area()):
                 prlarea = PrL.area()
                 prlreq = PrL.requiredArea(P.area())
-                move(LE, V, "CW", 0.001)
+                LE = move(LE, V, "CW", step)
                 V_PrL = cut(V, LS, LE)
                 PrL = Problem(V = V_PrL[0], S = PrL.S)
-
+                prlarea = PrL.area()
+                prlreq = PrL.requiredArea(P.area())
 
         V_PrL, V_PlL = cut(V, LS, LE)
 
-
         P1 = Problem(V = V_PrL, S = PrL.S)
         P2 = Problem(V = V_PlL, S = S[len(PrL.S):])
-
-        # For fun, nicer images if shuffeled?
-        #P1.shuffle()
-        #P2.shuffle()
 
         P1.normalize()
         P2.normalize()
