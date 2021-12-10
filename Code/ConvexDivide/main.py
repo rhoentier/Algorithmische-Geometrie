@@ -8,7 +8,7 @@ from external import move, numSites, cut
 import random
 import numpy as np
 
-step = 0.001
+step = 0.005
 if __name__ == '__main__':
 
     # Initialize plot
@@ -24,19 +24,19 @@ if __name__ == '__main__':
     ax.set_ylabel('y-Achse')
 
     P_init = Problem(V=[Point(8, 9, "P1"), Point(0, 7, "P2"), Point(0, 4, "P3"), Point(2, 0, "P4"), Point(7, 0, "P5"), Point(10, 3, "P6")], S=[])
-    num = 5
+    num = 25
     while num > 0:
         P_init.addRandomSite()
         num -= 1
 
-#    P_init.addSite(Site(4, 8, "S1", 0.6))
-#    P_init.addSite(Site(0, 5, "S3", 0.1))
-#    P_init.addSite(Site(9, 6, "S2", 0.4))
-
-    #P_init = Problem(V=[Point(8, 9, "P1"), Point(0, 7, "P2"), Point(0, 4, "P3")], S=[Site(3.9128,7.9782,"xx", 0.180), Site(0.7864, 7.1966,"xx", 0.04230), Site(0, 5.02371, "xx", 0.1694)])
-    #P_init = Problem(V=[Point(8, 9, "P1"), Point(0, 7, "P2"), Point(0, 5.3037, "P3")], S=[Site(3.9128, 7.9782, "xx", 0.0971), Site(0.7864, 7.1966, "xx", 0.1902)])
+    #P_init.addSite(Site(9.040388907932856, 2.040388907932856, "S1", 0.05218424718859099))
+    #P_init.addSite(Site(9.42012025961265,2.42012025961265, "S2", 0.9478157528114091))
 
     P_init.normalize()
+
+    P_init.plotV(color="skyblue")
+    [s.plot(marker="x", size=70) for s in P_init.S]  # Plot sites
+    plt.savefig('polygon.png')
 
     for s in P_init.S:
         print(s)
@@ -44,9 +44,10 @@ if __name__ == '__main__':
     openProblems = []
     finishedProblems = []
     openProblems.append(P_init)
-
+    pl = 0
     while len(openProblems) > 0:   # As long as there are Problems with more than one Site
-
+        print(pl)
+        pl += 1
         P = openProblems.pop()
 
         # Input
@@ -54,16 +55,15 @@ if __name__ == '__main__':
         V = P.V
         S = P.S
 
-        [s.plot("r", marker="x", size=70) for s in S]   # Plot sites
-        P.plotV(color = "skyblue")
-        #plt.savefig('polygon.png')
-        LS = W[0].copy("LS")
+
+
+        LS = Point(W[0].x, W[0].y, "LS")
 
         # Find first site in W and copy it to new point "LE", k0 = index of first site
         k0 = 0
         for w in W:
             if w.type() == "Site":
-                LE = w.copy("LE")
+                LE = Point(w.x, w.y, "LE")
                 break
             k0 += 1              # index of first site
 
@@ -92,24 +92,16 @@ if __name__ == '__main__':
                 LS = move(LS, V, "CCW", step)
                 V_PrL = cut(V, LS, LE)
                 PrL = Problem(V = V_PrL[0], S = PrL.S)
-
         elif LE.equal(S[-1]) and PrL.area() < PrL.requiredArea(P.area()):
             while PrL.area() < PrL.requiredArea(P.area()):
                 LS = move(LS, V, "CW", step)
                 V_PrL = cut(V, LS, LE)
                 PrL = Problem(V = V_PrL[0], S = PrL.S)
-                prlarea = PrL.area()
-                prlreq = PrL.requiredArea(P.area())
-
         else:
             while PrL.area() > PrL.requiredArea(P.area()):
-                prlarea = PrL.area()
-                prlreq = PrL.requiredArea(P.area())
                 LE = move(LE, V, "CW", step)
                 V_PrL = cut(V, LS, LE)
                 PrL = Problem(V = V_PrL[0], S = PrL.S)
-                prlarea = PrL.area()
-                prlreq = PrL.requiredArea(P.area())
 
         V_PrL, V_PlL = cut(V, LS, LE)
 
@@ -130,7 +122,8 @@ if __name__ == '__main__':
             finishedProblems.append(P2)
 
         L = Line(LS, LE)
-        L.plot(color = "r")
+        L.plot()
 
         # Save figure
         plt.savefig('polygon.png')
+    #plt.show()

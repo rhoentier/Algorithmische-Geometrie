@@ -22,8 +22,8 @@ class Point:
     def type(self):
         return "Point"
 
-    def plot(self, col, **kwargs):
-
+    def plot(self, **kwargs):
+        col = kwargs.get("col", "skyblue")
         pos = kwargs.get('pos', [1, 1])
         marker = kwargs.get('marker', "o")
         size = kwargs.get("size", 30)
@@ -40,8 +40,12 @@ class Point:
 
     def equal(self, otherPoint):
         delta = 0.01
-        if abs(self.x - otherPoint.x) < delta and abs(self.y - otherPoint.y) < delta:
+        if self.x == otherPoint.x and self.y == otherPoint.y:
             return True
+
+        if self.distance(otherPoint) < delta:
+            return True
+
         return False
 
     def notEqual(self, otherPoint):

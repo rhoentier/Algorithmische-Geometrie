@@ -9,7 +9,7 @@ import math
 import numpy as np
 
 def side(p, LS, LE):
-    epsilon = 0.03  # epsilon nicht direkt als Abstand
+    epsilon = 0.01  # epsilon nicht direkt als Abstand
     d = (p.x - LS.x)*(LE.y-LS.y)-(p.y-LS.y)*(LE.x-LS.x)
     if d > -epsilon and d < epsilon:
         return "o"
@@ -74,10 +74,16 @@ def move(p, V, direction, dist):
     i = 0
     for i in range(num_pts):
         if p.equal(V[i]):
-            on_point = True
+            if p.distance(V[i]) == 0:
+                on_point = True
+            else:
+                p.x = V[i].x
+                p.y = V[i].y
+                return p
             break
 
     if on_point == True:
+        dist = 0.02
         if direction == "CW":
             j = (i - 1 + num_pts) % num_pts
 
@@ -86,8 +92,6 @@ def move(p, V, direction, dist):
 
     elif on_point == False:
         for i, v in enumerate(V):
-            von = V[i]
-            zu = V[(i+1) % num_pts]
             s = side(p, V[i], V[(i+1) % num_pts])
             if s == "o":
                 break
@@ -99,8 +103,6 @@ def move(p, V, direction, dist):
         elif direction == "CCW":
             j = (i + 1) % num_pts
 
-
-    #if direction == "CW":
     dx = p.x - V[j].x
     dy = p.y - V[j].y
     l = math.sqrt(dx ** 2 + dy ** 2)
@@ -108,14 +110,6 @@ def move(p, V, direction, dist):
     dy = dy * (l-dist)/l
     p.x = V[j].x + dx
     p.y = V[j].y + dy
-    #elif direction == "CCW":
-    #    dx = V[i].x - V[j].x
-    #    dy = V[i].y - V[j].y
-    #    l = math.sqrt(dx ** 2 + dy ** 2)
-    #    dx = dx * (l - dist) / l
-    #    dy = dy * (l - dist) / l
-    #    p.x = V[j].x + dx
-    #    p.y = V[j].y + dy
 
     return p
 

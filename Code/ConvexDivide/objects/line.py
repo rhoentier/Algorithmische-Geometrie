@@ -16,9 +16,9 @@ class Line:
         return "Line"
 
     def plot(self, **kwargs):
-        color = kwargs.get('color', "g")
+        col = kwargs.get('col', "g")
 
-        self.LS.plot(color, pos = [-1, -1])
-        self.LE.plot(color, pos = [-1, -1])
+        self.LS.plot(pos = [-1, -1])
+        self.LE.plot(pos = [-1, -1])
 
-        plt.plot([self.LS.x, self.LE.x], [self.LS.y, self.LE.y], color = color, linestyle = "--", zorder=6)
+        plt.plot([self.LS.x, self.LE.x], [self.LS.y, self.LE.y], color = col, linestyle = "--", zorder=6)

@@ -28,18 +28,6 @@ class Problem:
 
         elif self.W == None and self.V != None and self.S != None:  # init with V and S
             self.updateW()
-            #pass
-            #tmpS = self.S.copy()
-            #num_pts = len(self.V)
-            #tmp = []
-            #for i, v in enumerate(self.V):
-            #    tmp.append(v)
-            #    for j, s in enumerate(tmpS):
-            #        if side(s, v, self.V[(i + 1) % num_pts]) == "o":
-            #            tmp.append(s)
-            #            tmpS.pop(j)
-            #            break
-            #self.W = tmp
 
         else:
             # not defined
@@ -56,18 +44,6 @@ class Problem:
 
         for s in self.S:
             s.c = s.c / sum
-
-    def shuffle(self):
-        num_pts = len(self.W)
-        r = random.randint(0, num_pts)
-        print(r)
-        print(self.W)
-        for i in range(r):
-            self.W.append(self.W.pop(0))
-        print(self.W)
-        print("")
-        self.V = [x for x in self.W if x.type() == "Point"]
-        self.S = [x for x in self.W if x.type() == "Site"]
 
     def area(self):
         x = [p.x for p in self.V]
@@ -96,32 +72,35 @@ class Problem:
 
     def plotV(self, **kwargs):
 
-        color = kwargs.get('color', "k")
+        col = kwargs.get('color', "k")
 
         xs = [p.x for p in self.V]
         ys = [p.y for p in self.V]
 
         xs.append(xs[0])
         ys.append(ys[0])
-        plt.plot(xs, ys, color = color, zorder=5)
+        plt.plot(xs, ys, color = col, zorder=5)
 
         for p in self.V:
-            p.plot(color)
+            p.plot()
 
     def addRandomSite(self):
-        pos = random.randint(0, len(self.V) - 1)
-
-        pi = self.V[pos]
-        pj = self.V[(pos + 1) % len(self.V)]
+        i = random.randint(0, len(self.V) - 1)
+        j = (i + 1) % len(self.V)
+        pi = self.V[i]
+        pj = self.V[j]
 
         dec = random.random()
         x = pi.x + (pj.x - pi.x) * dec
         y = pi.y + (pj.y - pi.y) * dec
-
         dec = random.random()
-        self.S.append(Site(x, y, "R", dec))
-        self.updateW()
+        self.addSite(Site(x, y, "R", dec))
 
     def addSite(self, s):
-        self.S.append(s)
-        self.updateW()
+        for i, v in enumerate(self.W):
+            j = (i + 1) % len(self.W)
+            if side(s, self.W[i], self.W[j]) == "o":
+                if (s.x >= self.W[i].x and s.x <= self.W[j].x) or (s.x <= self.W[i].x and s.x >= self.W[j].x):
+                    self.W.insert(i + 1, s)
+                    self.S = [x for x in self.W if x.type() == "Site"]
+                    return
