@@ -50,8 +50,8 @@ class Problem:
         y = [p.y for p in self.V]
         return 0.5 * np.abs(np.dot(x, np.roll(y, 1)) - np.dot(y, np.roll(x, 1)))
 
-    def requiredArea(self, P_area):
-        return sum([s.c * P_area for s in self.S])
+    def requiredArea(self):
+        return sum([s.AreaRequired for s in self.S])
 
     def appendPoint(self, p):
         self.V.append(p)
@@ -61,6 +61,12 @@ class Problem:
         self.S.append(s)
         self.updateW()
 
+    def renameSites(self):
+        i = 1
+        for s in self.S:
+            s.name = "S" + str(i)
+            i += 1
+
     def updateW(self):
         self.W = []
         for i, v in enumerate(self.V):
@@ -69,6 +75,9 @@ class Problem:
             tmpS = [s for s in self.S if side(s, self.V[i], self.V[j]) == "o"]
             tmpS.sort(key=lambda x: self.V[i].distance(x))
             self.W = self.W + tmpS
+
+    def updateS(self):
+        self.S = [x for x in self.W if x.type() == "Site"]
 
     def plotV(self, **kwargs):
 
@@ -84,17 +93,18 @@ class Problem:
         for p in self.V:
             p.plot()
 
-    def addRandomSite(self):
+    def addRandomSite(self, c):
+        # Find random segment of polygon
         i = random.randint(0, len(self.V) - 1)
         j = (i + 1) % len(self.V)
         pi = self.V[i]
         pj = self.V[j]
-
+        # Find random position on segment
         dec = random.random()
         x = pi.x + (pj.x - pi.x) * dec
         y = pi.y + (pj.y - pi.y) * dec
-        dec = random.random()
-        self.addSite(Site(x, y, "R", dec))
+        # Create a new Site with random numbers and add it
+        self.addSite(Site(x, y, c))
 
     def addSite(self, s):
         for i, v in enumerate(self.W):
@@ -102,5 +112,11 @@ class Problem:
             if side(s, self.W[i], self.W[j]) == "o":
                 if (s.x >= self.W[i].x and s.x <= self.W[j].x) or (s.x <= self.W[i].x and s.x >= self.W[j].x):
                     self.W.insert(i + 1, s)
-                    self.S = [x for x in self.W if x.type() == "Site"]
-                    return
+                    break
+        self.updateS()
+        self.renameSites()
+        return
+
+    def calcArea(self):
+        for s in self.S:
+            s.AreaRequired = s.c * self.area()

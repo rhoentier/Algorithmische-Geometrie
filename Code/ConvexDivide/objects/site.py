@@ -3,15 +3,15 @@ import matplotlib.pyplot as plt
 
 # Site class (inherit from Point)
 class Site(point.Point):
-    def __init__(self, x_init, y_init, name_init, c_init):
+    def __init__(self, x_init, y_init, c_init, **kwargs):
         self.x = x_init
         self.y = y_init
-        self.name = name_init
         self.c = c_init
-        self.areaRequired = 0.0
+        self.name = kwargs.get('name', "")
+        self.AreaRequired = kwargs.get('AreaRequired', 0)
 
     def __repr__(self):
-        return "".join(["Site(", str(self.x), ",", str(self.y), ",", self.name, ",", str(self.c), ")"])
+        return "".join(["Site(", "{:.2f}".format(self.x), ",", "{:.2f}".format(self.y), ",", self.name, ",", "{:.2f}".format(self.c), ")"])
 
     def type(self):
         return "Site"
@@ -25,5 +25,4 @@ class Site(point.Point):
         plt.scatter(self.x, self.y, color = col, s = size, marker = marker, zorder=6)
 
         delta = 0.25
-        plt.annotate(self.name, (self.x + pos[0] * delta, self.y + pos[0] * delta), ha = "center", va = "center", color = col, zorder = 11)
-        #plt.annotate(self.name + ", c = " + "{:.2f}".format(self.c), (self.x + pos[0] * delta, self.y + pos[0] * delta), ha = "center", va = "center", color = col, zorder = 11)
+        plt.annotate(self.name + " (c = " + "{:.2f}".format(self.c) + ")", (self.x + pos[0] * delta, self.y + pos[0] * delta), ha = "center", va = "center", color = col, zorder = 11)
