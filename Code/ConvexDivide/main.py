@@ -44,8 +44,38 @@ if __name__ == '__main__':
     P_init = Problem(V=[Point(8, 9, "P1"), Point(0, 7, "P2"), Point(0, 4, "P3"), Point(2, 0, "P4"), Point(7, 0, "P5"),
                         Point(10, 3, "P6")], S=[])
 
-    for i in range(num):
-        P_init.addRandomSite(random_c.pop())
+    #for i in range(num):
+    #    P_init.addRandomSite(random_c.pop())
+
+    # img1
+    # P_init.addSite(Site(1, 2, 0.20))
+    # P_init.addSite(Site(8, 1, 0.80))
+
+    # img2
+    # P_init.addSite(Site(1, 2, 0.70))
+    # P_init.addSite(Site(8, 1, 0.30))
+
+    # img3
+    # P_init.addSite(Site(1, 2, 0.95))
+    # P_init.addSite(Site(8, 1, 0.05))
+
+    # serie
+    # P_init.addSite(Site(4, 8, 0.30))
+    # P_init.addSite(Site(0, 5, 0.20))
+    # P_init.addSite(Site(3, 0, 0.35))
+    # P_init.addSite(Site(9, 2, 0.15))
+
+    # example
+    P_init.addSite(Site(6, 8.5, 0.15))
+    P_init.addSite(Site(1, 7.25, 0.20))
+    P_init.addSite(Site(0, 6, 0.08))
+    P_init.addSite(Site(0, 5, 0.04))
+    P_init.addSite(Site(1, 2, 0.27))
+    P_init.addSite(Site(1.5, 1, 0.02))
+    P_init.addSite(Site(5, 0, 0.01))
+    P_init.addSite(Site(9, 2, 0.04))
+    P_init.addSite(Site(9.333333, 5, 0.12))
+    P_init.addSite(Site(8.333333, 8, 0.07))
 
     P_init.calcArea()
 
@@ -105,6 +135,9 @@ if __name__ == '__main__':
 
             prlarea = PrL.area()
             prlreq = PrL.requiredArea()
+
+        #L = Line(LS, LE)
+        #L.plot(col="grey")
 
         if LE.equal(S[0]) and PrL.area() > PrL.requiredArea():
             while PrL.area() > PrL.requiredArea():
