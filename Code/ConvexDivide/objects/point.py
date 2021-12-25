@@ -1,6 +1,7 @@
 from math import sqrt
 import matplotlib.pyplot as plt
 import copy
+import numpy as np
 
 # Point class
 class Point:
@@ -27,6 +28,8 @@ class Point:
         pos = kwargs.get('pos', [1, 1])
         marker = kwargs.get('marker', "o")
         size = kwargs.get("size", 30)
+
+        col = np.random.rand(3,)
 
         plt.scatter(self.x, self.y, color = col, s = size, marker = marker, zorder=6)
 

@@ -34,64 +34,10 @@ class Problem:
             print("Initialization only with W or (V and S) -> exit")
             exit()
 
-    def numSites(self):
-        return len(self.S)
-
-    def normalize(self):
-        sum = 0
-        for s in self.S:
-            sum += s.c
-
-        for s in self.S:
-            s.c = s.c / sum
-
-    def area(self):
-        x = [p.x for p in self.V]
-        y = [p.y for p in self.V]
-        return 0.5 * np.abs(np.dot(x, np.roll(y, 1)) - np.dot(y, np.roll(x, 1)))
-
-    def requiredArea(self):
-        return sum([s.AreaRequired for s in self.S])
-
-    def appendPoint(self, p):
-        self.V.append(p)
-        self.updateW()
-
-    def appendSite(self, s):
-        self.S.append(s)
-        self.updateW()
-
-    def renameSites(self):
-        i = 1
-        for s in self.S:
-            s.name = "S" + str(i)
-            i += 1
-
-    def updateW(self):
-        self.W = []
-        for i, v in enumerate(self.V):
-            j = (i + 1) % len(self.V)
-            self.W.append(self.V[i])
-            tmpS = [s for s in self.S if side(s, self.V[i], self.V[j]) == "o"]
-            tmpS.sort(key=lambda x: self.V[i].distance(x))
-            self.W = self.W + tmpS
-
-    def updateS(self):
-        self.S = [x for x in self.W if x.type() == "Site"]
-
-    def plotV(self, **kwargs):
-
-        col = kwargs.get('color', "k")
-
-        xs = [p.x for p in self.V]
-        ys = [p.y for p in self.V]
-
-        xs.append(xs[0])
-        ys.append(ys[0])
-        plt.plot(xs, ys, color = col, zorder=5)
-
-        for p in self.V:
-            p.plot()
+    #def __str__(self):
+        # to be done, should output a nice representation with vertices and sites >
+        #return str(self)
+        #pass
 
     def addRandomSite(self, c):
         # Find random segment of polygon
@@ -116,7 +62,61 @@ class Problem:
         self.updateS()
         self.renameSites()
         return
+    def appendPoint(self, p):
+        self.V.append(p)
+        self.updateW()
+
+    def appendSite(self, s):
+        self.S.append(s)
+        self.updateW()
+    def area(self):
+        x = [p.x for p in self.V]
+        y = [p.y for p in self.V]
+        return 0.5 * np.abs(np.dot(x, np.roll(y, 1)) - np.dot(y, np.roll(x, 1)))
 
     def calcArea(self):
         for s in self.S:
             s.AreaRequired = s.c * self.area()
+
+    def numSites(self):
+        return len(self.S)
+
+    def plotS(self):
+        [s.plot(marker="x", size=70) for s in self.S]
+
+    def plotV(self):
+
+        xs = [p.x for p in self.V]
+        ys = [p.y for p in self.V]
+
+        xs.append(xs[0])
+        ys.append(ys[0])
+
+        plt.plot(xs, ys, color = "skyblue", zorder=5)
+
+        for p in self.V:
+            p.plot()
+
+    def print(self):
+        print(self)
+
+    def renameSites(self):
+        i = 1
+        for s in self.S:
+            s.name = "S" + str(i)
+            i += 1
+
+    def requiredArea(self):
+        return sum([s.AreaRequired for s in self.S])
+
+    def updateS(self):
+        self.S = [x for x in self.W if x.type() == "Site"]
+
+    def updateW(self):
+        self.W = []
+        for i, v in enumerate(self.V):
+            j = (i + 1) % len(self.V)
+            self.W.append(self.V[i])
+            tmpS = [s for s in self.S if side(s, self.V[i], self.V[j]) == "o"]
+            tmpS.sort(key=lambda x: self.V[i].distance(x))
+            self.W = self.W + tmpS
