@@ -4,10 +4,10 @@ import copy
 
 # Point class
 class Point:
-    def __init__(self, x_init, y_init, name_init):
+    def __init__(self, x_init, y_init, name):
         self.x = x_init
         self.y = y_init
-        self.name = name_init
+        self.name = name
 
     def shift(self, x, y):
         self.x += x
@@ -23,15 +23,21 @@ class Point:
         return "Point"
 
     def plot(self, **kwargs):
-        col = kwargs.get("col", "skyblue")
+        color = kwargs.get("color", "k")
         pos = kwargs.get('pos', [1, 1])
         marker = kwargs.get('marker', "o")
         size = kwargs.get("size", 30)
 
+<<<<<<< Updated upstream
         plt.scatter(self.x, self.y, color = col, s = size, marker = marker, zorder=6)
+=======
+        #col = np.random.rand(3,)
+
+        plt.scatter(self.x, self.y, color = color, s = size, marker = marker, zorder=6)
+>>>>>>> Stashed changes
 
         delta = 0.25
-        plt.annotate(self.name, (self.x + pos[0] * delta, self.y + pos[0] * delta), ha = "center", va = "center", color = col, zorder = 11)
+        plt.annotate(self.name, (self.x + pos[0] * delta, self.y + pos[0] * delta), ha = "center", va = "center", color = color, zorder = 11)
 
     def copy(self, name_new):
         tmp = copy.deepcopy(self)

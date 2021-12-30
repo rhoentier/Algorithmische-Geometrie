@@ -16,9 +16,14 @@ class Line:
         return "Line"
 
     def plot(self, **kwargs):
-        col = kwargs.get('col', "g")
 
-        self.LS.plot(pos = [-1, -1])
-        self.LE.plot(pos = [-1, -1])
+        alpha = kwargs.get('alpha', 1.0)
+        color = kwargs.get('color', "g")
+        linestyle = kwargs.get('linestyle', "--")
+        annotate = kwargs.get("annotate", False)
 
-        plt.plot([self.LS.x, self.LE.x], [self.LS.y, self.LE.y], color = col, linestyle = "--", zorder=6)
+        if annotate:
+            self.LS.plot(pos = [-1, -1], color = color)
+            self.LE.plot(pos = [-1, -1], color = color)
+
+        return plt.plot([self.LS.x, self.LE.x], [self.LS.y, self.LE.y], color = color, linestyle = linestyle, zorder=6, alpha = alpha)
