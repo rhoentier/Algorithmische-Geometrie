@@ -1,0 +1,42 @@
+Hallo Herr Jendrny,
+
+> ich habe dieses Semester das Seminar Algorithmische Geometrie bei Ihnen und Herrn Icking belegt. Gemeinsam mit meinem Partner Herrn Loder erarbeite ich das Thema 3 "Gleichmäßige Flächenaufteilung von Polygonen". Wir sind kurz davor einen ersten Entwurf unserer Arbeit an Sie zu schicken. Allerdings haben wir ein Verständnisproblem beim Durcharbeiten des zur Verfügung gestellten Papers [1] bemerkt.
+> Bei der Prozedur DetachAndAssign (S.15) ist als Input Poly(CP) angegeben. In dem Abschnitt 2 „Problembeschreibung und Notation“ wird Poly(CP) beschrieben. Ich habe es so verstanden, dass alle mittelbaren und unmittelbaren Nachbarn des Teilpolygons CP und CP selber Poly(CP) bilden.
+
+Das Polygon P wird in verschiedene Teilpolygone zerlegt, dabei jedes Teilpolygon ist konvex. Wie das Polygon P in konvexe Teilpolygone zerlegt werden kann, ist nicht das Thema des Seminars.
+
+Wir nehmen einfach an, dass ein beliebiges P in m konvexe Polygone zerlegt wird. Das Ergebnis der Zerlegung des Polygons ist ein Nachbarschaftsgraph, bei dem jeder Knoten ein konvexes Teilpolygon ist und zwei benachbarte konvexe Polygone eine Kante im Graphen haben.  D.h. das Ergebnis ist ein Zeiger, der auf einen Knoten (ein konvexes Teilpolygon) zeigt. Beispielsweise zeigt der Zeiger auf ein konvexes Polygon CP und CP ist jetzt die Wurzel des Graphen. So eine Datenstruktur (Graphen) des Polygons wird als Poly(CP) bezeichnet.
+ 
+Wenn man den Zeiger hat, kann man alle konvexen Teilpolygone im Graphen besuchen. Insbesondere ist der Graph ein planerer und zusammenhängender Graph. 
+
+Man kann mit dem Algorithmus Tiefensuche (depth-first) alle Knoten eines zusammenhängenden Graphen besuchen, siehe auch Figure 7. Durch die Tiefensuche bekommt jeder Knoten eine Nummer und wir haben eine Liste von nummerierten konvexen Polygonen. Das Ergebnis der Besuche ist ein Baum und ein Baum hat immer Blätter. Ein Blatt hat die Nummer 1.
+
+> Nun wird in der Prozedur NonconvexDivide der Prozedur DetachAndAssign ein (möglicherweise) zusammengesetztes Polygon übergeben.
+
+Ja.
+
+> Dieses Polygon ist meiner Meinung nach weder (notwendigerweise) konvex noch sind Vorgänger oder Nachfolger zu identifizieren, obwohl diese in der Prozedur DetachAndAssign identifiziert werden müssen (PredPoly(CP))
+
+> Muss ich mir die Verbindung von NonconvexDivide und DetachAndAssign so vorstellen, dass NonconvexDivide ein Polygon aufteilt und dann das dort ermittelte Teilpolygon an DetachAndAssign übergibt?
+
+> Dieses Teilpolygon behält jedoch die relevanten Strukturen des Ursprungspolygons,
+
+> also zum Beispiel kann PredPoly(CP) auf dem Teilpolygon trotzdem gebildet werden, weil die jeweiligen Teilpolygone der CPi trotzdem als CPiidentifiziert werden können, obwohl ggf. nur Teile von CPi übergeben werden?
+
+Wir sollen zuerst die Idee der Prozedur NonconvexDivide verstehen.
+
+Durch die Tiefensuche wird ein Baum erzeugt, der ein Nachbarschaftgraph ist, ein Baum hat immer Blätter. Man nimmt ein Blatt z.B. mit Nummer 1, das ist ein konvexes Polygon CP und hat nur eine Kante zu seinem Nachbar im Nachbarschaftsgraphen. Auf dem Rand von CP gibt es ein paar Sites z.B. S_1, . . . , S_t und jeder Site hat eine angeforderte Fläche AreaRequired(S_i), i = 1, . . ., t. Man kann theoretisch leicht ausrechnen, ob die Fläche von CP diese Anforderungen von S_i, i = 1, . . ., t, erfüllen kann. Diese Berechnung wird auch im Algorithmus NonconvexDivide gezeigt.
+
+Wenn Area(CP)= Summe von AreaRequired(S_i), i = 1, . . ., t, dann kann man CP einfach vom restlichen Polygon trennen. Mit dem Algorithmus ConvexDivide kann man die Anforderungen von jedem Site erfüllen, siehe Figure 4. 
+
+Wenn Area(CP) > Summe von AreaRequired(S_i), i = 1, . . ., t, kann man CP in zwei Teile CP_1 und TP zerlegen, wobei TP die Sites S_1, . . . , S_t am Rand hat und die Area(TP) genau die Summe der AreaRequired(S_i) erfüllt, und CP_1 mindestens einen Teil der Kante zu seinem einzigen Nachbar noch hat und CP_1 hat keinen Site auf dem Rand. TP kann vom restlichen Baum getrennt werden. Die Fläche von CP_1 kann jetzt von Sites seines direkten Nachbars oder der weiteren Nachbarn aufgeteilt werden, siehe auch Figures 9, 10, 11, 12, dort hat CP_1 keinen Site mehr. 
+
+Wenn Area(CP) < Summe von AreaRequired(S_i), i = 1, . . ., t, dann muss man herausfinden, wie viele Sites von CP die angeforderten Flächen erfüllt werden. Also bleiben einige Sites auf dem Rand von CP z.B. S_m, S_{m+1}, . . ., S_{t}, die keine Fläche von CP bekommen können. Nun bekommt jeder Site von S_m, S_{m+1}, . . ., S_{t} einen pseudo-site auf der Kante zu dem Nachbar von CP, die Pseudo-sites auf dieser Kante müssen dieselben Reihenfolge wie S_m, S_{m+1}, . . ., S_{t} auf dem Rand von CP haben. Also hat das direkte benachbarte konvexe Polygon neu weitere Sites erhalten. CP kann vom Baum getrennt werden. 
+
+Also wird dieses drei Fälle immer rekursiv betrachtet. Diese obige drei Fälle müssen im Algorithmus NonconvexDivide wieder finden können.
+
+
+Viele Grüße
+Lihong Ma
+
+
