@@ -115,15 +115,10 @@ class ConvexPolygon:
                     self.W.insert(i + 1, s)
                     break
         self.updateS()
-<<<<<<< Updated upstream:Code/ConvexDivide/objects/problem.py
-        self.renameSites()
-        return
 
     def calcArea(self):
         for s in self.S:
             s.AreaRequired = s.c * self.area()
-=======
-        #self.renameSites()
 
     def appendPoint(self, p):
         self.V.append(p)
@@ -205,4 +200,3 @@ class ConvexPolygon:
             tmpS = [s for s in self.S if side(s, self.V[i], self.V[j]) == "o"]
             tmpS.sort(key=lambda x: self.V[i].distance(x))
             self.W = self.W + tmpS
->>>>>>> Stashed changes:Code/ConvexDivide/objects/convexpiece.py

@@ -28,13 +28,7 @@ class Point:
         marker = kwargs.get('marker', "o")
         size = kwargs.get("size", 30)
 
-<<<<<<< Updated upstream
-        plt.scatter(self.x, self.y, color = col, s = size, marker = marker, zorder=6)
-=======
-        #col = np.random.rand(3,)
-
         plt.scatter(self.x, self.y, color = color, s = size, marker = marker, zorder=6)
->>>>>>> Stashed changes
 
         delta = 0.25
         plt.annotate(self.name, (self.x + pos[0] * delta, self.y + pos[0] * delta), ha = "center", va = "center", color = color, zorder = 11)

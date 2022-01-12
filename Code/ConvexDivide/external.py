@@ -4,7 +4,7 @@ import math
 import numpy as np
 
 def side(p, LS, LE):
-    epsilon = 0.02  # epsilon nicht direkt als Abstand
+    epsilon = 0.02  # 0.02
     d = (p.x - LS.x)*(LE.y-LS.y)-(p.y-LS.y)*(LE.x-LS.x)
     if d > -epsilon and d < epsilon:
         return "o"
@@ -85,7 +85,7 @@ def move(p, V, direction, dist):
             break
 
     if on_point == True:
-        dist = 0.04
+        dist = 0.04 # 0.04
         if direction == "CW":
             j = (i - 1 + num_pts) % num_pts
 
