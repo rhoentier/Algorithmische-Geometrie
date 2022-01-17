@@ -178,7 +178,7 @@ def initPlot():
     plt.xticks(np.arange(-1, 12, step=1))
     plt.yticks(np.arange(-1, 12, step=1))
     plt.grid(zorder=0)
-    plt.tight_layout()
+    #plt.tight_layout()
 
 def compare(val1, val2, operator):
     if operator == ">":
@@ -246,7 +246,7 @@ def ConvexDivide(CP, iter = 1):
         if highlightPoint != False:
             circle1 = plt.scatter(highlightPoint[0], highlightPoint[1], color="orange", s=300, zorder=4)
 
-        plt.savefig("out/" + example + '/' + str(iter) + '_' + str(iimg) + '.png')
+        plt.savefig("out/" + example + '/' + str(iter).zfill(2) + '_' + str(iimg).zfill(4) + '.png')
 
         if removeLine:
             ax.lines.pop()
@@ -405,5 +405,5 @@ if __name__ == '__main__':
         CPi.plotS()  # Plot sites of CP
 
     if output.get("drawFinal"):
-        plt.savefig("out/" + example + '/' + str(iter) + '_result.png')
+        plt.savefig("out/" + example + '/' + str(iter).zfill(2) + '_0000.png')
     plt.close()
