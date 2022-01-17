@@ -6,7 +6,91 @@ from external import move, numSites, cut
 import random
 import numpy as np
 
-vid = True
+output_configs = {
+  "example1": {
+      "annotateStatus": False,
+      "annotateArea": False,
+      "drawPoly1": False,
+      "drawPolyn": False,
+      "drawInit": False,
+      "drawRaw1": False,
+      "drawRawIterative": False,
+      "drawRawResult": False,
+      "drawIterative": False,
+      "drawResult": True,
+      "drawFinal": True,
+      "example": 4
+  },
+  "example2": {
+      "annotateStatus": False,
+      "annotateArea": False,
+      "drawPoly1": False,
+      "drawPolyn": False,
+      "drawInit": True,
+      "drawRaw1": False,
+      "drawRawIterative": False,
+      "drawRawResult": True,
+      "drawIterative": False,
+      "drawResult": True,
+      "drawFinal": False,
+      "example": 2
+  },
+  "example3": {
+      "annotateStatus": False,
+      "annotateArea": False,
+      "drawPoly1": False,
+      "drawPolyn": True,
+      "drawInit": False,
+      "drawRaw1": False,
+      "drawRawIterative": False,
+      "drawRawResult": False,
+      "drawIterative": False,
+      "drawResult": True,
+      "drawFinal": True,
+      "example": 4
+  },
+  "video": {
+      "annotateStatus": True,
+      "annotateArea": True,
+      "drawPoly1": True,
+      "drawPolyn": True,
+      "drawInit": True,
+      "drawRaw1": True,
+      "drawRawIterative": False,
+      "drawRawResult": True,
+      "drawIterative": True,
+      "drawResult": True,
+      "drawFinal": True,
+      "example": 4
+  }
+}
+
+example_configs = {
+  "example1": {
+      "polygon": 1,
+      "output_config": "example1"
+  },
+  "example2.1": {
+      "polygon": 2,
+      "output_config": "example2"
+  },
+  "example2.2": {
+      "polygon": 3,
+      "output_config": "example2"
+  },
+  "example2.3": {
+      "polygon": 4,
+      "output_config": "example2"
+  },
+  "example3": {
+      "polygon": 5,
+      "output_config": "example3"
+  },
+  "video": {
+      "polygon": 1,
+      "output_config": "video"
+  }
+}
 
 def getRandom_c(num):
     # Returns a list of length <num> with c-values in range 0.01 to 0.99
@@ -52,30 +136,29 @@ def getExample(index: int, *args: int) -> ConvexPolygon:
 
     # get specific example with index >= 1 from here downwards
     elif index == 1:
-        P_init.addSite(Site(1, 2, 0.20, 1))
-        P_init.addSite(Site(8, 1, 0.80, 2))
-    elif index == 2:
-        P_init.addSite(Site(1, 2, 0.70, 1))
-        P_init.addSite(Site(8, 1, 0.30, 2))
-    elif index == 3:
-        P_init.addSite(Site(1, 2, 0.95, 1))
-        P_init.addSite(Site(8, 1, 0.05, 2))
-    elif index == 4:
         P_init.addSite(Site(0, 5, 0.05, 1))
         P_init.addSite(Site(1, 2, 0.55, 2))
         P_init.addSite(Site(3, 0, 0.18, 3))
         P_init.addSite(Site(8, 1, 0.22, 3))
+    elif index == 2:
+        P_init.addSite(Site(1, 2, 0.20, 1))
+        P_init.addSite(Site(8, 1, 0.80, 2))
+    elif index == 3:
+        P_init.addSite(Site(1, 2, 0.70, 1))
+        P_init.addSite(Site(8, 1, 0.30, 2))
+    elif index == 4:
+        P_init.addSite(Site(1, 2, 0.95, 1))
+        P_init.addSite(Site(8, 1, 0.05, 2))
+
     elif index == 5:
-        P_init.addSite(Site(6, 8.5, 0.15, 1))
-        P_init.addSite(Site(1, 7.25, 0.20, 5))
-        P_init.addSite(Site(0, 6, 0.08, 3))
-        P_init.addSite(Site(0, 5, 0.04, 2))
-        P_init.addSite(Site(1, 2, 0.27, 4))
-        P_init.addSite(Site(1.5, 1, 0.02, 6))
-        P_init.addSite(Site(5, 0, 0.01, 7))
-        P_init.addSite(Site(9, 2, 0.04, 10))
-        P_init.addSite(Site(9.333333, 5, 0.12, 9))
-        P_init.addSite(Site(8.333333, 8, 0.07, 8))
+        P_init.addSite(Site(6, 8.5, 0.125, 1))
+        P_init.addSite(Site(1, 7.25, 0.125, 2))
+        P_init.addSite(Site(0, 5, 0.125, 3))
+        P_init.addSite(Site(3, 0, 0.125, 4))
+        P_init.addSite(Site(6, 0, 0.125, 5))
+        P_init.addSite(Site(8, 1, 0.125, 6))
+        P_init.addSite(Site(9, 2, 0.125, 7))
+        P_init.addSite(Site(8.333333, 8, 0.125, 8))
     else:
         print("getExample(" + str(index) + "), Index out of range. No example defined.")
         exit()
@@ -95,6 +178,7 @@ def initPlot():
     plt.xticks(np.arange(-1, 12, step=1))
     plt.yticks(np.arange(-1, 12, step=1))
     plt.grid(zorder=0)
+    plt.tight_layout()
 
 def compare(val1, val2, operator):
     if operator == ">":
@@ -109,21 +193,25 @@ def ConvexDivide(CP, iter = 1):
 
     def snapshot(iimg, **kwargs):
 
-        if vid == False:
-            pass
-
         drawLine = kwargs.get("drawLine", True)
         drawArea = kwargs.get("drawArea", True)
         drawAnnotation = kwargs.get("drawAnnotation", True)
         removeLine = kwargs.get("removeLine", drawLine)
         removeArea = kwargs.get("removeArea", drawArea)
         removeAnnotation = kwargs.get("annotateLine", drawAnnotation)
+        status = kwargs.get("status", False)
+
+        if output.get("annotateArea") == False:
+            drawArea = False
+            removeArea = False
+
+        if output.get("annotateStatus") == False:
+            status = False
+
 
         highlightPoint = kwargs.get("highlightPoint", False)
         color = kwargs.get('color', "k")
         linestyle = kwargs.get("linestyle", "-")
-
-        status = kwargs.get("status", False)
 
         if drawLine:
             ax.plot([LS.x, LE.x], [LS.y, LE.y], color=color, linestyle = linestyle)
@@ -158,7 +246,7 @@ def ConvexDivide(CP, iter = 1):
         if highlightPoint != False:
             circle1 = plt.scatter(highlightPoint[0], highlightPoint[1], color="orange", s=300, zorder=4)
 
-        plt.savefig('vid/vid_' + str(ivid) + '/' + str(iter) + '_' + str(iimg) + '.png')
+        plt.savefig("out/" + example + '/' + str(iter) + '_' + str(iimg) + '.png')
 
         if removeLine:
             ax.lines.pop()
@@ -192,10 +280,12 @@ def ConvexDivide(CP, iter = 1):
     CP.plotS()  # Plot sites of CP
 
     if CP.numSites() <= 1:
-        iimg = snapshot(iimg, drawLine = False, drawAnnotation=False, drawArea=False, status="Polygon with number of sites == 1, no partitioning needed")
+        if output.get("drawPoly1"):
+            iimg = snapshot(iimg, drawLine = False, drawAnnotation=False, drawArea=False, status="Polygon with number of sites == 1, no partitioning needed")
         return [CP], iter
 
-    iimg = snapshot(iimg, drawLine = False, drawAnnotation=False, drawArea=False, status="Polygon with number of sites > 1, partitioning needed")
+    if output.get("drawPolyn"):
+        iimg = snapshot(iimg, drawLine = False, drawAnnotation=False, drawArea=False, status="Polygon with number of sites > 1, partitioning needed")
 
     # Initialize line segment L
     LS = Point(CP.W[0].x, CP.W[0].y, "Ls")      # LS at first element of list W
@@ -206,11 +296,13 @@ def ConvexDivide(CP, iter = 1):
     V_PrL = cut(CP.V, LS, LE)
     PrL = ConvexPolygon(V=V_PrL, S=[CP.S[0]])
 
-    iimg = snapshot(iimg, color="darkgrey", linestyle="dotted", removeLine = False, drawArea=False, status="Line initialized from w1 to first site in W")
+    if output.get("drawInit"):
+        iimg = snapshot(iimg, color="darkgrey", linestyle="dotted", removeLine = False, drawArea=False, status="Line initialized from w1 to first site in W")
 
     def xxx(iimg, **kwargs):
         highlight_pt = kwargs.get("highlight_pt", False)
         last_pt = kwargs.get("last_pt", False)
+        removeLine = kwargs.get("removeLine", True)
 
         if PrL.area() < PrL.requiredArea():
             status = "Area(PrL) < AreaRequired(S(PrL)), move Le CCW to next w"
@@ -222,10 +314,11 @@ def ConvexDivide(CP, iter = 1):
             status = status + ", add previous site"
         if last_pt == True:
             status = status + ", last site reached"
-        iimg = snapshot(iimg, color="royalblue", linestyle=linestyle, status=status, highlightPoint=highlight_pt)
+        iimg = snapshot(iimg, color="royalblue", linestyle=linestyle, status=status, highlightPoint=highlight_pt, removeLine=removeLine)
         return iimg + 1
 
-    iimg = xxx(iimg)
+    if output.get("drawRaw1"):
+        iimg = xxx(iimg)
 
     # Move LE CCW from point to point if PrL is area-incomplete
     k = 0
@@ -241,7 +334,11 @@ def ConvexDivide(CP, iter = 1):
         PrL.appendPoint(CP.W[k0 + k])
 
         last_point = LE.equal(CP.S[-1])
-        iimg = xxx(iimg, highlight_pt = highlight_pt, last_pt = last_point)
+        if output.get("drawRawIterative"):
+            iimg = xxx(iimg, highlight_pt = highlight_pt, last_pt = last_point)
+
+    if output.get("drawRawResult"):
+        iimg = snapshot(iimg, color="royalblue", linestyle="-", removeLine=False)
 
     # Move LS/LE incrementally until area requirement is fulfilled
 
@@ -263,14 +360,16 @@ def ConvexDivide(CP, iter = 1):
         V_PrL = cut(CP.V, LS, LE)
         PrL = ConvexPolygon(V=V_PrL, S=PrL.S)
 
-        iimg = snapshot(iimg, color = "royalblue", status= "Move " + switch[case][1] + " in " + switch[case][2] + "-direction to " + switch[case][3] + " area of PrL")
+        if output.get("drawIterative"):
+            iimg = snapshot(iimg, color = "royalblue", status= "Move " + switch[case][1] + " in " + switch[case][2] + "-direction to " + switch[case][3] + " area of PrL")
 
     V_PrL, V_PlL = cut(CP.V, LS, LE, direction = "both")
 
     PrL = ConvexPolygon(V=V_PrL, S=PrL.S)
     PlL = ConvexPolygon(V=V_PlL, S=CP.S[len(PrL.S):])
 
-    iimg = snapshot(iimg, color = "red", linestyle="-", drawAnnotation=True, status="Area(PrL) == AreaRequired(S(PrL)), execute partitioning")
+    if output.get("drawResult"):
+        iimg = snapshot(iimg, color = "red", linestyle="-", drawAnnotation=True, status="Area(PrL) == AreaRequired(S(PrL)), execute partitioning")
 
     CPis = []
     tmp, iter = ConvexDivide(PrL, iter+1)
@@ -286,17 +385,25 @@ def ConvexDivide(CP, iter = 1):
 step = 0.01 # 0.01
 if __name__ == '__main__':
 
-    CP = getExample(4)        # get predefined sites or random example
-    ivid = 4                  # number for video output
+    example = "video"
+    print(example)
+
+    example_dict = example_configs[example]
+    polygon = example_dict.get("polygon")
+    config  = example_dict.get("output_config")
+
+    output = output_configs[config]
+
+    CP = getExample(polygon)        # get predefined sites or random example
 
     arr, iter = ConvexDivide(CP)
     iter += 1
 
-    if vid:
-        initPlot()  # Initialize plot
-        for CPi in arr:
-            CPi.plotV()  # Plot vertices and edges of CP
-            CPi.plotS()  # Plot sites of CP
+    initPlot()  # Initialize plot
+    for CPi in arr:
+        CPi.plotV()  # Plot vertices and edges of CP
+        CPi.plotS()  # Plot sites of CP
 
-        plt.savefig('vid/vid_' + str(ivid) + '/' + str(iter) + '_result.png')
-        plt.close()
+    if output.get("drawFinal"):
+        plt.savefig("out/" + example + '/' + str(iter) + '_result.png')
+    plt.close()
