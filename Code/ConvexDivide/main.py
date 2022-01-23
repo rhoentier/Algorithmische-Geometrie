@@ -139,7 +139,7 @@ def getExample(index: int, *args: int) -> ConvexPolygon:
         P_init.addSite(Site(0, 5, 0.05, 1))
         P_init.addSite(Site(1, 2, 0.55, 2))
         P_init.addSite(Site(3, 0, 0.18, 3))
-        P_init.addSite(Site(8, 1, 0.22, 3))
+        P_init.addSite(Site(8, 1, 0.22, 4))
     elif index == 2:
         P_init.addSite(Site(1, 2, 0.20, 1))
         P_init.addSite(Site(8, 1, 0.80, 2))
@@ -178,7 +178,7 @@ def initPlot():
     plt.xticks(np.arange(-1, 12, step=1))
     plt.yticks(np.arange(-1, 12, step=1))
     plt.grid(zorder=0)
-    #plt.tight_layout()
+    plt.tight_layout()
 
 def compare(val1, val2, operator):
     if operator == ">":
@@ -385,7 +385,7 @@ def ConvexDivide(CP, iter = 1):
 step = 0.01 # 0.01
 if __name__ == '__main__':
 
-    example = "video"
+    example = "example1"
     print(example)
 
     example_dict = example_configs[example]
