@@ -139,13 +139,58 @@ Diese Vorgehensweise entspricht im Wesentlichen Fall 1, wobei \ls (initialisiert
 %TODO: Beispiel einfügen
 %TODO: Code einfügen
  
+ %In diesem Kapitel wird die Aufteilung eines nicht einfachen, nicht konvexen Polygons gezeigt
+\section{Verallgemeinerung: Aufteilung eines nicht einfachen, nicht konvexen Polygons}\label{nicht konvex}
+Es wurde gezeigt, dass ein einfaches, konvexes Polygon rekursiv in $n$ 1-Standort-Polygone aufgeteilt werden kann. Dieses Kapitel dient dazu einen verallgemeinerten Algorithmus zu skizzieren, damit auch für nicht einfache, nicht konvexe Polygone (Abbildung XX) das Problem der verankerten Flächenaufteilung gelöst werden kann.
+%TODO: Abbildung einfügen
+Bevor dieser Algorithmus vorgestellt wird, soll die Beschreibung der dahinterliegenden Grundidee einen Überblick über die Vorgehensweise verschaffen. Danach werden die vorbereitenden Schritte vorgestellt und die Aufteilung des Polygons erläutert. Ein Beispiel dient anschließend zur Veranschaulichung des vorgestellten Algorithmus und zum Schluss des Kapitels wird der Sonderfall geschildert, dass Standorte im Inneren des Polygons liegen.
+
+\subsection{Grundidee}\label{grundidee nicht konvex}
+In Kapitel XX wurde bereits erläutert, wie ein einfaches, konvexes Polygon aufgeteilt werden kann. Dieses Vorgehen kann auch bei der Aufteilung nicht konvexer Polygone verwendet werden, muss jedoch in einigen Punkten erweitert werden.
+%TODO: Kapitel einfügen
+Als Voraussetzung wird angenommen, dass ein nicht einfaches, nicht konvexes Polygon $P$ bereits in konvexe Teilpolygone \cpp zerlegt wurde. Im ersten Schritt werden die Teilpolygone mithilfe einer Tiefensuche neu geordnet, um eine feste Bearbeitungsfolge für das weitere Vorgehen zu erhalten. Anschließend werden die Teilpolygone rekursiv aufgeteilt, wie es ähnlich bereits in Kapitel XX gezeigt wurde.  Allerdings können nun Sonderfälle auftreten, die bei der Zerlegung eines einfachen, konvexen Polygons nicht vorkommen können. Einerseits kann \cpi weniger Fläche ausfüllen, als durch \arreq{S(CP_{i})} gefordert ist. In diesem Fall ist \cpi Flächen-unvollständig und muss Flächen von anderen Teilpolygonen übernehmen. Andererseits kann es sein, dass einzelne Teilpolygone keinen Standort enthalten oder weniger Fläche ausfüllen, als durch \arreq{S(CP_{i})} gefordert ist. In diesem Fall ist \cpi Standort-unvollständig und andere Teilpolygone müssen Flächen von \cpi übernehmen.\\
+%TODO: Kapitel einfügen
+Die Neuordnung wird innerhalb der Prozedur \ord umgesetzt und die Aufteilung inklusive der Sonderfallbehandlung wird durch die beiden Methoden \noncon und \daa umgesetzt, die sich gegenseitig rekursiv aufrufen, bis ein n-Standort Polygon in $n$ 1-Standort Polygone aufgeteilt wurde.
+
+\subsection{Aufteilung in konvexe Teilpolygone}\label{aufteilung}
+Als Voraussetzung für die gleichmäßige Aufteilung eines nicht einfachen, nicht konvexen Polygons wird angenommen, dass das Polygon bereits in konvexe Teilpolygone aufgeteilt wurde. In verschiedenen Werken werden Möglichkeiten einer solchen Aufteilung vorgestellt. Ein Vorgehen wäre zum Beispiel, eine Triangulation eines Polygons zu erzeugen. In diesem Fall würde jedoch eine hohe Anzahl von Teilpolygonen entstehen. Um Teilpolygone zusammenzufassen, können nacheinander Kanten der Triangulation entfernt werden, solange das dadurch entstehende Teilpolygon weiterhin konvex ist.
+%TODO: Literatur einfügen
+Hieraus wird ersichtlich, dass es verschiedene Möglichkeiten gibt, ein Polygon in konvexe Teilpolygone aufzuteilen. Zum Schluss dieser Arbeit wird besprochen, welche Auswirkungen diese vorbereitenden Schritte auf den Verlauf des vorgestellten Algorithmus haben können.
+
+ \subsection{Neuordnung der konvexen Teilpolygone}\label{ordnung}
+% TODO: Code einfügen
+Es kann nun davon ausgegangen werden, dass das Polygon $P$ bereits in konvexe Teilpolygone \cpp zerlegt wurde. Die Teilpolygone können willkürlich geordnet sein und die Indizes treffen keine Aussage über die tatsächliche Anordnung im Polygon $P$. Aus diesem Grund werden die Teilpolygone zuerst neu geordnet, was für den anschließend dargestellten Algorithmus erforderlich ist. Dazu wird ein Verbindungsgraph $G$ gebildet und anhand dessen mittels einer Tiefensuche eine Ordnung erzeugt. Jedes Teilpolygon \cpi wird durch einen Knoten $N_{i}$ in $G$ abgebildet. Für jeden Nachbarn $CP_{k} (i \ne k)$ des Teilpolygons \cpi wird eine Kante zum jeweils korrespondierenden Knoten $N_{k}$ eingefügt. \\
+Wir definieren einen Knoten $N_{i}$ in $G$ als Blatt, wenn $N_{}$ entweder nur einen Nachbarn hat oder alle Nachbarn von $N_{i}$ als besucht markiert wurden.
+Die Prozedur \ord beschreibt nun die Neuordnung der Teilpolygone. \ord wird mit einem beliebigen Knoten $N_{i}$ von $G$ initial aufgerufen. Zuerst wird geprüft, ob $N_{i}$ bereits markiert wurde. Ist dies der Fall, kann der Aufruf zurückkehren. Falls $N_{i}$ noch nicht markiert wurde, wird geprüft, ob $N_{i}$ nach obiger Definition ein Blatt ist. Falls $N_{i}$ kein Blatt ist, dann wird der Knoten markiert und für alle Nachbarn $N_{k}$ von $N_{i}$ rekursiv \ord aufgerufen. Nach dem Rücksprung der Aufrufe aller Nachbarn von \cpi wird \cpi ausgegeben. Falls $N_{i}$ ein Blatt ist, dann wird $N_{i}$ markiert und \cpi ausgegeben. Anschließend wird für alle Nachbarn $N_{k}$ von $N_{i}$ rekursiv \ord aufgerufen.
+Die neue Ordnung der \cpi ist nun die Reihenfolge, in der die Teilpolygone ausgegeben wurden.
 
 
-% Eine neue Seite anfangen mit
-%\pagebreak
+ \subsection{Aufteilung eines nicht einfachen, nicht konvexen Polygons}\label{aufteilung nicht konvex}
+Für die Aufteilung wird jedes Teilpolygon \cpp betrachtet. Konkret wird das Polygon \pred{\mcpi} so aufgeteilt, dass ein Teilstück einem Standort in \cpi (falls vorhanden) zugeordnet wird und der Rest dem Polygon \pred{CP_{k}} mit $k > i$ angehangen wird. Diese Aufteilung wird durch die sich gegenseitig rekursiv aufrufenden Prozeduren \noncon und \daa erreicht. Erstere erzeugt ein Liniensegment, welches \pred{\mcpi} in zwei Teile aufteilt und letztere ordnet die Teile entweder einem Standort zu oder teilt sie erneut auf.
 
+%TODO: Code einfügen
+%TODO: Listing verlinken
+Zuerst wird die Prozedur \noncon beschrieben, die die Teilpolygone in zwei Teile aufteilt. Listing XX beschreibt diese Prozedur.
+Als Eingabe dient ein konvexes Teilpolygon, beschrieben durch die Liste W(\cpi) (mit $w{k}, k = 1,…,m$) mit allen Polygonpunkten inklusive Steiner-Punkten und die Liste S(\cpi) mit den Standorten des Teilpolygons inklusive der jeweils benötigten Fläche. Anders als bei \con aus Kapitel XX ist für die Bearbeitung relevant, welche Punkte $w_{1}$ und $w_{m}$ in W(\cpi) ist. Die Kante, die durch die Polygonpunkte $(w_{m}, w_{1})$ erzeugt wird, sei nun die Kante zu \next{mcpi}. Hat \cpi keinen nächsten Nachbarn, muss wm gleich einem Standort sein. Ansonsten gilt, dass W(\cpi) wieder gegen den Uhrzeigesinn geordnet ist.\\
 
-% und schon der letzte Abschnitt
+Wie es auch schon bei \con der Fall war, lässt die Prozedur erneut ein Liniensegment \l gegen den Uhrzeigersinn durch das Polygon \cpi wandern, wobei \ls als Drehpunkt dient. \l wird durch (\ls, \le) $= w_{1}, S_{i}$ initialisiert, wobei $S_{i}$ der erste Standort aus S(\cpi) ist.\\
+Nun können zwei Fälle eintreten, in denen die Schleife stoppt:
+
+\begin{itemize}
+\item Die Fläche rechts der Linie \l ist größer oder gleich der benötigten Fläche der Standorte, die sich in diesem Gebiet befinden. Es gilt:
+$\mar{\mprl}\ge\marreq{S(\mcprl)}$
+\item Das Ende des Polygons wird erreicht, also \le $= w_{m}$.
+\end{itemize}
+
+Durch die Bearbeitung von vorherigen Teilpolygonen kann es sein, dass nicht zugewiesene Teile dieser Polygone in die Aufteilung von \cpi miteinbezogen werden müssen. Außerdem kann nun der Fall eintreten, dass die Fläche des Teilpolygons kleiner ist als \arreq{S(\mcpi)}. Aus diesem Grund müssen die oberen beiden Fälle noch feingranularer aufgeteilt werden.\\
+
+\textbf{Fall 1:} Wie auch in der Prozedur \con wird ein Ende der Linie $L$ entlang des Polygons bewegt, um die Fläche \ar{\mprl} zu verkleinern. Hierbei unterscheiden wir zwei Fälle. Falls $L_{e} = S_{i}$ für einen beliebigen Wert für $i$ gilt, dann wird der Startpunkt \ls gegen den Uhrzeigersinn bewegt, ansonsten wird der Endpunkt \le im Uhrzeigersinn bewegt.
+
+Nun seien \leins und \lzwei zwei Liniensegmente, die einen gemeinsamen, festen Endpunkt haben. Dieser gemeinsame Endpunkt ist für beide Linien entweder \ls oder \le und damit das Gegenstück zum oben bestimmten Punkt, welcher entlang des Polygons bewegt wurde. Die Linien sind so positioniert, dass $\mar{P^{r}_{L_{1}}} < \marreq{S(CP^{r}_{L_{1}})}$ und $\mar{P^{r}_{L_{2}}} > \marreq{S(CP^{r}_{L_{2}})}$ gilt. Die Linie \lzwei wird demnach durch $(w_{1}, w_{k})$ und die Linie \leins durch $(w_{1}, w_{k-1})$ beschrieben.
+Dadurch entsteht ein Dreieck $T = (t_{1}, t_{2}, t_{3})$, das die Differenz von \cprleins und \cprlzwei bildet. Außerdem sei $(t_{1}, t_{2})$ das Liniensegment von \cpi, das $L_{1}$ und $L_{2}$ verbindet. Der gemeinsame Endpunkt von \leins und \lzwei ist demnach $t_{3}$.
+
+Nun muss \cprleins mit einer Teilfäche des Dreiecks $T$ und gegebenenfalls mit Teilflächen der Reste der Vorgängerpolygone vereinigt werden, damit die Flächenanforderungen der Standorte in \cprleins erfüllt ist. Dabei entstehen 3 Fälle:
+
 
 
 % Bibliographie entweder direkt hier eingeben (nur im Notfall)...

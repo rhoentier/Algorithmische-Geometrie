@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12.10) (preloaded format=pdflatex 2022.1.24)  24 JAN 2022 14:21
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12.10) (preloaded format=pdflatex 2022.1.24)  24 JAN 2022 19:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -879,25 +879,45 @@ Underfull \hbox (badness 10000) in paragraph at lines 130--133
 
  []
 
+[3]
+Overfull \hbox (2.8661pt too wide) in paragraph at lines 149--154
+\T1/lmr/m/n/10 der Son-der-fall-be-hand-lung wird durch die bei-den Me-tho-den 
+[] und []
+ []
+
+[4]
+
+LaTeX Warning: Command \textellipsis invalid in math mode on input line 174.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 173--175
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 185--186
+
+ []
+
 No file SeminarBeitrag.bbl.
-[3] (SeminarBeitrag.aux
+[5] (SeminarBeitrag.aux
 Package cleveref Info: loaded `ngerman' language definitions on input line 25.
 )
 Package rerunfilecheck Info: File `SeminarBeitrag.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 18978 strings out of 478659
- 350713 string characters out of 2844972
- 797095 words of memory out of 3000000
- 36775 multiletter control sequences out of 15000+600000
+ 19007 strings out of 478659
+ 351049 string characters out of 2844972
+ 797210 words of memory out of 3000000
+ 36797 multiletter control sequences out of 15000+600000
  451342 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  122i,6n,120p,10612b,474s stack positions out of 5000i,500n,10000p,200000b,80000s
-{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.
-enc}{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.en
-c}{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc
-}{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}{
+{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}
+{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.en
+c}{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}
+{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}{
 C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathex.enc
 }{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.e
 nc}<C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10
@@ -907,14 +927,15 @@ mi10.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/
 lmmi7.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm
 /lmr10.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
 m/lmr12.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/
+lm/lmr5.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/
 lm/lmr7.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/
 lm/lmri10.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/publi
 c/lm/lmssbx10.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/p
 ublic/lm/lmsy10.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1
 /public/lm/lmsy7.pfb>
-Output written on SeminarBeitrag.pdf (3 pages, 202187 bytes).
+Output written on SeminarBeitrag.pdf (5 pages, 240486 bytes).
 PDF statistics:
- 109 PDF objects out of 1000 (max. 8388607)
- 9 named destinations out of 1000 (max. 500000)
- 41 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 143 PDF objects out of 1000 (max. 8388607)
+ 16 named destinations out of 1000 (max. 500000)
+ 81 words of extra memory for PDF output out of 10000 (max. 10000000)
 
