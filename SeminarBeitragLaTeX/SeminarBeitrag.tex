@@ -1,0 +1,172 @@
+% !TEX encoding = UTF-8 Unicode
+
+% Beispiel für ein LaTeX-Dokument im Format "seminarvorlage"
+\documentclass[ngerman]{seminarbeitrag}
+% ngerman = Deutsch in neuer Rechtschreibung
+% english = Englisch
+
+\usepackage[utf8]{inputenc} % Kodierung der Non-ASCII-Zeichen
+
+\begin{document}
+
+% Unbedingt notwendig: Titel, Autoren
+\title{Gleichmäßige Flächenaufteilung von Polygonen}
+\author{Sebastian Loder\and\ Jan Steffen Jendrny}
+
+\maketitle% Titelangaben produzieren, kein Inhaltsverzeichnis
+
+\begin{abstract}
+Gummibärchen (auch Gummibären bzw. Goldbären) sind Fruchtgummis in Form von etwa
+zwei Zentimeter großen, stilisierten Bären. Sie werden in unterschiedlichen Farben hergestellt
+und bestehen im Wesentlichen aus Zucker, Zuckersirup und einer erstarrten
+Gelatine-Mischung, die ihnen ihre gummiartige Konsistenz verleiht.
+
+\keywords{Süßigkeiten, Gelatine, Bär, Lebensmittelfarbe.}% Keywords innerhalb vom Abstract
+\end{abstract}
+
+% Section-Überschriften werden automatisch in GROSSBUCHSTABEN gesetzt
+\section{Einleitung}\label{einleitung}
+Die Arbeit basiert auf der Veröffentlichung „Polygon Area Decomposition for Multiple-Robot Workspace Division“ von Susan Hert und Vladimir Lumelsky.
+%TODO: Hier muss noch eine Zitation rein
+In dieser Veröffentlichung wird ein konkretes Problem der Polygonzerlegung, das sogenannte \emph{Problem der verankerten Flächenaufteilung} (eng. \emph{anchored
+area partition problem}) beschrieben und mittels \emph{sweepline}- und \emph{divide-and-conquer}-Techniken gelöst. Die Lösung erfolgt zunächst für konvexe Polygone und wird
+anschließend auf nicht konvexe, nicht einfache Polygone erweitert.
+
+Die Polygonzerlegung ist eines der zentralen Probleme in der algorithmischen Geometrie und hat viele Anwendungsfälle, wie beispielsweise in der Kartographie,
+Bildverarbeitung oder in der Computergrafik. In vielen Fällen wird die Polygonzerlegung benötigt, um aus einem beliebigen Polygon eine Menge aus Teilpolygonen mit bestimmten
+Eigenschaften zu berechnen. Als Beispiel einer vielfach verwendeten Polygonzerlegung kann die Triangulation genannt werden, bei welcher ein gegebenes Polygon in eine Menge von Dreiecken
+zerlegt wird. Für die so berechnete Menge von Dreiecken stehen dann effiziente Algorithmen zur Lösung von Problemen zur Verfügung. Anschließend können die Lösungen der Teilpolygone zu
+einer Lösung für das Ausgangspolygon zusammengefasst werden. \\
+
+Bei dem hier vorgestellten Problem der verankerten Flächenaufteilung ist die Anforderung an die resultierenden Teilpolygone nicht durch eine bestimmte Geometrie
+(z. B. ein Dreieck), sondern durch die Lage und Fläche der Teilpolygone gegeben. Bezüglich der Lage besteht die Anforderung darin, dass ein gegebener Punkt (Standort genannt) auf
+dem resultierenden Polygon liegen muss. Jeder Standort weist als Eigenschaft eine Flächenanforderung auf, welche durch die Größe des Teilpolygons erfüllt werden soll. Die
+Flächenanforderung kann je Standort den gleichen Wert aufweisen, kann aber auch unter den Standorten variieren. Somit bezieht sich das hier beschriebene Problem sowohl auf eine
+gleichmäßige, als auch eine ungleichmäßige Flächenaufteilung. Das beschriebene Problem ist unter anderem durch die Flächenerkundung von Robotern motiviert: \\
+
+Auf einem Polygon werden n Roboter auf Standorten $S_{i},$ \iton positioniert, welche die Aufgabe erhalten, zusammen die gesamte Fläche des Polygons zu
+erkunden. Hierzu muss jede Position innerhalb des Polygons von einem der n Roboter abgefahren werden. Um die Arbeit unter den Robotern aufzuteilen, ist es sinnvoll, jedem Roboter einen
+Polygonteil zuzuweisen, der jeweils zu bearbeiten ist. Die Teilpolygone sollen sich nicht überlappen, um ein mehrfaches Überfahren zu vermeiden. Bei der Flächenaufteilung muss
+berücksichtigt werden, dass der Startpunkt eines jeden Roboters auf dem zugewiesenen Teilpolygon beziehungsweise in diesem liegt. Eine unterschiedliche Leistung der Roboter kann über die
+Flächenanforderung je Standort berücksichtigt werden. \\
+
+Zur formalen Beschreibung des Problems sind als Eingangsdaten ein Polygon $P$ sowie eine (nicht leere) Liste von Standorten \s{P} gegeben. Für jeden der $n$
+Standorte \si, \iton ist der benötigte Flächenanteil $c_{i}$, \iton mit $0 < c_{i} < 1$ gegeben, sodass $\sum_{i=1}^{n}c_{i}=1,0$ gilt. Das Polygon$P$ soll in $n$, nicht
+überlappende Polygone zerlegt werden, sodass jeder Standort \si auf dem Polygon \pi mit Fläche $c_{i}* \ar{P} $liegt. Aus der Fläche des Polygons $P$ kann für jeden der $n$ Standorte die
+benötigte Fläche mit $c_{i}* \ar{P} $ bestimmt werden.
+
+
+% Aufteilung eines Polygons im konvexen Fall
+\section{Aufteilung eines einfachen, konvexen Polygons}\label{konvex}
+%Beschreibung der Grundidee
+\subsection{Grundidee}\label{grundidee konvex}
+Bei der nachfolgend beschriebenen Lösung des Problems wird das konvexe Eingabepolygon \cp mithilfe von Liniensegmenten schrittweise zerlegt. Jedes Liniensegment
+\l ist hierbei vom Startpunkt \ls zum Endpunkt \le orientiert, wobei beide Punkte auf dem Rand von \cp liegen. Wenn für \ls und \le eine Position gefunden wurde, erfolgt eine
+Zerlegung in zwei Teilpolygone.
+Die bei jeder Teilung entstehen Teilpolygone erhalten entsprechend ihrer Lage zum Liniensegment \l die Bezeichnungen \prl für das rechts und \pll für das links
+des Liniensegments liegenden Polygons. Die Liniensegmente (bzw. \ls und \le) werden so positioniert, dass die Fläche von \prl der benötigten Fläche der auf dem Rand von \prl
+liegenden Standorte entspricht (\pll analog). Die Zerlegung wird für jedes Teilpolygon \prl und \pll rekursiv aufgerufen, bis nur noch 1-Standort Polygone vorliegen. Da aus einer
+Zerlegung eines konvexen Polygons mit einem Liniensegment immer zwei konvexe Polygone und insbesondere kein nicht konvexes Polygon resultiert, ist dieser Ansatz möglich.
+
+% Beschreibung des vorgestellten Algorithmus
+\subsection{Aufteilung eines einfachen, konvexen Polygons}\label{aufteilung konvex}
+Aus \cp entstehende, konvexe Polygone werden mit \cpi notiert. Mit den genannten Überlegungen lässt sich ein rekursiver \emph{divide-and-conquer} - Algorithmus
+zur Flächenaufteilung eines konvexen Polygons - basierend auf n Standorten - nun folgendermaßen skizzieren:
+
+%TODO: Einfügen des ersten Codes
+
+Bei jedem Aufruf von \con(\cp) wird zunächst geprüft, ob das übergebene Polygon nur noch einen Standort enthält. Falls ja, ist der Zielzustand für das
+übergebene Polygon erreicht und es ist keine weitere Flächenaufteilung erforderlich. Falls das Polygon mehrere Standorte enthält, erfolgt eine weitere Aufteilung
+des Polygons in zwei Teil-Polygone \prl und \pll, welche dann rekursiv mit \con aufgerufen werden.
+%TODO: Einfügen des ersten Beispiels
+
+\subsection{Positionierung der Schnittlinie}\label{schnittlinie konvex}
+Aus vorangegangenem Kapitel bleibt offen, wie genau die Aufteilung eines konvexen Polygons \cp in die Polygone \prl und \pll erfolgt, sodass anschließend
+$\mar{\mprl}=\marreq{S_{1},...,S_{i}}$ und $\mar{\mpll}=\marreq{S_{i+1},...,S_{n}} $ gilt.
+Konkret ist zu klären, wie Anfangs- und Endpunkt der Schnittlinien positioniert werden (siehe Listing XX, Zeile 4). \\
+%TODO: Bezug auf Listing 1 einfügen
+Initialisierung von \ls und \le beim Aufruf von \con:
+
+\begin{itemize}
+\item Der Startpunkt \ls der Linie \l wird mit den Koordinaten des ersten Punkts der Liste \w initialisiert, wobei dieser nach Definition ein Polygonpunkt (und
+kein Standort) ist. Es gilt daher $w_{1} \in$ \v.
+\item Der Endpunkt \le wird mit den Koordinaten des ersten Standorts in \w initialisiert und mit $w_{k}$ notiert, wobei $k$ der Index in \w ist, bei dem der
+erste Standort liegt. Da die Standorte nachihrem Vorkommen auf dem Weg von $v_{1}$ nach $v_{l}$ geordnet sind, ist bei einem konvexen Polygon sichergestellt,
+dass die Standorte $S_{2},…,S{n}$ alle links der Linie L liegen.
+\end{itemize}
+
+Bei einer Zerlegung mit einer so initialisierten Linie würde $S(\mprl)=S_{1}$ und $S(\mpll)=S_{2},...,S_{n}$ gelten, wobei $S_{1}$ in einer Ecke von \prl
+liegen würde. Je nach Fläche von \prl und \arreq{S_{1}} werden folgende Fälle unterschieden: \\
+
+\textbf{Fall 1: $\mar{\mprl}>\marreq{S_{1}}$} \\
+Nach der Initialisierung der Linie \l wird festgestellt, dass die Fläche von \prl größer ist als die benötigte Fläche von $S_{1}$. In diesem Fall erfolgt eine
+Verkleinerung von \ar{\mprl} unter Beibehaltung von $S(\mprl)=S_{1} $. Dies geschieht, indem \le als Drehpunkt fungiert und \ls inkrementell gegen den Uhrzeigersinn entlang des Polygons
+verschoben wird, bis $\mar{\mprl}=\marreq{S_{1}}$ gilt. Zur Verdeutlichung dieser Vorgehensweise sollen folgende Punkte nochmals herausgestellt werden:
+
+\begin{itemize}
+\item Durch die Initialisierung kann auf dem Weg von $w_{1}$ zu $w_{k}$ kein weiterer Standort liegen, d. h. $\marreq{S(\mprl)}$ ist konstant.
+\item $\mar{\mprl}$ wird mit Verschiebung von \ls stetig kleiner. Bei $L_{s}=S_{1}$ gilt $\mar{\mprl}=0$.
+\item \le ist fest, d.h. \s{1} ist stets Teil von \prl.
+\end{itemize}
+
+Wenn die Bedingung $\mar{\mprl}=\marreq{S_{1}}$ eintritt, erfolgt eine Polygonzerlegung. Für \prl erfolgt keine weitere Zerlegung beim Aufruf von
+\con (siehe Listing XX, Zeile 3), da nur $S_{1}$ auf dessen Rand liegt. Falls auf dem Rand von \prl mehr als ein Standort verbleibt, erfolgt eine erneute
+Zerlegung beim Aufruf von \con(\pll) (siehe Listing XX, Zeilen 4 und 5).
+%TODO: Bezug auf Listing einfügen
+
+\textbf{Fall 2: $\mar{\mprl}<\marreq{S_{1}}$} \\
+Nach der Initialisierung der Linie \l wird festgestellt, dass die Fläche von \prl kleiner ist als die benötigte Fläche von $S_{1}$. In diesem Fall erfolgt eine Vergrößerung von \ar{\mprl} mit dem Ziel, die Anforderung von $S_{1}$ zu erfüllen. Hierbei fungiert \ls als Drehpunkt und \le wird auf den nächsten in \w vorkommenden Polygonpunkt oder Standort $w_{k+1}$ gesetzt. Die Anforderung wird erneut geprüft. In diesem Schritt wird \le von Polygonpunkt zu Polygonpunkt verschoben. Eine inkrementelle Verschiebung entlang des Polygons erfolgt dann unter Fall 2.1 beziehungsweise 2.2.
+
+Hierbei kann es nun vorkommen, dass \le auf die Koordinaten eines Punktes $w_{j}$ in \w gesetzt wird, welcher ein Standort $\ne S_{1}$ ist. Dieser Standort wird dann beim nächsten Vorrücken (also bei $w_{j+1}$) zur benötigten Fläche von \prl hinzugenommen. Bei Fall 2 kann \arreq{\mprl} demnach ansteigen, sodass ein Vorücken von \le zwar zu einer größeren Fläche von \prl, nicht aber unbedingt zu einem günstigeren Verhältnis aus $\mar{\mprl} / \marreq{S(\mprl)}$ führt. \\
+\le wird so oft verschoben, bis eine der folgenden Bedingungen eintritt:\\
+
+\begin{itemize}
+\item $\mar{\mprl}>\marreq{S(\mprl)}$
+\item $L_{e} = S_{n}$
+\end{itemize}
+
+Je nachdem, wie weit \le vorrückt und wie die Fläche von \prl zur Flächenanforderung von S(\prl) ist, werden nun weiter zwei Fälle unterschieden:
+
+\textbf{Fall 2.1: $L_{e} = S_{n}$ und $\mar{\mprl}>\marreq{S(\mprl)}$} \\
+In diesem Fall wird der Endpunkt \le inkrementell im Uhrzeigersinn entlang des Polygons bewegt, bis $\mar{\mprl}=\marreq{S(\mprl)}$ gilt.
+Hinweis: Angenommen die Ausgangsposition von \le ist $w_{j}$, dann muss es zwischen $w_{j}$ und $w_{j-1}$ eine Position geben, bei der $\mar{\mprl}=\marreq{S(\mprl)}$ gilt, da beim Vorrücken \ar{\mprl} bei $w_{j-1}$ zu klein und bei $w_{j}$ zu groß war. Dieser Zwischenpunkt wird durch Interpolation gefunden.\\
+
+\textbf{Fall 2.2: $L_{e} = S_{n}$ und $\mar{\mprl}<\marreq{S(\mprl)}$} \\
+In diesem Fall wird der Anfangspunkt \ls inkrementell im Uhrzeigersinn entlang des Polygons bewegt, bis $\mar{\mprl}=\marreq{S(\mprl)}$ gilt.
+
+Diese Vorgehensweise entspricht im Wesentlichen Fall 1, wobei \ls (initialisiert mit $w_{1}$) nun nicht im Uhrzeigersinn zum ersten Standort \s{1}, sondern gegen den Uhrzeigersinn zum letzten Standort \s{n} bewegt wird. Vergleiche auch Abbildung XX, Fall (c) und (i).
+%TODO: Abbildung einfügen
+%TODO: Beispiel einfügen
+%TODO: Code einfügen
+ 
+
+
+% Eine neue Seite anfangen mit
+%\pagebreak
+
+
+% und schon der letzte Abschnitt
+
+
+% Bibliographie entweder direkt hier eingeben (nur im Notfall)...
+%\begin{thebibliography}{9}
+%\bibitem{ACM2019}
+%ACM.
+%\newblock How to classify works using ACM's computing classification system.
+%\newblock \url{http://www.acm.org/class/how_to_use.html}.
+%
+%\bibitem{Ivory2001}
+%M.~Y. Ivory and M.~A. Hearst.
+%\newblock The state of the art in automating usability evaluation of user
+%  interfaces.
+%\newblock {\em ACM Comput. Surv.}, 33(4):470--516, 2001.
+%
+%\end{thebibliography}
+
+% ... oder die Bibliographie mit Hilfe von BibTeX generieren,
+% dies ist auf jeden Fall die bessere Lösung und sollte nach
+% Möglichkeit immer verwendet werden:
+\bibliographystyle{abbrv}
+\bibliography{literatur} % Daten aus der Datei literatur.bib verwenden.
+
+\end{document}
