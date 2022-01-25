@@ -31,8 +31,7 @@ Gelatine-Mischung, die ihnen ihre gummiartige Konsistenz verleiht.
 
 % Section-Überschriften werden automatisch in GROSSBUCHSTABEN gesetzt
 \section{Einleitung}\label{einleitung}
-Die Arbeit basiert auf der Veröffentlichung „Polygon Area Decomposition for Multiple-Robot Workspace Division“ von Susan Hert und Vladimir Lumelsky.
-%TODO: Hier muss noch eine Zitation rein
+Die Arbeit basiert auf der Veröffentlichung „Polygon Area Decomposition for Multiple-Robot Workspace Division“ von Susan Hert und Vladimir Lumelsky \cite{Hert.1998}.
 In dieser Veröffentlichung wird ein konkretes Problem der Polygonzerlegung, das sogenannte \emph{Problem der verankerten Flächenaufteilung} (eng. \emph{anchored
 area partition problem}) beschrieben und mittels \emph{sweepline}- und \emph{divide-and-conquer}-Techniken gelöst. Die Lösung erfolgt zunächst für konvexe Polygone und wird
 anschließend auf nicht konvexe, nicht einfache Polygone erweitert.
@@ -230,16 +229,18 @@ Es wurde gezeigt, dass ein einfaches, konvexes Polygon rekursiv in $n$ 1-Standor
 \end{figure}
 Bevor dieser Algorithmus vorgestellt wird, soll die Beschreibung der dahinterliegenden Grundidee einen Überblick über die Vorgehensweise verschaffen. Danach werden die vorbereitenden Schritte vorgestellt und die Aufteilung des Polygons erläutert. Ein Beispiel dient anschließend zur Veranschaulichung des vorgestellten Algorithmus und zum Schluss des Kapitels wird der Sonderfall geschildert, dass Standorte im Inneren des Polygons liegen.
 
+%Die Grundidee des Algorithmus im nicht konvexen Fall
 \subsection{Grundidee}\label{grundidee nicht konvex}
 In Kapitel~\ref{konvex} wurde bereits erläutert, wie ein einfaches, konvexes Polygon aufgeteilt werden kann. Dieses Vorgehen kann auch bei der Aufteilung nicht konvexer Polygone verwendet werden, muss jedoch in einigen Punkten erweitert werden.\\
 Als Voraussetzung wird angenommen, dass ein nicht einfaches, nicht konvexes Polygon $P$ bereits in konvexe Teilpolygone \cpp zerlegt wurde. Im ersten Schritt werden die Teilpolygone mithilfe einer Tiefensuche neu geordnet, um eine feste Bearbeitungsfolge für das weitere Vorgehen zu erhalten. Anschließend werden die Teilpolygone rekursiv aufgeteilt, wie es ähnlich bereits in Kapitel~\ref{konvex} gezeigt wurde. Allerdings können nun Sonderfälle auftreten, die bei der Zerlegung eines einfachen, konvexen Polygons nicht vorkommen können. Einerseits kann \cpi weniger Fläche ausfüllen, als durch \arreq{S(CP_{i})} gefordert ist. In diesem Fall ist \cpi Flächen-unvollständig und muss Flächen von anderen Teilpolygonen übernehmen. Andererseits kann es sein, dass einzelne Teilpolygone keinen Standort enthalten oder weniger Fläche ausfüllen, als durch \arreq{S(CP_{i})} gefordert ist. In diesem Fall ist \cpi Standort-unvollständig und andere Teilpolygone müssen Flächen von \cpi übernehmen.\\
 Die Neuordnung wird innerhalb der Prozedur \ord umgesetzt und die Aufteilung inklusive der Sonderfallbehandlung wird durch die beiden Methoden \noncon und \daa umgesetzt, die sich gegenseitig rekursiv aufrufen, bis ein n-Standort Polygon in $n$ 1-Standort Polygone aufgeteilt wurde.
 
+%Beschreibung einer Möglichkeit das Polygon in konvexe Teile zu zerlegen
 \subsection{Aufteilung in konvexe Teilpolygone}\label{aufteilung}
-Als Voraussetzung für die gleichmäßige Aufteilung eines nicht einfachen, nicht konvexen Polygons wird angenommen, dass das Polygon bereits in konvexe Teilpolygone aufgeteilt wurde. In verschiedenen Werken werden Möglichkeiten einer solchen Aufteilung vorgestellt. Ein Vorgehen wäre zum Beispiel, eine Triangulation eines Polygons zu erzeugen. In diesem Fall würde jedoch eine hohe Anzahl von Teilpolygonen entstehen. Um Teilpolygone zusammenzufassen, können nacheinander Kanten der Triangulation entfernt werden, solange das dadurch entstehende Teilpolygon weiterhin konvex ist.
-%TODO: Literatur einfügen
+Als Voraussetzung für die gleichmäßige Aufteilung eines nicht einfachen, nicht konvexen Polygons wird angenommen, dass das Polygon bereits in konvexe Teilpolygone aufgeteilt wurde. In verschiedenen Werken werden Möglichkeiten einer solchen Aufteilung vorgestellt. Ein Vorgehen wäre zum Beispiel, eine Triangulation eines Polygons zu erzeugen. In diesem Fall würde jedoch eine hohe Anzahl von Teilpolygonen entstehen. Um Teilpolygone zusammenzufassen, können nacheinander Kanten der Triangulation entfernt werden, solange das dadurch entstehende Teilpolygon weiterhin konvex ist \cite{Schachter.1978}.
 Hieraus wird ersichtlich, dass es verschiedene Möglichkeiten gibt, ein Polygon in konvexe Teilpolygone aufzuteilen. Zum Schluss dieser Arbeit wird besprochen, welche Auswirkungen diese vorbereitenden Schritte auf den Verlauf des vorgestellten Algorithmus haben können.
 
+%Beschreibung des Algorithmus um die konvexen Teilpolygone neu zu ordnen
 \subsection{Neuordnung der konvexen Teilpolygone}\label{ordnung}
 
 \begin{lstlisting}[float,caption={Der Algorithmus \ord}, frame=single, label=orderpieces]
@@ -264,7 +265,7 @@ Wir definieren einen Knoten $N_{i}$ in $G$ als Blatt, wenn $N_{}$ entweder nur e
 Die Prozedur \ord beschreibt nun die Neuordnung der Teilpolygone. \ord wird mit einem beliebigen Knoten $N_{i}$ von $G$ initial aufgerufen. Zuerst wird geprüft, ob $N_{i}$ bereits markiert wurde. Ist dies der Fall, kann der Aufruf zurückkehren. Falls $N_{i}$ noch nicht markiert wurde, wird geprüft, ob $N_{i}$ nach obiger Definition ein Blatt ist. Falls $N_{i}$ kein Blatt ist, dann wird der Knoten markiert und für alle Nachbarn $N_{k}$ von $N_{i}$ rekursiv \ord aufgerufen. Nach dem Rücksprung der Aufrufe aller Nachbarn von \cpi wird \cpi ausgegeben. Falls $N_{i}$ ein Blatt ist, dann wird $N_{i}$ markiert und \cpi ausgegeben. Anschließend wird für alle Nachbarn $N_{k}$ von $N_{i}$ rekursiv \ord aufgerufen.
 Die neue Ordnung der \cpi ist nun die Reihenfolge, in der die Teilpolygone ausgegeben wurden.
 
-
+%Beschreibung des Algorithmus zur Lösung der verankerten Flächenaufteilung im nicht konvexen Fall
 \subsection{Aufteilung eines nicht einfachen, nicht konvexen Polygons}\label{aufteilung nicht konvex}
 Für die Aufteilung wird jedes Teilpolygon \cpp betrachtet. Konkret wird das Polygon \pred{\mcpi} so aufgeteilt, dass ein Teilstück einem Standort in \cpi (falls vorhanden) zugeordnet wird und der Rest dem Polygon \pred{CP_{k}} mit $k > i$ angehangen wird. Diese Aufteilung wird durch die sich gegenseitig rekursiv aufrufenden Prozeduren \noncon und \daa erreicht. Erstere erzeugt ein Liniensegment, welches \pred{\mcpi} in zwei Teile aufteilt und letztere ordnet die Teile entweder einem Standort zu oder teilt sie erneut auf.
 
@@ -364,7 +365,7 @@ Weiterhin muss der Fall betrachtet werden, bei dem das Liniensegment $L$ das Pol
 Die Pseudostandorte werden nun bei der Aufteilung von \next{\mcpi} behandelt. Wenn den Pseudostandorten hierbei ein Polygon zugeteilt wird, dann wird dieses Polygon auf die korrespondierenden Standorte übertragen.\\
 Zusammenfassend wir durch den Algorithmus von\noncon ein $q$-Standort-Polygon entweder in ein $q_{1}$-Standort-Polygon und ein $q_{2}$-Standort-Polygon mit $q_{1}, q_{2} > 0$ und $q-{1} + q_{2} = q$ aufgeteilt oder es wird ein $1$-Standort Polygon abgetrennt und es bleibt ein $q'$-Standort Polygon mit $q' = q - 1$ übrig.
 
-
+%Beschreibung des Algorithmus DetachAndAssign
 \subsection{Der Algorithmus DetachAndAssign}\label{detach}
 
 \begin{lstlisting}[float,caption={Der Algorithmus \daa}, frame=single, label=code detach,breaklines=true,breakatwhitespace=true]
@@ -408,6 +409,7 @@ Im zweiten Fall treten die gleichen zwei Unterfälle auf. Falls \pred{CP} nur ei
 Falls \pred{CP} mehrere Standorte hat, dann wird \pred{CP} zunächst neu geordnet, sodass $(w_{m}, w_{1})$ die Kante zu \next{CP} ist. Anschließend erfolgt wiederum ein rekursiver Aufruf von \mbox{\textit{NonConvexDivide}}, da nicht bekannt ist, durch welchen Standort die Flächen-Unvollständigkeit resultiert.\\
 Im dritten Fall hat \pred{CP} mehr Fläche, als die Standorte von $CP$ benötigen. In diesem Fall wird \pred{CP} ebenfalls neu geordnet, sodass $(w_{m}, w_{1})$ die Kante zu \next{CP} ist. Mit diesem Polygon erfolgt ein Aufruf von \mbox{\textit{NonConvexDivide}}.
 
+%Beschreibung des Sonderfalls, wenn Standorte innerhalb des Polygons liegen
 \subsection{Behandlung innen liegender Standorte}\label{innere Standorte}
 Für innen liegende Standorte muss die in Kapitel~\ref{aufteilung} beschriebene Zerlegung in konvexe Teilpolygone so erfolgen, dass jeder Standort anschließend auf einer Kante liegt. Ist dies nicht direkt möglich, können für die Standorte auch weitere Kanten eingefügt werden und die Aufteilung in konvexe Teilpolygone wird etwas detaillierter. Die neuen Kanten laufen durch die innenliegenden Standorte. Für den korrekten Ablauf des Algorithmus spielt diese Art der Zerlegung keine Rolle.
 
@@ -416,10 +418,9 @@ Für innen liegende Standorte muss die in Kapitel~\ref{aufteilung} beschriebene 
 \begin{figure}[h]
     \includegraphics[width=1\textwidth]{./Abbildungen/5.png}
     \centering
-    \caption{Beispiel einer Aufteilung eines nicht konvexen Polygons, entnommen aus XX Abbildung 17}
+    \caption{Beispiel einer Aufteilung eines nicht konvexen Polygons, entnommen aus \cite{Hert.1998} Abbildung 17}
     \label{fuenftes beispiel}
 \end{figure}
-%TODO: Literatur einfügen
 Abbildung~\ref{fuenftes beispiel} zeigt verschiedene Stadien der gleichmäßigen Aufteilung eines nicht konvexen Polygons mit 12 Ecken und sieben Standorten. (a) zeigt die initiale Aufteilung des Polygons in 5 konvexe Teilpolygone $CP1, …,CP5$. In (b) – (f) werden die Teilpolygone, die bereits einem Standort zugeteilt sind, dunkelblau markiert. Die Teilpolygone, die bereits einem Standort zugeteilt, aber noch Flächen-unvollständig sind, werden hellblau markiert.\\
 In (b) wird das Teilpolygon $CP1$ bearbeitet und dabei in zwei Teilpolygone aufgeteilt. $P3$ wird dem Standort $S3$ zugeordnet und $P4$ dem Standort $S4$. $P4$ erfüllt die Flächenanforderung von $S4$ nicht vollständig, weshalb ein Pseudostandort $S'4$ an der Kante zu \next{CP1} erzeugt wird. Dieser Pseudostandort wird zu einem späteren Zeitpunkt bearbeitet.\\
  (c) zeigt den Zustand nach der Bearbeitung von Teilpolygon $CP2$. Hier tritt erneut der Fall auf, dass die Fläche, die dem Standort $S2$ zugeteilt wird, zu klein ist. Aus diesem Grund wird der Pseudostandort $S'2$ an der Kante zu \next{CP2} erzeugt.\\
@@ -427,11 +428,14 @@ In (d) wird der Zustand nach der Bearbeitung von Teilpolygon $CP3$ gezeigt. Dort
  (e) zeigt den Zustand nach der Bearbeitung von $CP4$. Dort hat das Liniensegment das Ende von $CP4$ erreicht, ohne dass zuvor die Flächenanforderung der Standorte erfüllt werden konnte. Aus diesem Grund wird $P5$ und der Pseudostandort $S'5$ erzeugt und diese $S5$ zugeordnet. Anschließend wird derselbe Schritt für $S6$ wiederholt. Nach Abziehen der Flächen $P5$ und $P6$ von $CP4$ werden Teile von $CP4$ den Pseudostandorten $S'2$ und $S4$ zugeordnet und mit den Teilpolygonen $P2$ und $P4$ vereint.\\
 Im letzten Schritt (f) wird $CP5$ und der verbliebene Teil von $CP4$ den Pseudostandorten $S5$ und $S6$ zugeordnet. Die Abbildung zeigt das in gleichmäßige Teilpolygone $P1,…,P7$ zerlegte Polygon.
 
+%Komplexitätsanalyse der Vorgestellten Algorithmen
 \section{Komplexitätsanalyse}\label{komplex}
+%Konvexer Fall
 \subsection{Konvexes Polygon}
 Der Algorithmus \con benötigt lineare Zeit bezogen auf die Anzahl der Elemente der Liste $W(P)$, um einen einzelnen Schnitt durchzuführen. Der dabei erforderliche Aufbau der Polygone \prl beziehungsweise \pll sowie die Ermittlung der Fläche ist in konstanter Zeit möglich. Das Finden der Punkte, bei denen $\mar{\mprl} = \marreq{S(\mprl)}$ gilt, kann ebenso in konstanter Zeit erfolgen. Der Algorithmus \con benötigt daher $O(n+v)$ Zeit ($n$ = Anzahl der Standorte, $v$ = Anzahl an Polygonpunkten).\\
 Im ungünstigste Fall trennt \con von einem konvexen Polygon mit $q$ Standorten nur ein Dreieck ($v$ = 3, $n$ = 1) ab. Neben dem Dreieck verbleibt dann ein konvexes Polygon mit $q-1$ Standorten und $v+1$ Polygonpunkten. Für dieses Polygon gilt wiederrum selbes. Um eine gesamte Flächenzerlegung eines konvexen Polygons zu berechnen, wird $O((n-1)(n+v))$ Zeit benötigt. 
 Hierbei sei angemerkt, dass dieser Algorithmus stets terminiert, da die Anzahl an Standorten konstant ist und die Anzahl der Teil-Polygone je Schnitt um 1 erhöht wird. Nach $n-1$ Schnitten entspricht die Anzahl der Teil-Polygone der Anzahl der Standorte.
+%Nicht konvexer Fall
 \subsection{Nicht konvexes Polygon}
 Der Algorithmus \ord besucht jeden Knoten im Nachbarschaftsgraphen maximal zwei Mal, sodass die Ordnung in linearer Zeit $O(p)$ bezogen auf die Anzahl $p$ der konvexen Teile erfolgen kann.
 Der Algorithmus \noncon benötigt $O(pn^{2} + nv)$ Zeit, um alle $p$ konvexen Teile unter den $n$ Standorten aufzuteilen. Im ungünstigsten Fall wird jedes der $p$ konvexen Teile in $n$ Polygone zerlegt, wobei jedes der Polygone einen Teil eines Standorts abbildet.\\
@@ -440,26 +444,6 @@ Um ein Polygon nach einem Schnitt zu lösen (\emph{Detach}), müssen alle Zeiger
 Der Algorithmus \emph{Assign} übernimmt die Zuweisung von Flächen zu Standorten, wobei eine Fläche aus einem Set von konvexen Teilen besteht. Die Vereinigung der konvexen Teile zu einem Polygon benötigt lineare Zeit bezogen auf die Anzahl der Polygonpunkte aller Teile, also maximal $O(pn + v)$. Die Vereinigung aller $n$-Standort-Polygone benötigt daher $O(pn^{2}+ vn)$ Zeit. 
 Zusammenfassend ergibt sich aus den Laufzeiten für \mbox{\textit{OrderPieces}}, \noncon und \daa eine Gesamtlaufzeit von $O(pn^{2} + vn)$.
 
-
-
-% Bibliographie entweder direkt hier eingeben (nur im Notfall)...
-%\begin{thebibliography}{9}
-%\bibitem{ACM2019}
-%ACM.
-%\newblock How to classify works using ACM's computing classification system.
-%\newblock \url{http://www.acm.org/class/how_to_use.html}.
-%
-%\bibitem{Ivory2001}
-%M.~Y. Ivory and M.~A. Hearst.
-%\newblock The state of the art in automating usability evaluation of user
-% interfaces.
-%\newblock {\em ACM Comput. Surv.}, 33(4):470--516, 2001.
-%
-%\end{thebibliography}
-
-% ... oder die Bibliographie mit Hilfe von BibTeX generieren,
-% dies ist auf jeden Fall die bessere Lösung und sollte nach
-% Möglichkeit immer verwendet werden:
 \bibliographystyle{abbrv}
 \bibliography{literatur} % Daten aus der Datei literatur.bib verwenden.
 
