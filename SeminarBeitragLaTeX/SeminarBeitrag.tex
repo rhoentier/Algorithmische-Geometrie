@@ -6,9 +6,13 @@
 % english = Englisch
 
 \usepackage[utf8]{inputenc} % Kodierung der Non-ASCII-Zeichen
+\usepackage{listings} %Einfügen von Code-Beispielen
+\usepackage{xcolor}
 
 \begin{document}
 
+%Einstellungen für Listings
+\lstset{basicstyle=\small, language=C, keywordstyle=\color{black},commentstyle=\color{gray}, numbers=left, numberstyle=\tiny}
 % Unbedingt notwendig: Titel, Autoren
 \title{Gleichmäßige Flächenaufteilung von Polygonen}
 \author{Sebastian Loder\and\ Jan Steffen Jendrny}
@@ -52,8 +56,8 @@ Flächenanforderung je Standort berücksichtigt werden. \\
 
 Zur formalen Beschreibung des Problems sind als Eingangsdaten ein Polygon $P$ sowie eine (nicht leere) Liste von Standorten \s{P} gegeben. Für jeden der $n$
 Standorte \si, \iton ist der benötigte Flächenanteil $c_{i}$, \iton mit $0 < c_{i} < 1$ gegeben, sodass $\sum_{i=1}^{n}c_{i}=1,0$ gilt. Das Polygon$P$ soll in $n$, nicht
-überlappende Polygone zerlegt werden, sodass jeder Standort \si auf dem Polygon \pi mit Fläche $c_{i}* \ar{P} $liegt. Aus der Fläche des Polygons $P$ kann für jeden der $n$ Standorte die
-benötigte Fläche mit $c_{i}* \ar{P} $ bestimmt werden.
+überlappende Polygone zerlegt werden, sodass jeder Standort \si auf dem Polygon \pi mit Fläche $c_{i}* \mar{P}$ liegt. Aus der Fläche des Polygons $P$ kann für jeden der $n$ Standorte die
+benötigte Fläche mit $c_{i}* \mar{P}$ bestimmt werden.
 
 
 % Aufteilung eines Polygons im konvexen Fall
@@ -64,28 +68,38 @@ Bei der nachfolgend beschriebenen Lösung des Problems wird das konvexe Eingabep
 \l ist hierbei vom Startpunkt \ls zum Endpunkt \Le orientiert, wobei beide Punkte auf dem Rand von \cp liegen. Wenn für \ls und \Le eine Position gefunden wurde, erfolgt eine
 Zerlegung in zwei Teilpolygone.
 Die bei jeder Teilung entstehen Teilpolygone erhalten entsprechend ihrer Lage zum Liniensegment \l die Bezeichnungen \prl für das rechts und \pll für das links
-des Liniensegments liegenden Polygons. Die Liniensegmente (bzw. \ls und \Le) werden so positioniert, dass die Fläche von \prl der benötigten Fläche der auf dem Rand von \prl
+des Liniensegments liegenden Polygons. Die Liniensegmente (bzw. \ls und $L_{e}$) werden so positioniert, dass die Fläche von \prl der benötigten Fläche der auf dem Rand von \prl
 liegenden Standorte entspricht (\pll analog). Die Zerlegung wird für jedes Teilpolygon \prl und \pll rekursiv aufgerufen, bis nur noch 1-Standort Polygone vorliegen. Da aus einer
 Zerlegung eines konvexen Polygons mit einem Liniensegment immer zwei konvexe Polygone und insbesondere kein nicht konvexes Polygon resultiert, ist dieser Ansatz möglich.
 
 % Beschreibung des vorgestellten Algorithmus
 \subsection{Aufteilung eines einfachen, konvexen Polygons}\label{aufteilung konvex}
 Aus \cp entstehende, konvexe Polygone werden mit \cpi notiert. Mit den genannten Überlegungen lässt sich ein rekursiver \emph{divide-and-conquer} - Algorithmus
-zur Flächenaufteilung eines konvexen Polygons - basierend auf n Standorten - nun folgendermaßen skizzieren:
+zur Flächenaufteilung eines konvexen Polygons - basierend auf n Standorten - wie in Listing~\ref{code grundidee} skizzieren.\\
 
-%TODO: Einfügen des ersten Codes
+\begin{lstlisting}[float,caption={Die Grundidee hinter dem Algorithmus \con}, frame=single, label=code grundidee]
+// Input: Convex polygon CP
+Function ConvexDivide(CP)
+    if Length(S(CP)) == 1 then return CP
+    // Here, the postion of L has to be calculated
+    PrL, PlL = Cut(CP, L)       // CP is cut into two pieces PrL and PlL
+    ConvexDivide(PrL)   // recursive PrL
+    ConvexDivide(PlL)   // recursive PlL
+ End ConvexDivide() 
+\end{lstlisting}
 
 Bei jedem Aufruf von \con(\cp) wird zunächst geprüft, ob das übergebene Polygon nur noch einen Standort enthält. Falls ja, ist der Zielzustand für das
 übergebene Polygon erreicht und es ist keine weitere Flächenaufteilung erforderlich. Falls das Polygon mehrere Standorte enthält, erfolgt eine weitere Aufteilung
 des Polygons in zwei Teil-Polygone \prl und \pll, welche dann rekursiv mit \con aufgerufen werden.
 %TODO: Einfügen des ersten Beispiels
 
+%Beschreibung, wie die Linie L das Polygon durchläuft
 \subsection{Positionierung der Schnittlinie}\label{schnittlinie konvex}
+
 Aus vorangegangenem Kapitel bleibt offen, wie genau die Aufteilung eines konvexen Polygons \cp in die Polygone \prl und \pll erfolgt, sodass anschließend
 $\mar{\mprl}=\marreq{S_{1},...,S_{i}}$ und $\mar{\mpll}=\marreq{S_{i+1},...,S_{n}} $ gilt.
-Konkret ist zu klären, wie Anfangs- und Endpunkt der Schnittlinien positioniert werden (siehe Listing XX, Zeile 4). \\
-%TODO: Bezug auf Listing 1 einfügen
-Initialisierung von \ls und \Le beim Aufruf von \con:
+Konkret ist zu klären, wie Anfangs- und Endpunkt der Schnittlinien positioniert werden (siehe Listing~\ref{code grundidee}, Zeile 4). \\
+Initialisierung von \ls und \Le beim Aufruf von \mbox{\textit{ConvexDivide}}:
 
 \begin{itemize}
 \item Der Startpunkt \ls der Linie \l wird mit den Koordinaten des ersten Punkts der Liste \w initialisiert, wobei dieser nach Definition ein Polygonpunkt (und
@@ -110,9 +124,8 @@ verschoben wird, bis $\mar{\mprl}=\marreq{S_{1}}$ gilt. Zur Verdeutlichung diese
 \end{itemize}
 
 Wenn die Bedingung $\mar{\mprl}=\marreq{S_{1}}$ eintritt, erfolgt eine Polygonzerlegung. Für \prl erfolgt keine weitere Zerlegung beim Aufruf von
-\con (siehe Listing XX, Zeile 3), da nur $S_{1}$ auf dessen Rand liegt. Falls auf dem Rand von \prl mehr als ein Standort verbleibt, erfolgt eine erneute
-Zerlegung beim Aufruf von \con(\pll) (siehe Listing XX, Zeilen 4 und 5).
-%TODO: Bezug auf Listing einfügen
+\con (siehe Listing~\ref{code grundidee}, Zeile 3), da nur $S_{1}$ auf dessen Rand liegt. Falls auf dem Rand von \pll mehr als ein Standort verbleibt, erfolgt eine erneute
+Zerlegung beim Aufruf von \con(\pll) (siehe Listing~\ref{code grundidee}, Zeile 7).
 
 \textbf{Fall 2: $\mar{\mprl}<\marreq{S_{1}}$} \\
 Nach der Initialisierung der Linie \l wird festgestellt, dass die Fläche von \prl kleiner ist als die benötigte Fläche von $S_{1}$. In diesem Fall erfolgt eine Vergrößerung von \ar{\mprl} mit dem Ziel, die Anforderung von $S_{1}$ zu erfüllen. Hierbei fungiert \ls als Drehpunkt und \Le wird auf den nächsten in \w vorkommenden Polygonpunkt oder Standort $w_{k+1}$ gesetzt. Die Anforderung wird erneut geprüft. In diesem Schritt wird \Le von Polygonpunkt zu Polygonpunkt verschoben. Eine inkrementelle Verschiebung entlang des Polygons erfolgt dann unter Fall 2.1 beziehungsweise 2.2.
@@ -135,9 +148,36 @@ Hinweis: Angenommen die Ausgangsposition von \Le ist $w_{j}$, dann muss es zwisc
 In diesem Fall wird der Anfangspunkt \ls inkrementell im Uhrzeigersinn entlang des Polygons bewegt, bis $\mar{\mprl}=\marreq{S(\mprl)}$ gilt.
 
 Diese Vorgehensweise entspricht im Wesentlichen Fall 1, wobei \ls (initialisiert mit $w_{1}$) nun nicht im Uhrzeigersinn zum ersten Standort \s{1}, sondern gegen den Uhrzeigersinn zum letzten Standort \s{n} bewegt wird. Vergleiche auch Abbildung XX, Fall (c) und (i).
+\begin{lstlisting}[float,caption={Mit den Fällen 1 und 2 lässt sich der Algorithmus von \con nun wie folgt erweitern:}, frame=single, label=code konvex]
+// Input: Convex polygon CP
+Function ConvexDivide(CP)
+    if Length(S(CP)) == 1 then return CP 
+    Ls = W(1), Le = W(k)   // k = index of first Site in W
+    PrL, PlL = Cut(CP, L)  // partitioning, returns PrL and PlL
+    while Area(PrL) < AreaRequired(S(PrL)) and Le != Sn do
+        if W(k-1) != S1 and W(k-1) in S then 
+            S(PrL) = S(PrL) + W(k-1)   // add previous Site to S(PrL)
+        k += 1
+        Le = W(k)                     // move Le to next point in W
+        PrL, PlL = Cut(CP, L)
+    if Area(PrL) > AreaRequired(S(PrL)) and Le == S1 then
+        move Le CCW until Area(PrL) == AreaRequired(S(PrL))
+    else if Area(PrL) < AreaRequired(S(PrL)) 
+        if Le != Sn then
+            interpolate Le that Area(PrL) == AreaRequired(S(PrL))
+        else if Le == Sn then 
+            move Ls CW until Area(PrL) == AreaRequired(S(PrL))
+    PrL, PlL = Cut(CP, L)	// CP is cut into two pieces PrL and PlL
+    ConvexDivide(PrL)  // recursive PrL
+    ConvexDivide(PlL)   // recursive PlL
+End ConvexDivide()
+\end{lstlisting}
+
+
 %TODO: Abbildung einfügen
 %TODO: Beispiel einfügen
 %TODO: Code einfügen
+
 %In diesem Kapitel wird die Aufteilung eines nicht einfachen, nicht konvexen Polygons gezeigt
 \section{Verallgemeinerung: Aufteilung eines nicht einfachen, nicht konvexen Polygons}\label{nicht konvex}
 Es wurde gezeigt, dass ein einfaches, konvexes Polygon rekursiv in $n$ 1-Standort-Polygone aufgeteilt werden kann. Dieses Kapitel dient dazu einen verallgemeinerten Algorithmus zu skizzieren, damit auch für nicht einfache, nicht konvexe Polygone (Abbildung XX) das Problem der verankerten Flächenaufteilung gelöst werden kann.
@@ -145,10 +185,8 @@ Es wurde gezeigt, dass ein einfaches, konvexes Polygon rekursiv in $n$ 1-Standor
 Bevor dieser Algorithmus vorgestellt wird, soll die Beschreibung der dahinterliegenden Grundidee einen Überblick über die Vorgehensweise verschaffen. Danach werden die vorbereitenden Schritte vorgestellt und die Aufteilung des Polygons erläutert. Ein Beispiel dient anschließend zur Veranschaulichung des vorgestellten Algorithmus und zum Schluss des Kapitels wird der Sonderfall geschildert, dass Standorte im Inneren des Polygons liegen.
 
 \subsection{Grundidee}\label{grundidee nicht konvex}
-In Kapitel XX wurde bereits erläutert, wie ein einfaches, konvexes Polygon aufgeteilt werden kann. Dieses Vorgehen kann auch bei der Aufteilung nicht konvexer Polygone verwendet werden, muss jedoch in einigen Punkten erweitert werden.
-%TODO: Kapitel einfügen
-Als Voraussetzung wird angenommen, dass ein nicht einfaches, nicht konvexes Polygon $P$ bereits in konvexe Teilpolygone \cpp zerlegt wurde. Im ersten Schritt werden die Teilpolygone mithilfe einer Tiefensuche neu geordnet, um eine feste Bearbeitungsfolge für das weitere Vorgehen zu erhalten. Anschließend werden die Teilpolygone rekursiv aufgeteilt, wie es ähnlich bereits in Kapitel XX gezeigt wurde. Allerdings können nun Sonderfälle auftreten, die bei der Zerlegung eines einfachen, konvexen Polygons nicht vorkommen können. Einerseits kann \cpi weniger Fläche ausfüllen, als durch \arreq{S(CP_{i})} gefordert ist. In diesem Fall ist \cpi Flächen-unvollständig und muss Flächen von anderen Teilpolygonen übernehmen. Andererseits kann es sein, dass einzelne Teilpolygone keinen Standort enthalten oder weniger Fläche ausfüllen, als durch \arreq{S(CP_{i})} gefordert ist. In diesem Fall ist \cpi Standort-unvollständig und andere Teilpolygone müssen Flächen von \cpi übernehmen.\\
-%TODO: Kapitel einfügen
+In Kapitel~\ref{konvex} wurde bereits erläutert, wie ein einfaches, konvexes Polygon aufgeteilt werden kann. Dieses Vorgehen kann auch bei der Aufteilung nicht konvexer Polygone verwendet werden, muss jedoch in einigen Punkten erweitert werden.\\
+Als Voraussetzung wird angenommen, dass ein nicht einfaches, nicht konvexes Polygon $P$ bereits in konvexe Teilpolygone \cpp zerlegt wurde. Im ersten Schritt werden die Teilpolygone mithilfe einer Tiefensuche neu geordnet, um eine feste Bearbeitungsfolge für das weitere Vorgehen zu erhalten. Anschließend werden die Teilpolygone rekursiv aufgeteilt, wie es ähnlich bereits in Kapitel~\ref{konvex} gezeigt wurde. Allerdings können nun Sonderfälle auftreten, die bei der Zerlegung eines einfachen, konvexen Polygons nicht vorkommen können. Einerseits kann \cpi weniger Fläche ausfüllen, als durch \arreq{S(CP_{i})} gefordert ist. In diesem Fall ist \cpi Flächen-unvollständig und muss Flächen von anderen Teilpolygonen übernehmen. Andererseits kann es sein, dass einzelne Teilpolygone keinen Standort enthalten oder weniger Fläche ausfüllen, als durch \arreq{S(CP_{i})} gefordert ist. In diesem Fall ist \cpi Standort-unvollständig und andere Teilpolygone müssen Flächen von \cpi übernehmen.\\
 Die Neuordnung wird innerhalb der Prozedur \ord umgesetzt und die Aufteilung inklusive der Sonderfallbehandlung wird durch die beiden Methoden \noncon und \daa umgesetzt, die sich gegenseitig rekursiv aufrufen, bis ein n-Standort Polygon in $n$ 1-Standort Polygone aufgeteilt wurde.
 
 \subsection{Aufteilung in konvexe Teilpolygone}\label{aufteilung}
@@ -157,7 +195,24 @@ Als Voraussetzung für die gleichmäßige Aufteilung eines nicht einfachen, nich
 Hieraus wird ersichtlich, dass es verschiedene Möglichkeiten gibt, ein Polygon in konvexe Teilpolygone aufzuteilen. Zum Schluss dieser Arbeit wird besprochen, welche Auswirkungen diese vorbereitenden Schritte auf den Verlauf des vorgestellten Algorithmus haben können.
 
 \subsection{Neuordnung der konvexen Teilpolygone}\label{ordnung}
-% TODO: Code einfügen
+
+\begin{lstlisting}[float,caption={Der Algorithmus \ord}, frame=single, label=orderpieces]
+// Input: Nj - Node of the connectivity Graph
+Function OderPieces(Nj)
+    if Nj has not beeing marked then
+        if Nj is a leaf node then    
+            Mark(Nj)
+            Output(CPj)
+            for each Nk in Neighbors(Nj)
+                OrderPieces(Nk)
+        else
+            Mark(Nj)
+            for each Nk in Neighbors(Nj)
+                OrderPieces(Nk)
+            Output(CPj)
+End OrderPieces(Nj)  
+\end{lstlisting}
+
 Es kann nun davon ausgegangen werden, dass das Polygon $P$ bereits in konvexe Teilpolygone \cpp zerlegt wurde. Die Teilpolygone können willkürlich geordnet sein und die Indizes treffen keine Aussage über die tatsächliche Anordnung im Polygon $P$. Aus diesem Grund werden die Teilpolygone zuerst neu geordnet, was für den anschließend dargestellten Algorithmus erforderlich ist. Dazu wird ein Verbindungsgraph $G$ gebildet und anhand dessen mittels einer Tiefensuche eine Ordnung erzeugt. Jedes Teilpolygon \cpi wird durch einen Knoten $N_{i}$ in $G$ abgebildet. Für jeden Nachbarn $CP_{k} (i \ne k)$ des Teilpolygons \cpi wird eine Kante zum jeweils korrespondierenden Knoten $N_{k}$ eingefügt. \\
 Wir definieren einen Knoten $N_{i}$ in $G$ als Blatt, wenn $N_{}$ entweder nur einen Nachbarn hat oder alle Nachbarn von $N_{i}$ als besucht markiert wurden.
 Die Prozedur \ord beschreibt nun die Neuordnung der Teilpolygone. \ord wird mit einem beliebigen Knoten $N_{i}$ von $G$ initial aufgerufen. Zuerst wird geprüft, ob $N_{i}$ bereits markiert wurde. Ist dies der Fall, kann der Aufruf zurückkehren. Falls $N_{i}$ noch nicht markiert wurde, wird geprüft, ob $N_{i}$ nach obiger Definition ein Blatt ist. Falls $N_{i}$ kein Blatt ist, dann wird der Knoten markiert und für alle Nachbarn $N_{k}$ von $N_{i}$ rekursiv \ord aufgerufen. Nach dem Rücksprung der Aufrufe aller Nachbarn von \cpi wird \cpi ausgegeben. Falls $N_{i}$ ein Blatt ist, dann wird $N_{i}$ markiert und \cpi ausgegeben. Anschließend wird für alle Nachbarn $N_{k}$ von $N_{i}$ rekursiv \ord aufgerufen.
@@ -167,12 +222,59 @@ Die neue Ordnung der \cpi ist nun die Reihenfolge, in der die Teilpolygone ausge
 \subsection{Aufteilung eines nicht einfachen, nicht konvexen Polygons}\label{aufteilung nicht konvex}
 Für die Aufteilung wird jedes Teilpolygon \cpp betrachtet. Konkret wird das Polygon \pred{\mcpi} so aufgeteilt, dass ein Teilstück einem Standort in \cpi (falls vorhanden) zugeordnet wird und der Rest dem Polygon \pred{CP_{k}} mit $k > i$ angehangen wird. Diese Aufteilung wird durch die sich gegenseitig rekursiv aufrufenden Prozeduren \noncon und \daa erreicht. Erstere erzeugt ein Liniensegment, welches \pred{\mcpi} in zwei Teile aufteilt und letztere ordnet die Teile entweder einem Standort zu oder teilt sie erneut auf.
 
-%TODO: Code einfügen
-%TODO: Listing verlinken
-Zuerst wird die Prozedur \noncon beschrieben, die die Teilpolygone in zwei Teile aufteilt. Listing XX beschreibt diese Prozedur.
-Als Eingabe dient ein konvexes Teilpolygon, beschrieben durch die Liste W(\cpi) (mit $w{k}, k = 1,…,m$) mit allen Polygonpunkten inklusive Steiner-Punkten und die Liste S(\cpi) mit den Standorten des Teilpolygons inklusive der jeweils benötigten Fläche. Anders als bei \con aus Kapitel XX ist für die Bearbeitung relevant, welche Punkte $w_{1}$ und $w_{m}$ in W(\cpi) ist. Die Kante, die durch die Polygonpunkte $(w_{m}, w_{1})$ erzeugt wird, sei nun die Kante zu \next{mcpi}. Hat \cpi keinen nächsten Nachbarn, muss wm gleich einem Standort sein. Ansonsten gilt, dass W(\cpi) wieder gegen den Uhrzeigesinn geordnet ist.\\
+\begin{lstlisting}[float,caption={Der Algorithmus \noncon}, frame=single, label=code nicht konvex,breaklines=true,breakatwhitespace=true]
+// Input: Convex polygon CP
+Function NonConvexDivide(CP)
+    Ls=W(1), Le=W(k)   // k=index of first Site CCW from w1 in W
+    PrL,PlL=Cut(CP, L)  // partitioning, returns PrL and PlL
+    while Area(PrL)<AreaRequired(S(PrL)) and Le!=wm do
+       if W(k-1)!=S1 and W(k-1) in S then 
+          S(CPrL)=S(CPrL)+W(k-1) // add previous Site to S(CPrL)
+       k+=1
+       Le=W(k) // move Le to next point in W
+       PrL,PlL=Cut(CP, L)
+    if Area(PrL)>AreaRequired(S(CPrL)) then
+        if Le==Si then
+            k1=1
+            while Area(PrL)>AreaRequired(S(PrL)) do
+                k1=k1+1
+                Ls=w(k1)
+            L1=(w(k1), Le)
+            T(t1,t2,t3) = (w(k1), w(k1-1), Le)
+        else
+            L1=(Ls, w(k-1))
+            T(t1,t2,t3)=(w(k-1), w(k1), Ls)
+        if Area(PrL1+T)>AreaRequired(S(CPrL)) then
+            interpolate point t on (t1,t2) until Area(PrL+T)==AreaRequired(S(CPrL))
+            T(t1,t2,t3) = (t1, t, t3)
+            DetachAndAssign(PrL1+T)
+            DetachAndAssign(PlL1-T-PredPoly(CP,(t1,t))
+        else if Area(PrL1+PredPoly(CP,(t1,t2))<AreaRequired(S(CPrL)) then
+            interpolate point t on (t1,t2) until Area(PrL+T)==AreaRequired(S(CPrL))
+            T(t1,t2,t3)=(t1, t, t3)
+            DetachAndAssign(PrL1+T)
+            DetachAndAssign(PlL1-T-PredPoly(CP,(t1,t))
+        else
+            PS=interiorPoint(t1,t2) //PS is new Pseudosite
+            T(t1,t2,t3)=(t1,PS,t3)
+            AreaRequired(PS)=AreaRequired(S(CPrL)-Area(PrL1+T)
+            Order(W(PredPoly(CP,(t1,t2)) //such that w1=PS if Le!=Si and wm=PS if Le==Si
+            DetachAndAssign(PredPoly(CP,(t1,t2))
+            DetachAndAssign(PrL1+T)
+            DetachAndAssign(PlL1+T)
+    else
+        t = InteriorPoint(wm, w1)
+        L1 = (t,Si)
+        DetachAndAssign(PrL1)
+        DetachAndAssign(PlL1)
+End NonConvexDivide() 
 
-Wie es auch schon bei \con der Fall war, lässt die Prozedur erneut ein Liniensegment \l gegen den Uhrzeigersinn durch das Polygon \cpi wandern, wobei \ls als Drehpunkt dient. \l wird durch (\ls, \Le) $= w_{1}, S_{i}$ initialisiert, wobei $S_{i}$ der erste Standort aus S(\cpi) ist.\\
+\end{lstlisting}
+
+Zuerst wird die Prozedur \noncon beschrieben, die die Teilpolygone in zwei Teile aufteilt. Listing~\ref{code nicht konvex} beschreibt diese Prozedur.
+Als Eingabe dient ein konvexes Teilpolygon, beschrieben durch die Liste $W(\mcpi)$ (mit $w{k}, k = 1,…,m$) mit allen Polygonpunkten inklusive Steiner-Punkten und die Liste S(\cpi) mit den Standorten des Teilpolygons inklusive der jeweils benötigten Fläche. Anders als bei \con aus Kapitel~\ref{konvex} ist für die Bearbeitung relevant, welche Punkte $w_{1}$ und $w_{m}$ in $W(\mcpi)$ ist. Die Kante, die durch die Polygonpunkte $(w_{m}, w_{1})$ erzeugt wird, sei nun die Kante zu \next{\mcpi}. Hat \cpi keinen nächsten Nachbarn, muss wm gleich einem Standort sein. Ansonsten gilt, dass $W(\mcpi)$ wieder gegen den Uhrzeigesinn geordnet ist.\\
+
+Wie es auch schon bei \con der Fall war, lässt die Prozedur erneut ein Liniensegment \l gegen den Uhrzeigersinn durch das Polygon \cpi wandern, wobei \ls als Drehpunkt dient. \l wird durch $(L_{s}, L_{s}) = (w_{1}, S_{i})$ initialisiert, wobei $S_{i}$ der erste Standort aus S(\cpi) ist.\\
 Nun können zwei Fälle eintreten, in denen die Schleife stoppt:
 
 \begin{itemize}
@@ -216,11 +318,38 @@ Weiterhin muss der Fall betrachtet werden, bei dem das Liniensegment $L$ das Pol
 Die Pseudostandorte werden nun bei der Aufteilung von \next{\mcpi} behandelt. Wenn den Pseudostandorten hierbei ein Polygon zugeteilt wird, dann wird dieses Polygon auf die korrespondierenden Standorte übertragen.\\
 Zusammenfassend wir durch den Algorithmus von\noncon ein $q$-Standort-Polygon entweder in ein $q_{1}$-Standort-Polygon und ein $q_{2}$-Standort-Polygon mit $q_{1}, q_{2} > 0$ und $q-{1} + q_{2} = q$ aufgeteilt oder es wird ein $1$-Standort Polygon abgetrennt und es bleibt ein $q'$-Standort Polygon mit $q' = q - 1$ übrig.
 
-%TODO: Code einfügen
 
 \subsection{Der Algorithmus DetachAndAssign}\label{detach}
-Die Prozedur \daa teilt ein Polygon einem Standort zu oder teilt ein Teilpolygon erneut mittels \noncon auf. \daa ist durch Listing XX beschrieben.
-%TODO: Listing verlinken
+
+\begin{lstlisting}[float,caption={Der Algorithmus \daa}, frame=single, label=code detach,breaklines=true,breakatwhitespace=true]
+// Input: Poly(CP) - Polygon rooted at convex piece CP
+Function DetachAndAssign(Poly(CP))
+    if Length(S(CP))==0 then return 
+    if PredPoly(CP) is AreaComplete then
+        if S(CP) == {Si} then  //for some i
+            Assign PredPoly(CP) to Si
+            Detach PredPoly(CP) from Poly(CP)
+        else
+            Detach PredPoly(CP) from Poly(CP)
+            Order(W(CP))	 //such that wm = Si for some i
+            NonConvexeDivide(CP)
+    else if PredPoly(CP) is areaIncomplete then
+        if S(CP) == {Si} then	//for some i
+             Assign PredPoly(CP) to Si
+             Detach PredPoly(CP) from Poly(CP)
+             PS = interiorPoint(w(j),w(k))	//with (w(j),w(k)) is edge to NextNeighbor(CP)
+        else
+            Order(W(CP))	 //such that edge (w(m),w(1)) is edge to NextNeighbor(CP)
+            NonConvexeDivide(CP)
+    else
+        Order(W(CP))  //such that edge (w(m),w(1)) is edge to NextNeighbor(CP)
+        NonConvexeDivide(CP)
+End DetachAndAssign()
+
+\end{lstlisting}
+
+Die Prozedur \daa teilt ein Polygon einem Standort zu oder teilt ein Teilpolygon erneut mittels \noncon auf. \daa ist durch Listing~\ref{code detach} beschrieben.
+
 Beim Aufruf von \emph{DetachAndAssign(Poly(CP))} können 3 Fälle auftreten. Das Polygon
 \begin{itemize}
 \item \pred{CP} ist Flächen-vollständig
@@ -234,8 +363,8 @@ Falls \pred{CP} mehrere Standorte hat, dann wird \pred{CP} zunächst neu geordne
 Im dritten Fall hat \pred{CP} mehr Fläche, als die Standorte von $CP$ benötigen. In diesem Fall wird \pred{CP} ebenfalls neu geordnet, sodass $(w_{m}, w_{1})$ die Kante zu \next{CP} ist. Mit diesem Polygon erfolgt ein Aufruf von \mbox{\textit{NonConvexDivide}}.
 
 \subsection{Behandlung innen liegender Standorte}\label{innere Standorte}
-Für innen liegende Standorte muss die in Kapitel XX beschriebene Zerlegung in konvexe Teilpolygone so erfolgen, dass jeder Standort anschließend auf einer Kante liegt. Ist dies nicht direkt möglich, können für die Standorte auch weitere Kanten eingefügt werden und die Aufteilung in konvexe Teilpolygone wird etwas detaillierter. Die neuen Kanten laufen durch die innenliegenden Standorte. Für den korrekten Ablauf des Algorithmus spielt diese Art der Zerlegung keine Rolle.
-%TODO: Kapitel einfügen
+Für innen liegende Standorte muss die in Kapitel~\ref{aufteilung} beschriebene Zerlegung in konvexe Teilpolygone so erfolgen, dass jeder Standort anschließend auf einer Kante liegt. Ist dies nicht direkt möglich, können für die Standorte auch weitere Kanten eingefügt werden und die Aufteilung in konvexe Teilpolygone wird etwas detaillierter. Die neuen Kanten laufen durch die innenliegenden Standorte. Für den korrekten Ablauf des Algorithmus spielt diese Art der Zerlegung keine Rolle.
+
 
 \subsection{Beispiel}\label{beispiel nicht konvex}
 Das Beispiel aus Abbildung XX ist aus dem Artikel [Quelle], Abbildung XX übernommen.
