@@ -8,6 +8,7 @@
 \usepackage[utf8]{inputenc} % Kodierung der Non-ASCII-Zeichen
 \usepackage{listings} %Einfügen von Code-Beispielen
 \usepackage{xcolor}
+\usepackage{subfig}
 
 \begin{document}
 
@@ -91,7 +92,31 @@ Function ConvexDivide(CP)
 Bei jedem Aufruf von \con(\cp) wird zunächst geprüft, ob das übergebene Polygon nur noch einen Standort enthält. Falls ja, ist der Zielzustand für das
 übergebene Polygon erreicht und es ist keine weitere Flächenaufteilung erforderlich. Falls das Polygon mehrere Standorte enthält, erfolgt eine weitere Aufteilung
 des Polygons in zwei Teil-Polygone \prl und \pll, welche dann rekursiv mit \con aufgerufen werden.
-%TODO: Einfügen des ersten Beispiels
+
+\begin{figure}[h]
+    \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/1a.png}}
+    \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/1b.png}}
+    \qquad
+    \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/1c.png}}
+    \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/1d.png}}
+    \centering
+    \caption{Zerlegung eines konvexen Polygons $CP$ in vier konvexe Polygone $CP_{1},...,CP_{4}$}
+    \label{erstes beispiel}
+\end{figure}
+
+%Wenn Beispiel in eienr Zeile abgebildet werden soll
+%\begin{figure}[h]
+%    \subfloat[]{\includegraphics[width=0.20\textwidth]{./Abbildungen/1a.png}}
+%    \subfloat[]{\includegraphics[width=0.20\textwidth]{./Abbildungen/1b.png}}
+%    \subfloat[]{\includegraphics[width=0.20\textwidth]{./Abbildungen/1c.png}}
+%    \subfloat[]{\includegraphics[width=0.20\textwidth]{./Abbildungen/1d.png}}
+%    \centering
+%    \caption{Zerlegung eines konvexen Polygons $CP$ in vier konvexe Polygone $CP_{1},...,CP_{4}$}
+%    \label{erstes beispiel}
+%\end{figure}
+
+Abbildung~\ref{erstes beispiel} zeigt ein Beispiel für eine Zerlegung eines 4-Standort-Polygons in 4 Teilpolygone mit jeweils einem Standort. In (a) wird \prl mit einer Fläche von 3.4 FE abgetrennt und dem Standort $S01$ zugeordnet. Die in (b) entstehenden Teilpolygone \prl und \pll weisen eine Fläche von 49.3 FE beziehungsweise 14.8 FE auf. Letzteres wird dem Standort $S04$ zugeordnet und ist als 1-Standort-Polygon fertig bearbeitet. \prl wird in (c) erneut aufgeteilt, sodass die Flächenanforderung von $S02$ und $S03$ jeweils erfüllt werden. (d) zeigt die resultierende Aufteilung mit den 4 Teilpolygonen.  
+
 
 %Beschreibung, wie die Linie L das Polygon durchläuft
 \subsection{Positionierung der Schnittlinie}\label{schnittlinie konvex}
@@ -138,7 +163,7 @@ Hierbei kann es nun vorkommen, dass \Le auf die Koordinaten eines Punktes $w_{j}
 \item $L_{e} = S_{n}$
 \end{itemize}
 
-Je nachdem, wie weit \Le vorrückt und wie die Fläche von \prl zur Flächenanforderung von S(\prl) ist, werden nun weiter zwei Fälle unterschieden:
+Je nachdem, wie weit \Le vorrückt und wie die Fläche von \prl zur Flächenanforderung von S($\mprl$) ist, werden nun weiter zwei Fälle unterschieden:
 
 \textbf{Fall 2.1: $L_{e} = S_{n}$ und $\mar{\mprl}>\marreq{S(\mprl)}$} \\
 In diesem Fall wird der Endpunkt \Le inkrementell im Uhrzeigersinn entlang des Polygons bewegt, bis $\mar{\mprl}=\marreq{S(\mprl)}$ gilt.
@@ -147,7 +172,24 @@ Hinweis: Angenommen die Ausgangsposition von \Le ist $w_{j}$, dann muss es zwisc
 \textbf{Fall 2.2: $L_{e} = S_{n}$ und $\mar{\mprl}<\marreq{S(\mprl)}$} \\
 In diesem Fall wird der Anfangspunkt \ls inkrementell im Uhrzeigersinn entlang des Polygons bewegt, bis $\mar{\mprl}=\marreq{S(\mprl)}$ gilt.
 
-Diese Vorgehensweise entspricht im Wesentlichen Fall 1, wobei \ls (initialisiert mit $w_{1}$) nun nicht im Uhrzeigersinn zum ersten Standort \s{1}, sondern gegen den Uhrzeigersinn zum letzten Standort \s{n} bewegt wird. Vergleiche auch Abbildung XX, Fall (c) und (i).
+Diese Vorgehensweise entspricht im Wesentlichen Fall 1, wobei \ls (initialisiert mit $w_{1}$) nun nicht im Uhrzeigersinn zum ersten Standort \s{1}, sondern gegen den Uhrzeigersinn zum letzten Standort \s{n} bewegt wird. Vergleiche auch Abbildung~\ref{zweites beispiel}, Fall (c) und (i).
+\begin{figure}[h]
+    \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/2a.png}}
+    \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/2b.png}}
+    \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/2c.png}}
+    \qquad
+    \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/2d.png}}
+    \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/2e.png}}
+    \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/2f.png}}
+    \qquad
+    \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/2g.png}}
+    \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/2h.png}}
+    \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/2i.png}}
+    \centering
+    \caption{Zerlegung eines konvexen Polygons $CP$ in vier konvexe Polygone $CP_{1},...,CP_{4}$}
+    \label{zweites beispiel}
+\end{figure}
+
 \begin{lstlisting}[float,caption={Mit den Fällen 1 und 2 lässt sich der Algorithmus von \con nun wie folgt erweitern:}, frame=single, label=code konvex]
 // Input: Convex polygon CP
 Function ConvexDivide(CP)
@@ -173,15 +215,19 @@ Function ConvexDivide(CP)
 End ConvexDivide()
 \end{lstlisting}
 
-
-%TODO: Abbildung einfügen
 %TODO: Beispiel einfügen
-%TODO: Code einfügen
+
 
 %In diesem Kapitel wird die Aufteilung eines nicht einfachen, nicht konvexen Polygons gezeigt
 \section{Verallgemeinerung: Aufteilung eines nicht einfachen, nicht konvexen Polygons}\label{nicht konvex}
-Es wurde gezeigt, dass ein einfaches, konvexes Polygon rekursiv in $n$ 1-Standort-Polygone aufgeteilt werden kann. Dieses Kapitel dient dazu einen verallgemeinerten Algorithmus zu skizzieren, damit auch für nicht einfache, nicht konvexe Polygone (Abbildung XX) das Problem der verankerten Flächenaufteilung gelöst werden kann.
-%TODO: Abbildung einfügen
+Es wurde gezeigt, dass ein einfaches, konvexes Polygon rekursiv in $n$ 1-Standort-Polygone aufgeteilt werden kann. Dieses Kapitel dient dazu einen verallgemeinerten Algorithmus zu skizzieren, damit auch für nicht einfache, nicht konvexe Polygone (Abbildung~\ref{viertes beispiel}) das Problem der verankerten Flächenaufteilung gelöst werden kann.
+
+\begin{figure}[h]
+    \includegraphics[width=0.50\textwidth]{./Abbildungen/4.png}
+    \centering
+    \caption{Beispiel eines nicht einfachen, nicht konvexen Polygons}
+    \label{viertes beispiel}
+\end{figure}
 Bevor dieser Algorithmus vorgestellt wird, soll die Beschreibung der dahinterliegenden Grundidee einen Überblick über die Vorgehensweise verschaffen. Danach werden die vorbereitenden Schritte vorgestellt und die Aufteilung des Polygons erläutert. Ein Beispiel dient anschließend zur Veranschaulichung des vorgestellten Algorithmus und zum Schluss des Kapitels wird der Sonderfall geschildert, dass Standorte im Inneren des Polygons liegen.
 
 \subsection{Grundidee}\label{grundidee nicht konvex}
@@ -367,9 +413,14 @@ Für innen liegende Standorte muss die in Kapitel~\ref{aufteilung} beschriebene 
 
 
 \subsection{Beispiel}\label{beispiel nicht konvex}
-Das Beispiel aus Abbildung XX ist aus dem Artikel [Quelle], Abbildung XX übernommen.
-%TODO: Abbildung und Literatur einfügen
-Abbildung XX zeigt verschiedene Stadien der gleichmäßigen Aufteilung eines nicht konvexen Polygons mit 12 Ecken und sieben Standorten. (a) zeigt die initiale Aufteilung des Polygons in 5 konvexe Teilpolygone $CP1, …,CP5$. In (b) – (f) werden die Teilpolygone, die bereits einem Standort zugeteilt sind, dunkelblau markiert. Die Teilpolygone, die bereits einem Standort zugeteilt, aber noch Flächen-unvollständig sind, werden hellblau markiert.\\
+\begin{figure}[h]
+    \includegraphics[width=1\textwidth]{./Abbildungen/5.png}
+    \centering
+    \caption{Beispiel einer Aufteilung eines nicht konvexen Polygons, entnommen aus XX Abbildung 17}
+    \label{fuenftes beispiel}
+\end{figure}
+%TODO: Literatur einfügen
+Abbildung~\ref{fuenftes beispiel} zeigt verschiedene Stadien der gleichmäßigen Aufteilung eines nicht konvexen Polygons mit 12 Ecken und sieben Standorten. (a) zeigt die initiale Aufteilung des Polygons in 5 konvexe Teilpolygone $CP1, …,CP5$. In (b) – (f) werden die Teilpolygone, die bereits einem Standort zugeteilt sind, dunkelblau markiert. Die Teilpolygone, die bereits einem Standort zugeteilt, aber noch Flächen-unvollständig sind, werden hellblau markiert.\\
 In (b) wird das Teilpolygon $CP1$ bearbeitet und dabei in zwei Teilpolygone aufgeteilt. $P3$ wird dem Standort $S3$ zugeordnet und $P4$ dem Standort $S4$. $P4$ erfüllt die Flächenanforderung von $S4$ nicht vollständig, weshalb ein Pseudostandort $S'4$ an der Kante zu \next{CP1} erzeugt wird. Dieser Pseudostandort wird zu einem späteren Zeitpunkt bearbeitet.\\
  (c) zeigt den Zustand nach der Bearbeitung von Teilpolygon $CP2$. Hier tritt erneut der Fall auf, dass die Fläche, die dem Standort $S2$ zugeteilt wird, zu klein ist. Aus diesem Grund wird der Pseudostandort $S'2$ an der Kante zu \next{CP2} erzeugt.\\
 In (d) wird der Zustand nach der Bearbeitung von Teilpolygon $CP3$ gezeigt. Dort wird das Teilpolygon $P7$ dem Standort $S7$ zugeteilt und das Teilpolygon $P1$ dem Standort $S1$. Der Rest von $CP3$ wird mit $P2$ vereint und daher ebenfalls $S2$ zugewiesen. Da die Fläche von $P2$ weiterhin nicht groß genug ist, um der Flächenanforderung von $S2$ zu genügen, wird ein neuer Pseudostandort $S'2$ an der Kante zu \next{CP3} erzeugt.\\
