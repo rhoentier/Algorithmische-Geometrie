@@ -47,24 +47,29 @@
 
 % Kommandos
 \newcommand{\ls}{$L_{s}$ }
-\renewcommand{\le}{$L_{e}$ }
+\newcommand{\Le}{$L_{e}$ }
 \renewcommand{\l}{$L$ }
 \newcommand{\leins}{$L_{1}$ }
 \newcommand{\lzwei}{$L_{2}$ }
 \newcommand{\w}{$W()$ }
 \renewcommand{\v}{$V()$ }
 \newcommand{\cp}{$CP$ }
+\newcommand{\cprl}{$CP_{L}^{r}$ }
 \newcommand{\cpi}{$CP_{i}$ }
 \newcommand{\mcpi}{CP_{i}}
 \newcommand{\s}[1]{$S_{#1}$ }
 \newcommand{\si}{$S_{i}$ }
 \renewcommand{\pi}{$P_{i}$ }
 \newcommand{\mprl}{P_{L}^{r}}
+\newcommand{\mprleins}{P_{L_{1}}^{r}}
 \newcommand{\mcprl}{CP_{L}^{r}}
 \newcommand{\cprleins}{$CP^{r}_{L_{1}}$}
+\newcommand{\mcprleins}{CP^{r}_{L_{1}}}
 \newcommand{\cprlzwei}{$CP^{r}_{L_{2}}$}
 \newcommand{\prl}{$P_{L}^{r}$ }
+\newcommand{\prleins}{$P_{L_{1}}^{r}$ }
 \newcommand{\mpll}{P_{L}^{l}}
+\newcommand{\mplleins}{P_{L_{1}}^{l}}
 \newcommand{\mcpll}{CP_{L}^{l}}
 \newcommand{\pll}{$P_{L}^{l}$ }
 \newcommand{\ord}{\mbox{\textit{OrderPieces}} }
@@ -78,7 +83,7 @@
 \newcommand{\arreq}[1]{$AreaRequired(#1)$ }
 \newcommand{\marreq}[1]{AreaRequired(#1)}
 \newcommand{\pred}[1]{$PredPoly(#1)$ }
-\newcommand{\predl}[2]{$PredPoly(#1, #2)$ }
+\newcommand{\predl}[2]{$PredPoly(#1, (#2))$ }
 \newcommand{\next}[1]{$NextNeighbor(#1)$ }
 
 

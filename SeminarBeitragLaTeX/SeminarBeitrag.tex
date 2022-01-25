@@ -61,10 +61,10 @@ benötigte Fläche mit $c_{i}* \ar{P} $ bestimmt werden.
 %Beschreibung der Grundidee
 \subsection{Grundidee}\label{grundidee konvex}
 Bei der nachfolgend beschriebenen Lösung des Problems wird das konvexe Eingabepolygon \cp mithilfe von Liniensegmenten schrittweise zerlegt. Jedes Liniensegment
-\l ist hierbei vom Startpunkt \ls zum Endpunkt \le orientiert, wobei beide Punkte auf dem Rand von \cp liegen. Wenn für \ls und \le eine Position gefunden wurde, erfolgt eine
+\l ist hierbei vom Startpunkt \ls zum Endpunkt \Le orientiert, wobei beide Punkte auf dem Rand von \cp liegen. Wenn für \ls und \Le eine Position gefunden wurde, erfolgt eine
 Zerlegung in zwei Teilpolygone.
 Die bei jeder Teilung entstehen Teilpolygone erhalten entsprechend ihrer Lage zum Liniensegment \l die Bezeichnungen \prl für das rechts und \pll für das links
-des Liniensegments liegenden Polygons. Die Liniensegmente (bzw. \ls und \le) werden so positioniert, dass die Fläche von \prl der benötigten Fläche der auf dem Rand von \prl
+des Liniensegments liegenden Polygons. Die Liniensegmente (bzw. \ls und \Le) werden so positioniert, dass die Fläche von \prl der benötigten Fläche der auf dem Rand von \prl
 liegenden Standorte entspricht (\pll analog). Die Zerlegung wird für jedes Teilpolygon \prl und \pll rekursiv aufgerufen, bis nur noch 1-Standort Polygone vorliegen. Da aus einer
 Zerlegung eines konvexen Polygons mit einem Liniensegment immer zwei konvexe Polygone und insbesondere kein nicht konvexes Polygon resultiert, ist dieser Ansatz möglich.
 
@@ -85,12 +85,12 @@ Aus vorangegangenem Kapitel bleibt offen, wie genau die Aufteilung eines konvexe
 $\mar{\mprl}=\marreq{S_{1},...,S_{i}}$ und $\mar{\mpll}=\marreq{S_{i+1},...,S_{n}} $ gilt.
 Konkret ist zu klären, wie Anfangs- und Endpunkt der Schnittlinien positioniert werden (siehe Listing XX, Zeile 4). \\
 %TODO: Bezug auf Listing 1 einfügen
-Initialisierung von \ls und \le beim Aufruf von \con:
+Initialisierung von \ls und \Le beim Aufruf von \con:
 
 \begin{itemize}
 \item Der Startpunkt \ls der Linie \l wird mit den Koordinaten des ersten Punkts der Liste \w initialisiert, wobei dieser nach Definition ein Polygonpunkt (und
 kein Standort) ist. Es gilt daher $w_{1} \in$ \v.
-\item Der Endpunkt \le wird mit den Koordinaten des ersten Standorts in \w initialisiert und mit $w_{k}$ notiert, wobei $k$ der Index in \w ist, bei dem der
+\item Der Endpunkt \Le wird mit den Koordinaten des ersten Standorts in \w initialisiert und mit $w_{k}$ notiert, wobei $k$ der Index in \w ist, bei dem der
 erste Standort liegt. Da die Standorte nachihrem Vorkommen auf dem Weg von $v_{1}$ nach $v_{l}$ geordnet sind, ist bei einem konvexen Polygon sichergestellt,
 dass die Standorte $S_{2},…,S{n}$ alle links der Linie L liegen.
 \end{itemize}
@@ -100,13 +100,13 @@ liegen würde. Je nach Fläche von \prl und \arreq{S_{1}} werden folgende Fälle
 
 \textbf{Fall 1: $\mar{\mprl}>\marreq{S_{1}}$} \\
 Nach der Initialisierung der Linie \l wird festgestellt, dass die Fläche von \prl größer ist als die benötigte Fläche von $S_{1}$. In diesem Fall erfolgt eine
-Verkleinerung von \ar{\mprl} unter Beibehaltung von $S(\mprl)=S_{1} $. Dies geschieht, indem \le als Drehpunkt fungiert und \ls inkrementell gegen den Uhrzeigersinn entlang des Polygons
+Verkleinerung von \ar{\mprl} unter Beibehaltung von $S(\mprl)=S_{1} $. Dies geschieht, indem \Le als Drehpunkt fungiert und \ls inkrementell gegen den Uhrzeigersinn entlang des Polygons
 verschoben wird, bis $\mar{\mprl}=\marreq{S_{1}}$ gilt. Zur Verdeutlichung dieser Vorgehensweise sollen folgende Punkte nochmals herausgestellt werden:
 
 \begin{itemize}
 \item Durch die Initialisierung kann auf dem Weg von $w_{1}$ zu $w_{k}$ kein weiterer Standort liegen, d. h. $\marreq{S(\mprl)}$ ist konstant.
 \item $\mar{\mprl}$ wird mit Verschiebung von \ls stetig kleiner. Bei $L_{s}=S_{1}$ gilt $\mar{\mprl}=0$.
-\item \le ist fest, d.h. \s{1} ist stets Teil von \prl.
+\item \Le ist fest, d.h. \s{1} ist stets Teil von \prl.
 \end{itemize}
 
 Wenn die Bedingung $\mar{\mprl}=\marreq{S_{1}}$ eintritt, erfolgt eine Polygonzerlegung. Für \prl erfolgt keine weitere Zerlegung beim Aufruf von
@@ -115,21 +115,21 @@ Zerlegung beim Aufruf von \con(\pll) (siehe Listing XX, Zeilen 4 und 5).
 %TODO: Bezug auf Listing einfügen
 
 \textbf{Fall 2: $\mar{\mprl}<\marreq{S_{1}}$} \\
-Nach der Initialisierung der Linie \l wird festgestellt, dass die Fläche von \prl kleiner ist als die benötigte Fläche von $S_{1}$. In diesem Fall erfolgt eine Vergrößerung von \ar{\mprl} mit dem Ziel, die Anforderung von $S_{1}$ zu erfüllen. Hierbei fungiert \ls als Drehpunkt und \le wird auf den nächsten in \w vorkommenden Polygonpunkt oder Standort $w_{k+1}$ gesetzt. Die Anforderung wird erneut geprüft. In diesem Schritt wird \le von Polygonpunkt zu Polygonpunkt verschoben. Eine inkrementelle Verschiebung entlang des Polygons erfolgt dann unter Fall 2.1 beziehungsweise 2.2.
+Nach der Initialisierung der Linie \l wird festgestellt, dass die Fläche von \prl kleiner ist als die benötigte Fläche von $S_{1}$. In diesem Fall erfolgt eine Vergrößerung von \ar{\mprl} mit dem Ziel, die Anforderung von $S_{1}$ zu erfüllen. Hierbei fungiert \ls als Drehpunkt und \Le wird auf den nächsten in \w vorkommenden Polygonpunkt oder Standort $w_{k+1}$ gesetzt. Die Anforderung wird erneut geprüft. In diesem Schritt wird \Le von Polygonpunkt zu Polygonpunkt verschoben. Eine inkrementelle Verschiebung entlang des Polygons erfolgt dann unter Fall 2.1 beziehungsweise 2.2.
 
-Hierbei kann es nun vorkommen, dass \le auf die Koordinaten eines Punktes $w_{j}$ in \w gesetzt wird, welcher ein Standort $\ne S_{1}$ ist. Dieser Standort wird dann beim nächsten Vorrücken (also bei $w_{j+1}$) zur benötigten Fläche von \prl hinzugenommen. Bei Fall 2 kann \arreq{\mprl} demnach ansteigen, sodass ein Vorücken von \le zwar zu einer größeren Fläche von \prl, nicht aber unbedingt zu einem günstigeren Verhältnis aus $\mar{\mprl} / \marreq{S(\mprl)}$ führt. \\
-\le wird so oft verschoben, bis eine der folgenden Bedingungen eintritt:\\
+Hierbei kann es nun vorkommen, dass \Le auf die Koordinaten eines Punktes $w_{j}$ in \w gesetzt wird, welcher ein Standort $\ne S_{1}$ ist. Dieser Standort wird dann beim nächsten Vorrücken (also bei $w_{j+1}$) zur benötigten Fläche von \prl hinzugenommen. Bei Fall 2 kann \arreq{\mprl} demnach ansteigen, sodass ein Vorücken von \Le zwar zu einer größeren Fläche von \prl, nicht aber unbedingt zu einem günstigeren Verhältnis aus $\mar{\mprl} / \marreq{S(\mprl)}$ führt. \\
+\Le wird so oft verschoben, bis eine der folgenden Bedingungen eintritt:\\
 
 \begin{itemize}
 \item $\mar{\mprl}>\marreq{S(\mprl)}$
 \item $L_{e} = S_{n}$
 \end{itemize}
 
-Je nachdem, wie weit \le vorrückt und wie die Fläche von \prl zur Flächenanforderung von S(\prl) ist, werden nun weiter zwei Fälle unterschieden:
+Je nachdem, wie weit \Le vorrückt und wie die Fläche von \prl zur Flächenanforderung von S(\prl) ist, werden nun weiter zwei Fälle unterschieden:
 
 \textbf{Fall 2.1: $L_{e} = S_{n}$ und $\mar{\mprl}>\marreq{S(\mprl)}$} \\
-In diesem Fall wird der Endpunkt \le inkrementell im Uhrzeigersinn entlang des Polygons bewegt, bis $\mar{\mprl}=\marreq{S(\mprl)}$ gilt.
-Hinweis: Angenommen die Ausgangsposition von \le ist $w_{j}$, dann muss es zwischen $w_{j}$ und $w_{j-1}$ eine Position geben, bei der $\mar{\mprl}=\marreq{S(\mprl)}$ gilt, da beim Vorrücken \ar{\mprl} bei $w_{j-1}$ zu klein und bei $w_{j}$ zu groß war. Dieser Zwischenpunkt wird durch Interpolation gefunden.\\
+In diesem Fall wird der Endpunkt \Le inkrementell im Uhrzeigersinn entlang des Polygons bewegt, bis $\mar{\mprl}=\marreq{S(\mprl)}$ gilt.
+Hinweis: Angenommen die Ausgangsposition von \Le ist $w_{j}$, dann muss es zwischen $w_{j}$ und $w_{j-1}$ eine Position geben, bei der $\mar{\mprl}=\marreq{S(\mprl)}$ gilt, da beim Vorrücken \ar{\mprl} bei $w_{j-1}$ zu klein und bei $w_{j}$ zu groß war. Dieser Zwischenpunkt wird durch Interpolation gefunden.\\
 
 \textbf{Fall 2.2: $L_{e} = S_{n}$ und $\mar{\mprl}<\marreq{S(\mprl)}$} \\
 In diesem Fall wird der Anfangspunkt \ls inkrementell im Uhrzeigersinn entlang des Polygons bewegt, bis $\mar{\mprl}=\marreq{S(\mprl)}$ gilt.
@@ -138,8 +138,7 @@ Diese Vorgehensweise entspricht im Wesentlichen Fall 1, wobei \ls (initialisiert
 %TODO: Abbildung einfügen
 %TODO: Beispiel einfügen
 %TODO: Code einfügen
- 
- %In diesem Kapitel wird die Aufteilung eines nicht einfachen, nicht konvexen Polygons gezeigt
+%In diesem Kapitel wird die Aufteilung eines nicht einfachen, nicht konvexen Polygons gezeigt
 \section{Verallgemeinerung: Aufteilung eines nicht einfachen, nicht konvexen Polygons}\label{nicht konvex}
 Es wurde gezeigt, dass ein einfaches, konvexes Polygon rekursiv in $n$ 1-Standort-Polygone aufgeteilt werden kann. Dieses Kapitel dient dazu einen verallgemeinerten Algorithmus zu skizzieren, damit auch für nicht einfache, nicht konvexe Polygone (Abbildung XX) das Problem der verankerten Flächenaufteilung gelöst werden kann.
 %TODO: Abbildung einfügen
@@ -148,7 +147,7 @@ Bevor dieser Algorithmus vorgestellt wird, soll die Beschreibung der dahinterlie
 \subsection{Grundidee}\label{grundidee nicht konvex}
 In Kapitel XX wurde bereits erläutert, wie ein einfaches, konvexes Polygon aufgeteilt werden kann. Dieses Vorgehen kann auch bei der Aufteilung nicht konvexer Polygone verwendet werden, muss jedoch in einigen Punkten erweitert werden.
 %TODO: Kapitel einfügen
-Als Voraussetzung wird angenommen, dass ein nicht einfaches, nicht konvexes Polygon $P$ bereits in konvexe Teilpolygone \cpp zerlegt wurde. Im ersten Schritt werden die Teilpolygone mithilfe einer Tiefensuche neu geordnet, um eine feste Bearbeitungsfolge für das weitere Vorgehen zu erhalten. Anschließend werden die Teilpolygone rekursiv aufgeteilt, wie es ähnlich bereits in Kapitel XX gezeigt wurde.  Allerdings können nun Sonderfälle auftreten, die bei der Zerlegung eines einfachen, konvexen Polygons nicht vorkommen können. Einerseits kann \cpi weniger Fläche ausfüllen, als durch \arreq{S(CP_{i})} gefordert ist. In diesem Fall ist \cpi Flächen-unvollständig und muss Flächen von anderen Teilpolygonen übernehmen. Andererseits kann es sein, dass einzelne Teilpolygone keinen Standort enthalten oder weniger Fläche ausfüllen, als durch \arreq{S(CP_{i})} gefordert ist. In diesem Fall ist \cpi Standort-unvollständig und andere Teilpolygone müssen Flächen von \cpi übernehmen.\\
+Als Voraussetzung wird angenommen, dass ein nicht einfaches, nicht konvexes Polygon $P$ bereits in konvexe Teilpolygone \cpp zerlegt wurde. Im ersten Schritt werden die Teilpolygone mithilfe einer Tiefensuche neu geordnet, um eine feste Bearbeitungsfolge für das weitere Vorgehen zu erhalten. Anschließend werden die Teilpolygone rekursiv aufgeteilt, wie es ähnlich bereits in Kapitel XX gezeigt wurde. Allerdings können nun Sonderfälle auftreten, die bei der Zerlegung eines einfachen, konvexen Polygons nicht vorkommen können. Einerseits kann \cpi weniger Fläche ausfüllen, als durch \arreq{S(CP_{i})} gefordert ist. In diesem Fall ist \cpi Flächen-unvollständig und muss Flächen von anderen Teilpolygonen übernehmen. Andererseits kann es sein, dass einzelne Teilpolygone keinen Standort enthalten oder weniger Fläche ausfüllen, als durch \arreq{S(CP_{i})} gefordert ist. In diesem Fall ist \cpi Standort-unvollständig und andere Teilpolygone müssen Flächen von \cpi übernehmen.\\
 %TODO: Kapitel einfügen
 Die Neuordnung wird innerhalb der Prozedur \ord umgesetzt und die Aufteilung inklusive der Sonderfallbehandlung wird durch die beiden Methoden \noncon und \daa umgesetzt, die sich gegenseitig rekursiv aufrufen, bis ein n-Standort Polygon in $n$ 1-Standort Polygone aufgeteilt wurde.
 
@@ -157,7 +156,7 @@ Als Voraussetzung für die gleichmäßige Aufteilung eines nicht einfachen, nich
 %TODO: Literatur einfügen
 Hieraus wird ersichtlich, dass es verschiedene Möglichkeiten gibt, ein Polygon in konvexe Teilpolygone aufzuteilen. Zum Schluss dieser Arbeit wird besprochen, welche Auswirkungen diese vorbereitenden Schritte auf den Verlauf des vorgestellten Algorithmus haben können.
 
- \subsection{Neuordnung der konvexen Teilpolygone}\label{ordnung}
+\subsection{Neuordnung der konvexen Teilpolygone}\label{ordnung}
 % TODO: Code einfügen
 Es kann nun davon ausgegangen werden, dass das Polygon $P$ bereits in konvexe Teilpolygone \cpp zerlegt wurde. Die Teilpolygone können willkürlich geordnet sein und die Indizes treffen keine Aussage über die tatsächliche Anordnung im Polygon $P$. Aus diesem Grund werden die Teilpolygone zuerst neu geordnet, was für den anschließend dargestellten Algorithmus erforderlich ist. Dazu wird ein Verbindungsgraph $G$ gebildet und anhand dessen mittels einer Tiefensuche eine Ordnung erzeugt. Jedes Teilpolygon \cpi wird durch einen Knoten $N_{i}$ in $G$ abgebildet. Für jeden Nachbarn $CP_{k} (i \ne k)$ des Teilpolygons \cpi wird eine Kante zum jeweils korrespondierenden Knoten $N_{k}$ eingefügt. \\
 Wir definieren einen Knoten $N_{i}$ in $G$ als Blatt, wenn $N_{}$ entweder nur einen Nachbarn hat oder alle Nachbarn von $N_{i}$ als besucht markiert wurden.
@@ -165,7 +164,7 @@ Die Prozedur \ord beschreibt nun die Neuordnung der Teilpolygone. \ord wird mit 
 Die neue Ordnung der \cpi ist nun die Reihenfolge, in der die Teilpolygone ausgegeben wurden.
 
 
- \subsection{Aufteilung eines nicht einfachen, nicht konvexen Polygons}\label{aufteilung nicht konvex}
+\subsection{Aufteilung eines nicht einfachen, nicht konvexen Polygons}\label{aufteilung nicht konvex}
 Für die Aufteilung wird jedes Teilpolygon \cpp betrachtet. Konkret wird das Polygon \pred{\mcpi} so aufgeteilt, dass ein Teilstück einem Standort in \cpi (falls vorhanden) zugeordnet wird und der Rest dem Polygon \pred{CP_{k}} mit $k > i$ angehangen wird. Diese Aufteilung wird durch die sich gegenseitig rekursiv aufrufenden Prozeduren \noncon und \daa erreicht. Erstere erzeugt ein Liniensegment, welches \pred{\mcpi} in zwei Teile aufteilt und letztere ordnet die Teile entweder einem Standort zu oder teilt sie erneut auf.
 
 %TODO: Code einfügen
@@ -173,23 +172,93 @@ Für die Aufteilung wird jedes Teilpolygon \cpp betrachtet. Konkret wird das Pol
 Zuerst wird die Prozedur \noncon beschrieben, die die Teilpolygone in zwei Teile aufteilt. Listing XX beschreibt diese Prozedur.
 Als Eingabe dient ein konvexes Teilpolygon, beschrieben durch die Liste W(\cpi) (mit $w{k}, k = 1,…,m$) mit allen Polygonpunkten inklusive Steiner-Punkten und die Liste S(\cpi) mit den Standorten des Teilpolygons inklusive der jeweils benötigten Fläche. Anders als bei \con aus Kapitel XX ist für die Bearbeitung relevant, welche Punkte $w_{1}$ und $w_{m}$ in W(\cpi) ist. Die Kante, die durch die Polygonpunkte $(w_{m}, w_{1})$ erzeugt wird, sei nun die Kante zu \next{mcpi}. Hat \cpi keinen nächsten Nachbarn, muss wm gleich einem Standort sein. Ansonsten gilt, dass W(\cpi) wieder gegen den Uhrzeigesinn geordnet ist.\\
 
-Wie es auch schon bei \con der Fall war, lässt die Prozedur erneut ein Liniensegment \l gegen den Uhrzeigersinn durch das Polygon \cpi wandern, wobei \ls als Drehpunkt dient. \l wird durch (\ls, \le) $= w_{1}, S_{i}$ initialisiert, wobei $S_{i}$ der erste Standort aus S(\cpi) ist.\\
+Wie es auch schon bei \con der Fall war, lässt die Prozedur erneut ein Liniensegment \l gegen den Uhrzeigersinn durch das Polygon \cpi wandern, wobei \ls als Drehpunkt dient. \l wird durch (\ls, \Le) $= w_{1}, S_{i}$ initialisiert, wobei $S_{i}$ der erste Standort aus S(\cpi) ist.\\
 Nun können zwei Fälle eintreten, in denen die Schleife stoppt:
 
 \begin{itemize}
 \item Die Fläche rechts der Linie \l ist größer oder gleich der benötigten Fläche der Standorte, die sich in diesem Gebiet befinden. Es gilt:
 $\mar{\mprl}\ge\marreq{S(\mcprl)}$
-\item Das Ende des Polygons wird erreicht, also \le $= w_{m}$.
+\item Das Ende des Polygons wird erreicht, also \Le $= w_{m}$.
 \end{itemize}
 
 Durch die Bearbeitung von vorherigen Teilpolygonen kann es sein, dass nicht zugewiesene Teile dieser Polygone in die Aufteilung von \cpi miteinbezogen werden müssen. Außerdem kann nun der Fall eintreten, dass die Fläche des Teilpolygons kleiner ist als \arreq{S(\mcpi)}. Aus diesem Grund müssen die oberen beiden Fälle noch feingranularer aufgeteilt werden.\\
 
-\textbf{Fall 1:} Wie auch in der Prozedur \con wird ein Ende der Linie $L$ entlang des Polygons bewegt, um die Fläche \ar{\mprl} zu verkleinern. Hierbei unterscheiden wir zwei Fälle. Falls $L_{e} = S_{i}$ für einen beliebigen Wert für $i$ gilt, dann wird der Startpunkt \ls gegen den Uhrzeigersinn bewegt, ansonsten wird der Endpunkt \le im Uhrzeigersinn bewegt.
+\textbf{Fall 1:} Wie auch in der Prozedur \con wird ein Ende der Linie $L$ entlang des Polygons bewegt, um die Fläche \ar{\mprl} zu verkleinern. Hierbei unterscheiden wir zwei Fälle. Falls $L_{e} = S_{i}$ für einen beliebigen Wert für $i$ gilt, dann wird der Startpunkt \ls gegen den Uhrzeigersinn bewegt, ansonsten wird der Endpunkt \Le im Uhrzeigersinn bewegt.
 
-Nun seien \leins und \lzwei zwei Liniensegmente, die einen gemeinsamen, festen Endpunkt haben. Dieser gemeinsame Endpunkt ist für beide Linien entweder \ls oder \le und damit das Gegenstück zum oben bestimmten Punkt, welcher entlang des Polygons bewegt wurde. Die Linien sind so positioniert, dass $\mar{P^{r}_{L_{1}}} < \marreq{S(CP^{r}_{L_{1}})}$ und $\mar{P^{r}_{L_{2}}} > \marreq{S(CP^{r}_{L_{2}})}$ gilt. Die Linie \lzwei wird demnach durch $(w_{1}, w_{k})$ und die Linie \leins durch $(w_{1}, w_{k-1})$ beschrieben.
+Nun seien \leins und \lzwei zwei Liniensegmente, die einen gemeinsamen, festen Endpunkt haben. Dieser gemeinsame Endpunkt ist für beide Linien entweder \ls oder \Le und damit das Gegenstück zum oben bestimmten Punkt, welcher entlang des Polygons bewegt wurde. Die Linien sind so positioniert, dass $\mar{P^{r}_{L_{1}}} < \marreq{S(CP^{r}_{L_{1}})}$ und $\mar{P^{r}_{L_{2}}} > \marreq{S(CP^{r}_{L_{2}})}$ gilt. Die Linie \lzwei wird demnach durch $(w_{1}, w_{k})$ und die Linie \leins durch $(w_{1}, w_{k-1})$ beschrieben.
 Dadurch entsteht ein Dreieck $T = (t_{1}, t_{2}, t_{3})$, das die Differenz von \cprleins und \cprlzwei bildet. Außerdem sei $(t_{1}, t_{2})$ das Liniensegment von \cpi, das $L_{1}$ und $L_{2}$ verbindet. Der gemeinsame Endpunkt von \leins und \lzwei ist demnach $t_{3}$.
 
 Nun muss \cprleins mit einer Teilfäche des Dreiecks $T$ und gegebenenfalls mit Teilflächen der Reste der Vorgängerpolygone vereinigt werden, damit die Flächenanforderungen der Standorte in \cprleins erfüllt ist. Dabei entstehen 3 Fälle:
+
+\begin{itemize}
+\item $\mar{\mprleins + T} > \marreq{S(\mcprl)}$ \\
+Die Flächenanforderung der Standorte kann durch die Fläche rechts von \leins und $T$ vollständig gedeckt werden. Insbesondere wird kein Flächenanteil von \predl{CP}{t_{1},t{2}} benötigt. 
+\item $\mar{\mprleins +T} \le \marreq{S(\mcprl)}$ und \\ $\mar{\mprleins+PredPoly(CP,(t_{1},t_{2}))}<\marreq{S(\mcprl)}$ \hfill ($\ast$) \\
+Die Flächen von \prleins und $T$ reichen zusammen nicht $(<)$ oder exakt $(=)$ aus, um die Flächenanforderung der Standorte von \cprl zu erfüllen (1. Bedingung). Weiterhin liegt der Fall vor, dass die Fläche von \prleins in Kombination mit dem Vorgängerpolygon \predl{CP}{t_{1},t_{2}} kleiner als die geforderte Fläche ist (2. Bedingung).
+\item $\mar{\mprleins +T} \le \marreq{S(\mcprl)}$ und \\ $\mar{\mprleins+PredPoly(CP,(t_{1},t_{2}))}\ge\marreq{S(\mcprl)}$ \\
+Bedingung 1 ist analog zu Fall 1.2. Weiterhin liegt nun jedoch der Fall vor, dass die Fläche von \prleins in Kombination mit dem Vorgängerpolygon \predl{CP}{t_{1},t_{2}} zur Erfüllung der Anforderung genügen (2. Bedingung).
+\end{itemize}
+
+Die je nach Fall entstehenden Polygone werden anschließend an die Prozedur \daa übergeben und dort entweder Standorten zugewiesen oder durch einen rekursiven Aufruf von \noncon erneut aufgeteilt.\\
+
+\textbf{Fall 1.1:} Die Flächenanforderung von \s{\mcprl} kann durch das Polygon \prleins zusammen mit dem Dreieck $T$ erfüllt werden. In diesem Fall reicht es aus, mittels linearer Interpolation einen Punkt $t$ zwischen $t_{1}$ und $t_{2}$ zu finden, sodass für das Dreieck $T' = (t_{1}, t, t_{3})$ gilt: \\
+\begin{align*}\mar{\mprleins+T'-PredPoly(CP,(t_{1},t))}=\marreq{S(\mcprl)} \end{align*}
+Durch diese Aufteilung entstehen die beiden Polygone $(\mprleins + T' - PredPoly(CP,(t_{1},t))$ und \hbox{$(\mprleins -T')$}, die der Prozedur \daa übergeben werden.\\
+
+\textbf{Fall 1.2:} Damit die Flächenanforderung erfüllt werden kann, wird zunächst das Vorgängerpolygon \predl{CP}{t_{1},t_{2}} hinzugenommen und dieses um die Fläche \prleins und einen Teil des Dreiecks T erweitert. Erneut wird durch lineare Interpolation der Punkt t gefunden und wie oben das Dreieck $T'$ gebildet, sodass die Flächenanforderung erfüllt ist. Das Dreieck $T'$ kann durch die strikte Ungleichung $(\ast)$ nicht kollabieren. Somit entstehen die beiden Polygone $(\mprleins + T')$ und $(\mprleins - T' - PredPoly(CP,(t_{1},t))$, die der Prozedur \daa übergeben werden.\\
+
+\textbf{Fall 1.3:} Die Fläche der Vorgängerpolygone ist größer als die Flächenanforderung der Standorte. In diesem Fall muss die Fläche der Vorgängerpolygone wiederrum aufgeteilt werden. Ein Teil wird zur Erfüllung der Flächenanforderung genutzt und \s{\mcprleins} zugeordnet. Der übrige Teil wird im Weiteren durch einen sogenannten Pseudostandort $PS$ abgebildet. $PS$ wird auf der Kante zwischen $t_{1}$ und $t_{2}$ willkürlich hinzugefügt, sodass das Dreieck $T' = (t_{1}, PS, t_{3})$ entsteht. Es gilt:
+\begin{align*}\marreq{PS}=\marreq{S(\mcprl) - \mar{\mprleins + T'}} \end{align*}
+$PS$ bekommt also die fehlende Flächenanforderung zugewiesen. Dadurch kann \predl{CP}{t_{1},PS} ebenfalls durch \noncon aufgeteilt und ein Teilpolygon $PS$ zugewiesen werden. Das zugewiesene Teilpolygon kann dann dem Polygon $(\mprleins + T')$ hinzugefügt werden. Dieses Polygon und das Polygon $(\mplleins -T')$ werden dann an \daa übergeben. \\
+
+Weiterhin muss der Fall betrachtet werden, bei dem das Liniensegment $L$ das Polygon einmal komplett durchlaufen hat.\\
+\textbf{Fall 2:}: Dieser Fall tritt ein, wenn ein Teilpolygon und die Reste der Vorgängerpolygone weniger Fläche enthalten, als die Standorte beanspruchen. In diesem Fall ist \cpi Flächen-unvollständig und es muss für mindestens einen Standort aus $S(\mcprl)$ ein Pseudostandort erzeugt werden. Dazu wird ein Punkt $t$ auf der Kante $(w_{m}, w_{1})$ erzeugt, also der Kante zu \next{\mcpi}. Nun sei $L = (t, S_{i})$, wobei \si der erste Standort in $S(\mcpi)$ gegen den Uhrzeigersinn von $w_{1}$ aus ist. Nun wird $W(\mprl)$ so geordnet, dass $t = w_{1}$ gilt. Anschließend werden\prl und \pll an \daa übergeben. Hierbei entsteht entweder auf dem Liniensegment $(w_{1}, w_{2})$ ein Pseudostandort oder ein Teil von \prl wird dem Standort \si zugeordnet. Wenn ein Pseudostandort entsteht, dann wird diesem die Flächenanforderung von \si abzüglich der Fläche von \prl zugeordnet und das Polygon \prl von \cpi entfernt. Mit den restlichen Standorten von \cpi wird dasselbe Verfahren angewandt.\\
+Die Pseudostandorte werden nun bei der Aufteilung von \next{\mcpi} behandelt. Wenn den Pseudostandorten hierbei ein Polygon zugeteilt wird, dann wird dieses Polygon auf die korrespondierenden Standorte übertragen.\\
+Zusammenfassend wir durch den Algorithmus von\noncon ein $q$-Standort-Polygon entweder in ein $q_{1}$-Standort-Polygon und ein $q_{2}$-Standort-Polygon mit $q_{1}, q_{2} > 0$ und $q-{1} + q_{2} = q$ aufgeteilt oder es wird ein $1$-Standort Polygon abgetrennt und es bleibt ein $q'$-Standort Polygon mit $q' = q - 1$ übrig.
+
+%TODO: Code einfügen
+
+\subsection{Der Algorithmus DetachAndAssign}\label{detach}
+Die Prozedur \daa teilt ein Polygon einem Standort zu oder teilt ein Teilpolygon erneut mittels \noncon auf. \daa ist durch Listing XX beschrieben.
+%TODO: Listing verlinken
+Beim Aufruf von \emph{DetachAndAssign(Poly(CP))} können 3 Fälle auftreten. Das Polygon
+\begin{itemize}
+\item \pred{CP} ist Flächen-vollständig
+\item \pred{CP} ist Flächen-unvollständig
+\item \pred{CP} ist Standort-unvollständig
+\end{itemize}
+Im ersten Fall kann es sein, dass \pred{CP} nur einen Standort besitzt. Dann kann \pred{CP} vom Polygon $Poly(CP)$ getrennt (\emph{Detach}) und komplett diesem Standort zugeteilt (\emph{Assign}) werden.
+Falls \pred{CP} mehrere Standorte enthält, wird \pred{CP} von $Poly(CP)$ getrennt und rekursiv mittels \noncon aufgeteilt. \\
+Im zweiten Fall treten die gleichen zwei Unterfälle auf. Falls \pred{CP} nur einen Standort \si hat, kann \pred{CP} von $Poly(CP)$ getrennt und dem Standort zugeteilt werden. Da \pred{CP} Flächen-unvollständig ist, muss nun ein Pseudostandort auf der Kante zu \next{CP} erzeugt werden, der die restliche Flächenanforderung von \si enthält. Flächen, die im weiteren Verlauf dem Pseudostandort zugeteilt werden, werden so mittelbar dem Standort \si zugeteilt.
+Falls \pred{CP} mehrere Standorte hat, dann wird \pred{CP} zunächst neu geordnet, sodass $(w_{m}, w_{1})$ die Kante zu \next{CP} ist. Anschließend erfolgt wiederum ein rekursiver Aufruf von \mbox{\textit{NonConvexDivide}}, da nicht bekannt ist, durch welchen Standort die Flächen-Unvollständigkeit resultiert.\\
+Im dritten Fall hat \pred{CP} mehr Fläche, als die Standorte von $CP$ benötigen. In diesem Fall wird \pred{CP} ebenfalls neu geordnet, sodass $(w_{m}, w_{1})$ die Kante zu \next{CP} ist. Mit diesem Polygon erfolgt ein Aufruf von \mbox{\textit{NonConvexDivide}}.
+
+\subsection{Behandlung innen liegender Standorte}\label{innere Standorte}
+Für innen liegende Standorte muss die in Kapitel XX beschriebene Zerlegung in konvexe Teilpolygone so erfolgen, dass jeder Standort anschließend auf einer Kante liegt. Ist dies nicht direkt möglich, können für die Standorte auch weitere Kanten eingefügt werden und die Aufteilung in konvexe Teilpolygone wird etwas detaillierter. Die neuen Kanten laufen durch die innenliegenden Standorte. Für den korrekten Ablauf des Algorithmus spielt diese Art der Zerlegung keine Rolle.
+%TODO: Kapitel einfügen
+
+\subsection{Beispiel}\label{beispiel nicht konvex}
+Das Beispiel aus Abbildung XX ist aus dem Artikel [Quelle], Abbildung XX übernommen.
+%TODO: Abbildung und Literatur einfügen
+Abbildung XX zeigt verschiedene Stadien der gleichmäßigen Aufteilung eines nicht konvexen Polygons mit 12 Ecken und sieben Standorten. (a) zeigt die initiale Aufteilung des Polygons in 5 konvexe Teilpolygone $CP1, …,CP5$. In (b) – (f) werden die Teilpolygone, die bereits einem Standort zugeteilt sind, dunkelblau markiert. Die Teilpolygone, die bereits einem Standort zugeteilt, aber noch Flächen-unvollständig sind, werden hellblau markiert.\\
+In (b) wird das Teilpolygon $CP1$ bearbeitet und dabei in zwei Teilpolygone aufgeteilt. $P3$ wird dem Standort $S3$ zugeordnet und $P4$ dem Standort $S4$. $P4$ erfüllt die Flächenanforderung von $S4$ nicht vollständig, weshalb ein Pseudostandort $S'4$ an der Kante zu \next{CP1} erzeugt wird. Dieser Pseudostandort wird zu einem späteren Zeitpunkt bearbeitet.\\
+ (c) zeigt den Zustand nach der Bearbeitung von Teilpolygon $CP2$. Hier tritt erneut der Fall auf, dass die Fläche, die dem Standort $S2$ zugeteilt wird, zu klein ist. Aus diesem Grund wird der Pseudostandort $S'2$ an der Kante zu \next{CP2} erzeugt.\\
+In (d) wird der Zustand nach der Bearbeitung von Teilpolygon $CP3$ gezeigt. Dort wird das Teilpolygon $P7$ dem Standort $S7$ zugeteilt und das Teilpolygon $P1$ dem Standort $S1$. Der Rest von $CP3$ wird mit $P2$ vereint und daher ebenfalls $S2$ zugewiesen. Da die Fläche von $P2$ weiterhin nicht groß genug ist, um der Flächenanforderung von $S2$ zu genügen, wird ein neuer Pseudostandort $S'2$ an der Kante zu \next{CP3} erzeugt.\\
+ (e) zeigt den Zustand nach der Bearbeitung von $CP4$. Dort hat das Liniensegment das Ende von $CP4$ erreicht, ohne dass zuvor die Flächenanforderung der Standorte erfüllt werden konnte. Aus diesem Grund wird $P5$ und der Pseudostandort $S'5$ erzeugt und diese $S5$ zugeordnet. Anschließend wird derselbe Schritt für $S6$ wiederholt. Nach Abziehen der Flächen $P5$ und $P6$ von $CP4$ werden Teile von $CP4$ den Pseudostandorten $S'2$ und $S4$ zugeordnet und mit den Teilpolygonen $P2$ und $P4$ vereint.\\
+Im letzten Schritt (f) wird $CP5$ und der verbliebene Teil von $CP4$ den Pseudostandorten $S5$ und $S6$ zugeordnet. Die Abbildung zeigt das in gleichmäßige Teilpolygone $P1,…,P7$ zerlegte Polygon.
+
+\section{Komplexitätsanalyse}\label{komplex}
+\subsection{Konvexes Polygon}
+Der Algorithmus \con benötigt lineare Zeit bezogen auf die Anzahl der Elemente der Liste $W(P)$, um einen einzelnen Schnitt durchzuführen. Der dabei erforderliche Aufbau der Polygone \prl beziehungsweise \pll sowie die Ermittlung der Fläche ist in konstanter Zeit möglich. Das Finden der Punkte, bei denen $\mar{\mprl} = \marreq{S(\mprl)}$ gilt, kann ebenso in konstanter Zeit erfolgen. Der Algorithmus \con benötigt daher $O(n+v)$ Zeit ($n$ = Anzahl der Standorte, $v$ = Anzahl an Polygonpunkten).\\
+Im ungünstigste Fall trennt \con von einem konvexen Polygon mit $q$ Standorten nur ein Dreieck ($v$ = 3, $n$ = 1) ab. Neben dem Dreieck verbleibt dann ein konvexes Polygon mit $q-1$ Standorten und $v+1$ Polygonpunkten. Für dieses Polygon gilt wiederrum selbes. Um eine gesamte Flächenzerlegung eines konvexen Polygons zu berechnen, wird $O((n-1)(n+v))$ Zeit benötigt. 
+Hierbei sei angemerkt, dass dieser Algorithmus stets terminiert, da die Anzahl an Standorten konstant ist und die Anzahl der Teil-Polygone je Schnitt um 1 erhöht wird. Nach $n-1$ Schnitten entspricht die Anzahl der Teil-Polygone der Anzahl der Standorte.
+\subsection{Nicht konvexes Polygon}
+Der Algorithmus \ord besucht jeden Knoten im Nachbarschaftsgraphen maximal zwei Mal, sodass die Ordnung in linearer Zeit $O(p)$ bezogen auf die Anzahl $p$ der konvexen Teile erfolgen kann.
+Der Algorithmus \noncon benötigt $O(pn^{2} + nv)$ Zeit, um alle $p$ konvexen Teile unter den $n$ Standorten aufzuteilen. Im ungünstigsten Fall wird jedes der $p$ konvexen Teile in $n$ Polygone zerlegt, wobei jedes der Polygone einen Teil eines Standorts abbildet.\\
+Der Algorithmus \daa wird getrennt für den Teil \emph{Detach} beziehungsweise \emph{Assign} betrachtet.\\
+Um ein Polygon nach einem Schnitt zu lösen (\emph{Detach}), müssen alle Zeiger auf Nachbarpolygone aktualisiert werden. Dieser Vorgang ist in Zeit $O(v_{j})$ für ein konvexes Polygon mit $v_{j}$ Polygonpunkten möglich. Der ungünstigste Fall beziehungsweise die maximale Anzahl an zu aktualisierenden Zeigern besteht dann, wenn je Zerlegung ein Dreieck $(v=3)$ und ein Polygon mit $v_{j}+1$ Polygonpunkten abgetrennt werden. Für alle Teilpolygone ergibt sich dann eine maximale Zeit von $O(v + pn^{2})$.\\
+Der Algorithmus \emph{Assign} übernimmt die Zuweisung von Flächen zu Standorten, wobei eine Fläche aus einem Set von konvexen Teilen besteht. Die Vereinigung der konvexen Teile zu einem Polygon benötigt lineare Zeit bezogen auf die Anzahl der Polygonpunkte aller Teile, also maximal $O(pn + v)$. Die Vereinigung aller $n$-Standort-Polygone benötigt daher $O(pn^{2}+ vn)$ Zeit. 
+Zusammenfassend ergibt sich aus den Laufzeiten für \mbox{\textit{OrderPieces}}, \noncon und \daa eine Gesamtlaufzeit von $O(pn^{2} + vn)$.
 
 
 
@@ -203,7 +272,7 @@ Nun muss \cprleins mit einer Teilfäche des Dreiecks $T$ und gegebenenfalls mit 
 %\bibitem{Ivory2001}
 %M.~Y. Ivory and M.~A. Hearst.
 %\newblock The state of the art in automating usability evaluation of user
-%  interfaces.
+% interfaces.
 %\newblock {\em ACM Comput. Surv.}, 33(4):470--516, 2001.
 %
 %\end{thebibliography}
@@ -215,3 +284,4 @@ Nun muss \cprleins mit einer Teilfäche des Dreiecks $T$ und gegebenenfalls mit 
 \bibliography{literatur} % Daten aus der Datei literatur.bib verwenden.
 
 \end{document}
+

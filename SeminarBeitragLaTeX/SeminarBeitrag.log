@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12.10) (preloaded format=pdflatex 2022.1.24)  24 JAN 2022 19:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12.10) (preloaded format=pdflatex 2022.1.24)  25 JAN 2022 12:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -880,62 +880,128 @@ Underfull \hbox (badness 10000) in paragraph at lines 130--133
  []
 
 [3]
-Overfull \hbox (2.8661pt too wide) in paragraph at lines 149--154
+Overfull \hbox (2.8661pt too wide) in paragraph at lines 148--153
 \T1/lmr/m/n/10 der Son-der-fall-be-hand-lung wird durch die bei-den Me-tho-den 
 [] und []
  []
 
 [4]
 
-LaTeX Warning: Command \textellipsis invalid in math mode on input line 174.
+LaTeX Warning: Command \textellipsis invalid in math mode on input line 173.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 173--175
+Underfull \hbox (badness 10000) in paragraph at lines 172--174
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 184--185
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 185--186
+Overfull \hbox (6.9428pt too wide) in paragraph at lines 196--198
+\T1/lmr/m/n/10 vor, dass die Flä-che von $\OML/lmm/m/it/10 P[]$ \T1/lmr/m/n/10 
+in Kom-bi-na-ti-on mit dem Vor-gän-ger-po-ly-gon $\OML/lmm/m/it/10 PredPoly\OT1
+/lmr/m/n/10 (\OML/lmm/m/it/10 CP; \OT1/lmr/m/n/10 (\OML/lmm/m/it/10 t[]; t[]\OT
+1/lmr/m/n/10 ))$
+ []
+
+[5]
+Underfull \hbox (badness 10000) in paragraph at lines 202--203
 
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 204--205
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 205--207
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 208--209
+
+ []
+
+
+Overfull \hbox (14.77083pt too wide) in paragraph at lines 211--213
+$\OML/lmm/m/it/10 PS$ \T1/lmr/m/n/10 be-kommt al-so die feh-len-de Flä-chenan-f
+or-de-rung zu-ge-wie-sen. Da-durch kann $\OML/lmm/m/it/10 PredPoly\OT1/lmr/m/n/
+10 (\OML/lmm/m/it/10 CP; \OT1/lmr/m/n/10 (\OML/lmm/m/it/10 t[]; PS\OT1/lmr/m/n/
+10 ))$
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 211--213
+
+ []
+
+[6]
+Overfull \hbox (15.70396pt too wide) in paragraph at lines 230--235
+\T1/lmr/m/n/10 Im ers-ten Fall kann es sein, dass $\OML/lmm/m/it/10 PredPoly\OT
+1/lmr/m/n/10 (\OML/lmm/m/it/10 CP\OT1/lmr/m/n/10 )$  \T1/lmr/m/n/10 nur einen S
+tand-ort be-sitzt. Dann kann $\OML/lmm/m/it/10 PredPoly\OT1/lmr/m/n/10 (\OML/lm
+m/m/it/10 CP\OT1/lmr/m/n/10 )$
+ []
+
+
+Overfull \hbox (0.63652pt too wide) in paragraph at lines 230--235
+\T1/lmr/m/n/10 Fall wird $\OML/lmm/m/it/10 PredPoly\OT1/lmr/m/n/10 (\OML/lmm/m/
+it/10 CP\OT1/lmr/m/n/10 )$  \T1/lmr/m/n/10 eben-falls neu ge-ord-net, so-dass $
+\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 w[]; w[]\OT1/lmr/m/n/10 )$ \T1/lmr/m/n/10 die
+ Kan-te zu $\OML/lmm/m/it/10 NextNeighbor\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 CP\O
+T1/lmr/m/n/10 )$
+ []
+
+
+LaTeX Warning: Command \textellipsis invalid in math mode on input line 243.
+
+
+LaTeX Warning: Command \textellipsis invalid in math mode on input line 248.
+
+[7]
 No file SeminarBeitrag.bbl.
-[5] (SeminarBeitrag.aux
+[8] (SeminarBeitrag.aux
 Package cleveref Info: loaded `ngerman' language definitions on input line 25.
 )
 Package rerunfilecheck Info: File `SeminarBeitrag.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 19007 strings out of 478659
- 351049 string characters out of 2844972
- 797210 words of memory out of 3000000
- 36797 multiletter control sequences out of 15000+600000
+ 19036 strings out of 478659
+ 351356 string characters out of 2844972
+ 799291 words of memory out of 3000000
+ 36817 multiletter control sequences out of 15000+600000
  451342 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 122i,6n,120p,10612b,474s stack positions out of 5000i,500n,10000p,200000b,80000s
-{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}
-{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.en
-c}{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}
-{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}{
-C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathex.enc
-}{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.e
+ 122i,9n,120p,10612b,474s stack positions out of 5000i,500n,10000p,200000b,80000s
+{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.
+enc}{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.en
+c}{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.
+enc}{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.en
+c}{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc
+}{C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathex.e
 nc}<C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10
 .pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmex
 10.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lm
 mi10.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/
-lmmi7.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm
-/lmr10.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
-m/lmr12.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/
-lm/lmr5.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/
-lm/lmr7.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/
-lm/lmri10.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/publi
-c/lm/lmssbx10.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/p
-ublic/lm/lmsy10.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1
-/public/lm/lmsy7.pfb>
-Output written on SeminarBeitrag.pdf (5 pages, 240486 bytes).
+lmmi5.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm
+/lmmi7.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
+m/lmr10.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public/
+lm/lmr12.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public
+/lm/lmr5.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public
+/lm/lmr7.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/public
+/lm/lmri10.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/publ
+ic/lm/lmssbx10.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type1/
+public/lm/lmsy10.pfb><C:/Users/steffen/AppData/Local/Programs/MiKTeX/fonts/type
+1/public/lm/lmsy7.pfb>
+Output written on SeminarBeitrag.pdf (8 pages, 267132 bytes).
 PDF statistics:
- 143 PDF objects out of 1000 (max. 8388607)
- 16 named destinations out of 1000 (max. 500000)
- 81 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 188 PDF objects out of 1000 (max. 8388607)
+ 25 named destinations out of 1000 (max. 500000)
+ 129 words of extra memory for PDF output out of 10000 (max. 10000000)
 
