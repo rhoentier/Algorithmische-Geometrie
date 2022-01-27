@@ -75,7 +75,7 @@ Zerlegung eines konvexen Polygons mit einem Liniensegment immer zwei konvexe Pol
 % Beschreibung des vorgestellten Algorithmus
 \subsection{Aufteilung eines einfachen, konvexen Polygons}\label{aufteilung konvex}
 Aus \cp entstehende, konvexe Polygone werden mit \cpi notiert. Mit den genannten Überlegungen lässt sich ein rekursiver \emph{divide-and-conquer} - Algorithmus
-zur Flächenaufteilung eines konvexen Polygons - basierend auf n Standorten - wie in Listing~\ref{code grundidee} skizzieren.\\
+zur Flächenaufteilung eines konvexen Polygons - basierend auf n Standorten - wie in Listing~\ref{code grundidee} skizzieren.
 
 \begin{lstlisting}[float,caption={Die Grundidee hinter dem Algorithmus \con}, frame=single, label=code grundidee]
 // Input: Convex polygon CP
@@ -90,29 +90,17 @@ Function ConvexDivide(CP)
 
 Bei jedem Aufruf von \con(\cp) wird zunächst geprüft, ob das übergebene Polygon nur noch einen Standort enthält. Falls ja, ist der Zielzustand für das
 übergebene Polygon erreicht und es ist keine weitere Flächenaufteilung erforderlich. Falls das Polygon mehrere Standorte enthält, erfolgt eine weitere Aufteilung
-des Polygons in zwei Teil-Polygone \prl und \pll, welche dann rekursiv mit \con aufgerufen werden.
+des Polygons in zwei Teil-Polygone \prl und \pll, welche dann rekursiv mit \con aufgerufen werden.\\
 
 \begin{figure}[h]
-    \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/1a.png}}
-    \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/1b.png}}
-    \qquad
-    \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/1c.png}}
-    \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/1d.png}}
+    \subfloat[]{\includegraphics[width=0.25\textwidth]{./Abbildungen/1a.png}}
+    \subfloat[]{\includegraphics[width=0.25\textwidth]{./Abbildungen/1b.png}}
+    \subfloat[]{\includegraphics[width=0.25\textwidth]{./Abbildungen/1c.png}}
+    \subfloat[]{\includegraphics[width=0.25\textwidth]{./Abbildungen/1d.png}}
     \centering
     \caption{Zerlegung eines konvexen Polygons $CP$ in vier konvexe Polygone $CP_{1},...,CP_{4}$}
     \label{erstes beispiel}
 \end{figure}
-
-%Wenn Beispiel in eienr Zeile abgebildet werden soll
-%\begin{figure}[h]
-%    \subfloat[]{\includegraphics[width=0.20\textwidth]{./Abbildungen/1a.png}}
-%    \subfloat[]{\includegraphics[width=0.20\textwidth]{./Abbildungen/1b.png}}
-%    \subfloat[]{\includegraphics[width=0.20\textwidth]{./Abbildungen/1c.png}}
-%    \subfloat[]{\includegraphics[width=0.20\textwidth]{./Abbildungen/1d.png}}
-%    \centering
-%    \caption{Zerlegung eines konvexen Polygons $CP$ in vier konvexe Polygone $CP_{1},...,CP_{4}$}
-%    \label{erstes beispiel}
-%\end{figure}
 
 Abbildung~\ref{erstes beispiel} zeigt ein Beispiel für eine Zerlegung eines 4-Standort-Polygons in 4 Teilpolygone mit jeweils einem Standort. In (a) wird \prl mit einer Fläche von 3.4 FE abgetrennt und dem Standort $S01$ zugeordnet. Die in (b) entstehenden Teilpolygone \prl und \pll weisen eine Fläche von 49.3 FE beziehungsweise 14.8 FE auf. Letzteres wird dem Standort $S04$ zugeordnet und ist als 1-Standort-Polygon fertig bearbeitet. \prl wird in (c) erneut aufgeteilt, sodass die Flächenanforderung von $S02$ und $S03$ jeweils erfüllt werden. (d) zeigt die resultierende Aufteilung mit den 4 Teilpolygonen.  
 
@@ -149,7 +137,7 @@ verschoben wird, bis $\mar{\mprl}=\marreq{S_{1}}$ gilt. Zur Verdeutlichung diese
 
 Wenn die Bedingung $\mar{\mprl}=\marreq{S_{1}}$ eintritt, erfolgt eine Polygonzerlegung. Für \prl erfolgt keine weitere Zerlegung beim Aufruf von
 \con (siehe Listing~\ref{code grundidee}, Zeile 3), da nur $S_{1}$ auf dessen Rand liegt. Falls auf dem Rand von \pll mehr als ein Standort verbleibt, erfolgt eine erneute
-Zerlegung beim Aufruf von \con(\pll) (siehe Listing~\ref{code grundidee}, Zeile 7).
+Zerlegung beim Aufruf von \con(\pll) (siehe Listing~\ref{code grundidee}, Zeile 7).\\
 
 \textbf{Fall 2: $\mar{\mprl}<\marreq{S_{1}}$} \\
 Nach der Initialisierung der Linie \l wird festgestellt, dass die Fläche von \prl kleiner ist als die benötigte Fläche von $S_{1}$. In diesem Fall erfolgt eine Vergrößerung von \ar{\mprl} mit dem Ziel, die Anforderung von $S_{1}$ zu erfüllen. Hierbei fungiert \ls als Drehpunkt und \Le wird auf den nächsten in \w vorkommenden Polygonpunkt oder Standort $w_{k+1}$ gesetzt. Die Anforderung wird erneut geprüft. In diesem Schritt wird \Le von Polygonpunkt zu Polygonpunkt verschoben. Eine inkrementelle Verschiebung entlang des Polygons erfolgt dann unter Fall 2.1 beziehungsweise 2.2.
@@ -162,7 +150,7 @@ Hierbei kann es nun vorkommen, dass \Le auf die Koordinaten eines Punktes $w_{j}
 \item $L_{e} = S_{n}$
 \end{itemize}
 
-Je nachdem, wie weit \Le vorrückt und wie die Fläche von \prl zur Flächenanforderung von S($\mprl$) ist, werden nun weiter zwei Fälle unterschieden:
+Je nachdem, wie weit \Le vorrückt und wie die Fläche von \prl zur Flächenanforderung von S($\mprl$) ist, werden nun weiter zwei Fälle unterschieden:\\
 
 \textbf{Fall 2.1: $L_{e} = S_{n}$ und $\mar{\mprl}>\marreq{S(\mprl)}$} \\
 In diesem Fall wird der Endpunkt \Le inkrementell im Uhrzeigersinn entlang des Polygons bewegt, bis $\mar{\mprl}=\marreq{S(\mprl)}$ gilt.
@@ -361,7 +349,7 @@ Durch diese Aufteilung entstehen die beiden Polygone $(\mprleins + T' - PredPoly
 $PS$ bekommt also die fehlende Flächenanforderung zugewiesen. Dadurch kann \predl{CP}{t_{1},PS} ebenfalls durch \noncon aufgeteilt und ein Teilpolygon $PS$ zugewiesen werden. Das zugewiesene Teilpolygon kann dann dem Polygon $(\mprleins + T')$ hinzugefügt werden. Dieses Polygon und das Polygon $(\mplleins -T')$ werden dann an \daa übergeben. \\
 
 Weiterhin muss der Fall betrachtet werden, bei dem das Liniensegment $L$ das Polygon einmal komplett durchlaufen hat.\\
-\textbf{Fall 2:}: Dieser Fall tritt ein, wenn ein Teilpolygon und die Reste der Vorgängerpolygone weniger Fläche enthalten, als die Standorte beanspruchen. In diesem Fall ist \cpi Flächen-unvollständig und es muss für mindestens einen Standort aus $S(\mcprl)$ ein Pseudostandort erzeugt werden. Dazu wird ein Punkt $t$ auf der Kante $(w_{m}, w_{1})$ erzeugt, also der Kante zu \next{\mcpi}. Nun sei $L = (t, S_{i})$, wobei \si der erste Standort in $S(\mcpi)$ gegen den Uhrzeigersinn von $w_{1}$ aus ist. Nun wird $W(\mprl)$ so geordnet, dass $t = w_{1}$ gilt. Anschließend werden\prl und \pll an \daa übergeben. Hierbei entsteht entweder auf dem Liniensegment $(w_{1}, w_{2})$ ein Pseudostandort oder ein Teil von \prl wird dem Standort \si zugeordnet. Wenn ein Pseudostandort entsteht, dann wird diesem die Flächenanforderung von \si abzüglich der Fläche von \prl zugeordnet und das Polygon \prl von \cpi entfernt. Mit den restlichen Standorten von \cpi wird dasselbe Verfahren angewandt.\\
+\textbf{Fall 2:} Dieser Fall tritt ein, wenn ein Teilpolygon und die Reste der Vorgängerpolygone weniger Fläche enthalten, als die Standorte beanspruchen. In diesem Fall ist \cpi Flächen-unvollständig und es muss für mindestens einen Standort aus $S(\mcprl)$ ein Pseudostandort erzeugt werden. Dazu wird ein Punkt $t$ auf der Kante $(w_{m}, w_{1})$ erzeugt, also der Kante zu \next{\mcpi}. Nun sei $L = (t, S_{i})$, wobei \si der erste Standort in $S(\mcpi)$ gegen den Uhrzeigersinn von $w_{1}$ aus ist. Nun wird $W(\mprl)$ so geordnet, dass $t = w_{1}$ gilt. Anschließend werden\prl und \pll an \daa übergeben. Hierbei entsteht entweder auf dem Liniensegment $(w_{1}, w_{2})$ ein Pseudostandort oder ein Teil von \prl wird dem Standort \si zugeordnet. Wenn ein Pseudostandort entsteht, dann wird diesem die Flächenanforderung von \si abzüglich der Fläche von \prl zugeordnet und das Polygon \prl von \cpi entfernt. Mit den restlichen Standorten von \cpi wird dasselbe Verfahren angewandt.\\
 Die Pseudostandorte werden nun bei der Aufteilung von \next{\mcpi} behandelt. Wenn den Pseudostandorten hierbei ein Polygon zugeteilt wird, dann wird dieses Polygon auf die korrespondierenden Standorte übertragen.\\
 Zusammenfassend wir durch den Algorithmus von\noncon ein $q$-Standort-Polygon entweder in ein $q_{1}$-Standort-Polygon und ein $q_{2}$-Standort-Polygon mit $q_{1}, q_{2} > 0$ und $q-{1} + q_{2} = q$ aufgeteilt oder es wird ein $1$-Standort Polygon abgetrennt und es bleibt ein $q'$-Standort Polygon mit $q' = q - 1$ übrig.
 
