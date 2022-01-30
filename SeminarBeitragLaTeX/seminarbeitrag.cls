@@ -12,6 +12,8 @@
 % Fonts
 \RequirePackage[T1]{fontenc} % Moderne Fonts, Trennung von Woertern mit Umlauten
 \RequirePackage{lmodern} % Latin Modern
+\renewcommand{\ttdefault}{pcr}
+
 % Mathe
 \RequirePackage{amssymb} % American Mathematical Society
 \RequirePackage{amsmath}
@@ -28,7 +30,7 @@
 
 % Bilder
 \RequirePackage{graphicx} % \includegraphics
-\RequirePackage{color}
+\RequirePackage{color, colortbl}
 \usepackage[margin=2em,font=normalsize,labelfont={sf,bf}]{caption} % Bildunterschriften
 % Referenzen, Links
 \RequirePackage[pdftex,pdfpagelabels=false]{hyperref}
@@ -44,6 +46,8 @@
 }
 \RequirePackage{cleveref}% bequeme Referenzen mit \cref
 \RequirePackage{embrac}% Klammern nicht kursiv, () und []
+% Tabellen
+\renewcommand{\arraystretch}{1.5}
 
 % Kommandos
 \newcommand{\ls}{$L_{s}$ }
@@ -84,7 +88,7 @@
 \newcommand{\marreq}[1]{AreaRequired(#1)}
 \newcommand{\pred}[1]{$PredPoly(#1)$ }
 \newcommand{\predl}[2]{$PredPoly(#1, (#2))$ }
-\newcommand{\next}[1]{$NextNeighbor(#1)$ }
+\renewcommand{\next}[1]{$NextNeighbor(#1)$ }
 
 
 
