@@ -9,6 +9,7 @@
 \usepackage{listings} %Einfügen von Code-Beispielen
 \usepackage{xcolor}
 \usepackage{subfig}
+\usepackage{float}
 
 \begin{document}
 
@@ -21,9 +22,7 @@
 \maketitle% Titelangaben produzieren, kein Inhaltsverzeichnis
 
 \begin{abstract}
-Die Arbeit basiert auf der Veröffentlichung \emph{Polygon Area Decomposition for Multiple-Robot Workspace Division} von Susan Hert und Vladimir Lumelsky \cite{Hert.1998}.
-In dieser Veröffentlichung wird ein konkretes Problem der Polygonzerlegung, das sogenannte \emph{Problem der verankerten Flächenaufteilung} (eng. \emph{anchored
-area partition problem}) beschrieben und mittels \emph{sweepline}- und \emph{divide-and-conquer}-Techniken gelöst. Die Lösung erfolgt zunächst für konvexe Polygone und wird anschließend auf nicht konvexe, nicht einfache Polygone erweitert.
+In dieser Arbeit wird ein konkretes Problem der Polygonzerlegung, das sogenannte \emph{Problem der verankerten Flächenaufteilung} (eng. \emph{anchored area partition problem}) vorgestellt, welches von Susan Hert und Vladimir Lumelsky \cite{Hert.1998} veröffentlicht wurde. Die vorliegende Arbeit basiert maßgebend auf dieser Veröffentlichung und beschreibt, wie dieses Problem mittels \emph{sweepline-} und \emph{divide-and-conquer}-Techniken effizient gelöst werden kann. Die Lösung erfolgt zunächst für konvexe Polygone und wird anschließend auf nicht konvexe, nicht einfache Polygone erweitert.
 
 \keywords{Polygonzerlegung, Flächenaufteilung, Flächenerkundung, Roboterplanung}% Keywords innerhalb vom Abstract
 \end{abstract}
@@ -47,10 +46,11 @@ erkunden. Hierzu muss jede Position innerhalb des Polygons von einem der n Robot
 
 Zur formalen Beschreibung des Problems sind als Eingangsdaten ein Polygon $P$ sowie eine (nicht leere) Liste von Standorten $S(P)$ gegeben. Für jeden der $n$
 Standorte \si, \iton ist der benötigte Flächenanteil $c_{i}$, \iton mit $0 < c_{i} < 1$ gegeben, sodass $\sum_{i=1}^{n}c_{i}=1.0$ gilt. Das Polygon $P$ soll in $n$, nicht
-überlappende Polygone zerlegt werden, sodass jeder Standort \si auf dem Teilpolygon \pi mit Fläche $c_{i}* \mar{P}$ liegt. Aus der Fläche des Polygons $P$ kann für jeden der $n$ Standorte die benötigte Fläche mit $c_{i}* \mar{P}$ bestimmt werden.
+überlappende Polygone zerlegt werden, sodass jeder Standort \si auf dem Teilpolygon \pi mit Fläche $c_{i}* \mar{P}$ liegt. Aus der Fläche des Polygons $P$ kann für jeden der $n$ Standorte die benötigte Fläche mit $c_{i}* \mar{P}$ bestimmt werden.\\
 
 In der Praxis werden Flächenaufteilungen beispielsweise bei der Einteilung von Zustellbezirken der Post oder Einsatzgebieten von Rettungskräften verwendet. Die zuvor beschriebene, konkrete Problembeschreibung der verankerten Flächenaufteilung kann in Bezug auf die Roboterplanung beispielsweise auf Saug- oder Mähroboter übertragen werden, welche inzwischen in einigen Haushalten zu finden sind.\\
-Hinweis: Einige in diesem Beitrag genutzten Begriffe und Abkürzungen sind aus der Veröffentlichung von Hert und Lumelsky \cite{Hert.1998} übernommen und werden in Kapitel~\ref{begriffe} erläutert und daher bei ihrer ersten Verwendung nicht explizit beschrieben. Die Listings wurden gegenüber der Veröffentlichung \cite{Hert.1998} zur besseren Lesbarkeit verändert.
+
+Hinweis: Die in dieser Arbeiten genutzten Begriffe und Abkürzungen sind aus der Veröffentlichung von Hert und Lumelsky \cite{Hert.1998} übernommen und werden in Kapitel~\ref{begriffe} erläutert. Die Listings wurden gegenüber der Veröffentlichung \cite{Hert.1998} zur besseren Lesbarkeit verändert.
 
 
 
@@ -82,7 +82,7 @@ Function ConvexDivide(CP)
 Bei jedem Aufruf von \textit{ConvexDivide}($CP$) wird zunächst geprüft, ob das übergebene Polygon nur noch einen Standort enthält. Falls ja, ist der Zielzustand für dasübergebene Polygon erreicht und es ist keine weitere Flächenaufteilung erforderlich. Falls das Polygon mehrere Standorte enthält, erfolgt eine weitere Aufteilung
 des Polygons in zwei Teilpolygone \prl und $\mpll$, welche dann rekursiv mit \con aufgerufen werden.\\
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \subfloat[]{\includegraphics[width=0.25\textwidth]{./Abbildungen/1a.png}}
     \subfloat[]{\includegraphics[width=0.25\textwidth]{./Abbildungen/1b.png}}
     \subfloat[]{\includegraphics[width=0.25\textwidth]{./Abbildungen/1c.png}}
@@ -100,8 +100,7 @@ Abbildung~\ref{erstes beispiel} zeigt ein Beispiel für eine Zerlegung eines 4-S
 
 Aus vorangegangenem Kapitel bleibt offen, wie genau die Aufteilung eines konvexen Polygons \cp in die Polygone \prl und \pll erfolgt, sodass anschließend
 $\mar{\mprl}=\marreq{S_{1},...,S_{i}}$ und $\mar{\mpll}=\marreq{S_{i+1},...,S_{n}} $ gilt.
-Konkret ist zu klären, wie Anfangs- und Endpunkt der Schnittlinien positioniert werden (siehe Listing~\ref{code grundidee}, Zeile 4). \\
-Initialisierung von \ls und \Le beim Aufruf von \mbox{\textit{ConvexDivide}}:
+Konkret ist zu klären, wie Anfangs- und Endpunkt der Schnittlinien positioniert werden (siehe Listing~\ref{code grundidee}, Zeile 4). Zunächst werden \ls und \Le beim Aufruf von \con wie folgt initialisiert:
 
 \begin{itemize}
 \item Der Startpunkt \ls der Linie \l wird mit den Koordinaten des ersten Punkts der Liste \w initialisiert, wobei dieser nach Definition ein Polygonpunkt (und
@@ -130,7 +129,7 @@ Wenn die Bedingung $\mar{\mprl}=\marreq{S_{1}}$ eintritt, erfolgt eine Polygonze
 Zerlegung beim Aufruf von \con($\mpll$) (siehe Listing~\ref{code grundidee}, Zeile 7).\\
 
 \textbf{Fall 2: $\mar{\mprl}<\marreq{S_{1}}$} \\
-Nach der Initialisierung der Linie \l wird festgestellt, dass die Fläche von \prl kleiner ist als die benötigte Fläche von $S_{1}$. In diesem Fall erfolgt eine Vergrößerung von \ar{\mprl}mit dem Ziel, die Anforderung von $S_{1}$ zu erfüllen. Hierbei fungiert \ls als Drehpunkt und \Le wird auf den nächsten in \w vorkommenden Polygonpunkt oder Standort $w_{k+1}$ gesetzt. Die Anforderung wird erneut geprüft. In diesem Schritt wird \Le von Polygonpunkt zu Polygonpunkt verschoben. Eine inkrementelle Verschiebung entlang des Polygons erfolgt dann unter Fall 2.1 beziehungsweise 2.2.
+Nach der Initialisierung der Linie \l wird festgestellt, dass die Fläche von \prl kleiner ist als die benötigte Fläche von $S_{1}$. In diesem Fall erfolgt eine Vergrößerung von \ar{\mprl}mit dem Ziel, die Flächenanforderung zu erfüllen. Hierbei fungiert \ls als Drehpunkt und \Le wird auf den nächsten in \w vorkommenden Polygonpunkt oder Standort $w_{k+1}$ gesetzt. Die Anforderung wird erneut geprüft. In diesem Schritt wird \Le von Polygonpunkt zu Polygonpunkt verschoben. Eine inkrementelle Verschiebung entlang des Polygons erfolgt dann unter Fall 2.1 beziehungsweise 2.2.
 
 Hierbei kann es nun vorkommen, dass \Le auf die Koordinaten eines Punktes $w_{j}$ in \w gesetzt wird, welcher ein Standort $\ne S_{1}$ ist. Dieser Standort wird dann beim nächsten Vorrücken (also bei $w_{j+1}$) zur benötigten Fläche von \prl hinzugenommen. Bei Fall 2 kann \arreq{\mprl} demnach ansteigen, sodass ein Vorücken von \Le zwar zu einer größeren Fläche von $\mprl$, nicht aber unbedingt zu einem günstigeren Verhältnis aus $\mar{\mprl} / \marreq{S(\mprl)}$ führt. \\
 \Le wird so oft verschoben, bis eine der folgenden Bedingungen eintritt:\\
@@ -151,12 +150,7 @@ In diesem Fall wird der Anfangspunkt \ls inkrementell im Uhrzeigersinn entlang d
 
 Diese Vorgehensweise entspricht im Wesentlichen Fall 1, wobei \ls (initialisiert mit $w_{1}$) nun nicht gegen den Uhrzeigersinn zum ersten Standort $S_{1}$, sondern im Uhrzeigersinn zum letzten Standort \s{n}bewegt wird. Vergleiche auch Abbildung~\ref{zweites beispiel}, Fall (c) und (i).\\
 
-In der Abbildung~\ref{zweites beispiel} werden die unterschiedlichen Fälle gezeigt, die durch angepasste Flächenanforderungen von S01/S02 hervorgerufen werden (Fall 1: 0.20/0.80, Fall 2.1: 0.70/0.30, Fall 2.2: 0.95/0.05). Die Serie (a) - (c) bezieht sich hierbei auf Fall 1. Nach der Initialisierung (a) liegt bereits $\mar{\mprl} > \marreq{S(\mprl)}$ vor, sodass \Le nicht gegen den Uhrzeigersinn bewegt werden muss und fest bleibt, siehe (b). In (c) wird \ls dann inkrementell gegen den Uhrzeigersinn bewegt, bis $\mar{\mprl}=\marreq{S(\mprl)}$ gilt. Fall 2.1 wird in Serie (d) - (f) dargestellt, bei welchem nach der Initialisierung (d) zunächst $\mar{\mprl} < \marreq{S(\mprl)}$ gilt. Nach einer schrittweisen Verschiebung von \Le gegen den Uhrzeigersinn (e) folgt letztendlich eine Interpolation in (f), sodass $\mar{\mprl}=\marreq{S(\mprl)}$ gilt. Die Serie (g) - (i) bezieht sich auf Fall 2.2, wobei \Le in (h) zuerst bis zum letzten Standort wandert, bevor anschließend eine inkrementelle Verschiebung von \ls in (i) erfolgt, sodass $\mar{\mprl}=\marreq{S(\mprl)}$ gilt. Hierbei lässt sich gut die Analogie zwischen Fall (c) und (i) erkennen.\\
-In Listing~\ref{code konvex} wurde der Algorithmus \con nun durch die beschriebenen Fällen erweitert.
-
-Abbildung~\ref{beispiel konvex} zeigt ein Beispiel einer Zerlegung eines nicht konvexen Polygons.
-
-\begin{figure}[h]
+\begin{figure}[hb]
     \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/2a.png}}
     \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/2b.png}}
     \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/2c.png}}
@@ -172,6 +166,12 @@ Abbildung~\ref{beispiel konvex} zeigt ein Beispiel einer Zerlegung eines nicht k
     \caption{Fall 1, 2.1 und 2.2 inklusive der jeweiligen Zwischenschritte im Algorithmus \mbox{\textit{ConvexDivide}}.}
     \label{zweites beispiel}
 \end{figure}
+
+In der Abbildung~\ref{zweites beispiel} werden die unterschiedlichen Fälle gezeigt, die durch angepasste Flächenanforderungen von S01/S02 hervorgerufen werden (Fall 1: 0.20/0.80, Fall 2.1: 0.70/0.30, Fall 2.2: 0.95/0.05). Die Serie (a) - (c) bezieht sich hierbei auf Fall 1. Nach der Initialisierung (a) liegt bereits $\mar{\mprl} > \marreq{S(\mprl)}$ vor, sodass \Le nicht gegen den Uhrzeigersinn bewegt werden muss und fest bleibt, siehe (b). In (c) wird \ls dann inkrementell gegen den Uhrzeigersinn bewegt, bis $\mar{\mprl}=\marreq{S(\mprl)}$ gilt. Fall 2.1 wird in Serie (d) - (f) dargestellt, bei welchem nach der Initialisierung (d) zunächst $\mar{\mprl} < \marreq{S(\mprl)}$ gilt. Nach einer schrittweisen Verschiebung von \Le gegen den Uhrzeigersinn (e) folgt letztendlich eine Interpolation in (f), sodass $\mar{\mprl}=\marreq{S(\mprl)}$ gilt. Die Serie (g) - (i) bezieht sich auf Fall 2.2, wobei \Le in (h) zuerst bis zum letzten Standort wandert, bevor anschließend eine inkrementelle Verschiebung von \ls in (i) erfolgt, sodass $\mar{\mprl}=\marreq{S(\mprl)}$ gilt. Hierbei lässt sich gut die Analogie zwischen Fall (c) und (i) erkennen.\\
+In Listing~\ref{code konvex} wurde der Algorithmus \con nun durch die beschriebenen Fällen erweitert.
+
+Abbildung~\ref{beispiel konvex} zeigt ein Beispiel einer Zerlegung eines nicht konvexen Polygons.
+
 
 \begin{lstlisting}[float,caption={Der vollständige Algorithmus \mbox{\textit{ConvexDivide}}}, frame=single, label=code konvex]
 // Input: Convex polygon CP
@@ -203,9 +203,9 @@ End ConvexDivide()
 
 %In diesem Kapitel wird die Aufteilung eines nicht einfachen, nicht konvexen Polygons gezeigt
 \section{Verallgemeinerung: Aufteilung eines nicht einfachen, nicht konvexen Polygons}\label{nicht konvex}
-Es wurde gezeigt, dass ein einfaches, konvexes Polygon rekursiv in $n$ 1-Standort-Polygone aufgeteilt werden kann. Dieses Kapitel dient dazu einen verallgemeinerten Algorithmus zu skizzieren, damit auch für nicht einfache, nicht konvexe Polygone (Abbildung~\ref{viertes beispiel}) das Problem der verankerten Flächenaufteilung gelöst werden kann.
+Es wurde gezeigt, dass ein einfaches, konvexes Polygon rekursiv in $n$ 1-Standort-Polygone aufgeteilt werden kann. Dieses Kapitel dient dazu einen verallgemeinerten Algorithmus zu skizzieren, damit auch für nicht einfache, nicht konvexe Polygone (siehe beispielsweise Abbildung~\ref{viertes beispiel}) das Problem der verankerten Flächenaufteilung gelöst werden kann.
 
-\begin{figure}[h]
+\begin{figure}[hb]
     \includegraphics[width=0.50\textwidth]{./Abbildungen/4.png}
     \centering
     \caption{Beispiel eines nicht einfachen, nicht konvexen Polygons}
@@ -221,11 +221,24 @@ Die Neuordnung wird innerhalb der Prozedur \ord umgesetzt und die Aufteilung ink
 
 %Beschreibung einer Möglichkeit das Polygon in konvexe Teile zu zerlegen
 \subsection{Aufteilung in konvexe Teilpolygone}\label{aufteilung}
-Als Voraussetzung für die gleichmäßige Aufteilung eines nicht einfachen, nicht konvexen Polygons wird angenommen, dass das Polygon bereits in konvexe Teilpolygone aufgeteilt wurde. In verschiedenen Werken werden Möglichkeiten einer solchen Aufteilung vorgestellt. Ein Vorgehen wäre zum Beispiel, eine Triangulation eines Polygons zu erzeugen. In diesem Fall würde jedoch eine hohe Anzahl von Teilpolygonen entstehen. Um Teilpolygone zusammenzufassen, können nacheinander Kanten der Triangulation entfernt werden, solange das dadurch entstehende Teilpolygon weiterhin konvex ist \cite{Schachter.1978}.
+Als Voraussetzung für die gleichmäßige Aufteilung eines nicht einfachen, nicht konvexen Polygons wird angenommen, dass das Polygon bereits in konvexe Teilpolygone aufgeteilt wurde. In verschiedenen Werken werden Möglichkeiten einer solchen Aufteilung vorgestellt. Ein Vorgehen wäre zum Beispiel, eine Triangulation eines Polygons zu erzeugen. In diesem Fall würde jedoch eine hohe Anzahl von Teilpolygonen entstehen. Um Teilpolygone zusammenzufassen, könnten nacheinander Kanten der Triangulation entfernt werden, solange das dadurch entstehende Teilpolygon weiterhin konvex ist \cite{Schachter.1978}.
 Hieraus wird ersichtlich, dass es verschiedene Möglichkeiten gibt, ein Polygon in konvexe Teilpolygone aufzuteilen. Zum Schluss dieser Arbeit wird besprochen, welche Auswirkungen diese vorbereitenden Schritte auf den Verlauf des vorgestellten Algorithmus haben können.
 
+\begin{figure}[hb]
+    \includegraphics[width=0.70\textwidth]{./Abbildungen/6.png}
+    \centering
+    \caption{Ein in konvexe Teilpolygone zerlegtes Polygon und dessen Verbindungsgraph. Wenn \ord mit $CP_{1}$ als Eingabe aufgerufen wird, dann werden die verschiedenen Teilpolygone wiefolgt ausgegeben: $CP_{5},CP_{3},CP_{2},CP_{4},CP_{1}$. Das Beispiel ist übernommen aus \cite{Hert.1998}.}
+    \label{verbindungsgraph}
+\end{figure}
 %Beschreibung des Algorithmus um die konvexen Teilpolygone neu zu ordnen
 \subsection{Neuordnung der konvexen Teilpolygone}\label{ordnung}
+
+Es kann nun davon ausgegangen werden, dass das Polygon $P$ bereits in konvexe Teilpolygone \cpp zerlegt wurde. Die Teilpolygone können willkürlich geordnet sein und die Indizes treffen keine Aussage über die tatsächliche Anordnung im Polygon $P$. Aus diesem Grund werden die Teilpolygone zuerst neu geordnet, was für den anschließend dargestellten Algorithmus erforderlich ist. Dazu wird ein Verbindungsgraph $G$ gebildet und anhand dessen mittels einer Tiefensuche eine Ordnung erzeugt. Abbildung~\ref{verbindungsgraph} zeigt ein in konvexe Teilpolygone zerlegtes Polygon und dessen Verbindungsgraph.
+
+Jedes Teilpolygon \cpi wird durch einen Knoten $N_{i}$ in $G$ abgebildet. Für jeden Nachbarn $CP_{k} (i \ne k)$ des Teilpolygons \cpi wird eine Kante zum jeweils korrespondierenden Knoten $N_{k}$ eingefügt. \\
+Wir definieren einen Knoten $N_{i}$ in $G$ als Blatt, wenn $N_{}$ entweder nur einen Nachbarn hat oder alle Nachbarn von $N_{i}$ als besucht markiert wurden.
+Die Prozedur \ord beschreibt nun die Neuordnung der Teilpolygone. \ord wird mit einem beliebigen Knoten $N_{i}$ von $G$ initial aufgerufen. Zuerst wird geprüft, ob $N_{i}$ bereits markiert wurde. Ist dies der Fall, kann der Aufruf zurückkehren. Falls $N_{i}$ noch nicht markiert wurde, wird geprüft, ob $N_{i}$ nach obiger Definition ein Blatt ist. Falls $N_{i}$ kein Blatt ist, dann wird der Knoten markiert und für alle Nachbarn $N_{k}$ von $N_{i}$ rekursiv \ord aufgerufen. Nach dem Rücksprung der Aufrufe aller Nachbarn von \cpi wird \cpi ausgegeben. Falls $N_{i}$ ein Blatt ist, dann wird $N_{i}$ markiert und \cpi ausgegeben. Anschließend wird für alle Nachbarn $N_{k}$ von $N_{i}$ rekursiv \ord aufgerufen.
+Die neue Ordnung der \cpi ist nun die Reihenfolge, in der die Teilpolygone ausgegeben wurden.
 
 \begin{lstlisting}[float,caption={Der Algorithmus \ord}, frame=single, label=orderpieces]
 // Input: Nj - Node of the connectivity Graph
@@ -243,18 +256,6 @@ Function OderPieces(Nj)
             Output(CPj)
 End OrderPieces(Nj)  
 \end{lstlisting}
-
-Es kann nun davon ausgegangen werden, dass das Polygon $P$ bereits in konvexe Teilpolygone \cpp zerlegt wurde. Die Teilpolygone können willkürlich geordnet sein und die Indizes treffen keine Aussage über die tatsächliche Anordnung im Polygon $P$. Aus diesem Grund werden die Teilpolygone zuerst neu geordnet, was für den anschließend dargestellten Algorithmus erforderlich ist. Dazu wird ein Verbindungsgraph $G$ gebildet und anhand dessen mittels einer Tiefensuche eine Ordnung erzeugt. Abbildung~\ref{verbindungsgraph} zeigt ein in konvexe Teilpolygone zerlegtes Polygon und dessen Verbindungsgraph.
-\begin{figure}[h]
-    \includegraphics[width=0.70\textwidth]{./Abbildungen/6.png}
-    \centering
-    \caption{Ein in konvexe Teilpolygone zerlegtes Polygon und dessen Verbindungsgraph. Wenn \ord mit $CP_{1}$ als Eingabe aufgerufen wird, dann werden die verschiedenen Teilpolygone wiefolgt ausgegeben: $CP_{5},CP_{3},CP_{2},CP_{4},CP_{1}$. Das Beispiel ist übernommen aus \cite{Hert.1998}.}
-    \label{verbindungsgraph}
-\end{figure}
-Jedes Teilpolygon \cpi wird durch einen Knoten $N_{i}$ in $G$ abgebildet. Für jeden Nachbarn $CP_{k} (i \ne k)$ des Teilpolygons \cpi wird eine Kante zum jeweils korrespondierenden Knoten $N_{k}$ eingefügt. \\
-Wir definieren einen Knoten $N_{i}$ in $G$ als Blatt, wenn $N_{}$ entweder nur einen Nachbarn hat oder alle Nachbarn von $N_{i}$ als besucht markiert wurden.
-Die Prozedur \ord beschreibt nun die Neuordnung der Teilpolygone. \ord wird mit einem beliebigen Knoten $N_{i}$ von $G$ initial aufgerufen. Zuerst wird geprüft, ob $N_{i}$ bereits markiert wurde. Ist dies der Fall, kann der Aufruf zurückkehren. Falls $N_{i}$ noch nicht markiert wurde, wird geprüft, ob $N_{i}$ nach obiger Definition ein Blatt ist. Falls $N_{i}$ kein Blatt ist, dann wird der Knoten markiert und für alle Nachbarn $N_{k}$ von $N_{i}$ rekursiv \ord aufgerufen. Nach dem Rücksprung der Aufrufe aller Nachbarn von \cpi wird \cpi ausgegeben. Falls $N_{i}$ ein Blatt ist, dann wird $N_{i}$ markiert und \cpi ausgegeben. Anschließend wird für alle Nachbarn $N_{k}$ von $N_{i}$ rekursiv \ord aufgerufen.
-Die neue Ordnung der \cpi ist nun die Reihenfolge, in der die Teilpolygone ausgegeben wurden.
 
 %Beschreibung des Algorithmus zur Lösung der verankerten Flächenaufteilung im nicht konvexen Fall
 \subsection{Aufteilung eines nicht einfachen, nicht konvexen Polygons}\label{aufteilung nicht konvex}
@@ -311,7 +312,7 @@ End NonConvexDivide()
 
 Zuerst wird die Prozedur \noncon beschrieben, die die Teilpolygone in zwei Teile aufteilt. Listing~\ref{code nicht konvex} beschreibt diese Prozedur.
 Als Eingabe dient ein konvexes Teilpolygon, beschrieben durch die Liste $W(\mcpi)$ (mit $w_{k}, k = 1,…,m$) mit allen Polygonpunkten inklusive Steiner-Punkten und die Liste $S(\mcpi)$ mit den Standorten des Teilpolygons inklusive der jeweils benötigten Fläche.
-Anders als bei \con aus Kapitel~\ref{konvex} ist für die Bearbeitung relevant, welche Punkte $w_{1}$ und $w_{m}$ in $W(\mcpi)$ sind. Die Kante, die durch die Polygonpunkte $(w_{m}, w_{1})$ erzeugt wird, sei nun die Kante zu $NextNeighbor(\mcpi)$. Hat \cpi keinen nächsten Nachbarn, muss $w_{m}$ gleich einem Standort sein. Ansonsten gilt, dass $W(\mcpi)$ wieder gegen den Uhrzeigesinn geordnet ist.\\
+Anders als bei \con aus Kapitel~\ref{konvex} ist für die Bearbeitung relevant, welche Punkte $w_{1}$ und $w_{m}$ in $W(\mcpi)$ sind. Die Kante, die durch die Polygonpunkte $(w_{m}, w_{1})$ erzeugt wird, sei nun die Kante zu $NextNeighbor(\mcpi)$. Hat \cpi keinen nächsten Nachbarn, muss $w_{m}$ gleich einem Standort sein. Weiterhin gilt, dass $W(\mcpi)$ wieder gegen den Uhrzeigesinn geordnet ist.\\
 
 Wie es auch schon bei \con der Fall war, lässt die Prozedur erneut ein Liniensegment \l gegen den Uhrzeigersinn durch das Polygon \cpi wandern, wobei \ls als Drehpunkt dient. \l wird durch $(L_{s}, L_{e}) = (w_{1}, S_{i})$ initialisiert, wobei $S_{i}$ der erste Standort aus $S(\mcpi)$ ist.\\
 Nun können zwei Fälle eintreten, in denen die Schleife stoppt:
@@ -335,14 +336,14 @@ Nun muss \cprleins mit einer Teilfäche des Dreiecks $T$ und gegebenenfalls mit 
 \item $\mar{\mprleins + T} > \marreq{S(\mcprl)}$ \\
 Die Flächenanforderung der Standorte kann durch die Fläche rechts von \leins und $T$ vollständig gedeckt werden. Insbesondere wird kein Flächenanteil von \predl{CP}{t_{1},t{2}}benötigt. 
 \item $\mar{\mprleins +T} \le \marreq{S(\mcprl)}$ und \\ $\mar{\mprleins+PredPoly(CP,(t_{1},t_{2}))}<\marreq{S(\mcprl)}$ \hfill ($\ast$) \\
-Die Flächen von \prleins und $T$ reichen zusammen nicht $(<)$ oder exakt $(=)$ aus, um die Flächenanforderung der Standorte von \cprl zu erfüllen (1. Bedingung). Weiterhin liegt der Fall vor, dass die Fläche von \prleins in Kombination mit dem Vorgängerpolygon \predl{CP}{t_{1},t_{2}} kleiner als die geforderte Fläche ist (2. Bedingung).
+Die Flächen von \prleins und $T$ reichen zusammen nicht $(<)$ oder exakt $(=)$ aus, um die Flächenanforderung der Standorte von \cprl zu erfüllen (1. Bedingung). Weiterhin liegt der Fall vor, dass die Fläche von \prleins in Kombination mit dem Vorgängerpolygon \linebreak \predl{CP}{t_{1},t_{2}} kleiner als die geforderte Fläche ist (2. Bedingung).
 \item $\mar{\mprleins +T} \le \marreq{S(\mcprl)}$ und \\ $\mar{\mprleins+PredPoly(CP,(t_{1},t_{2}))}\ge\marreq{S(\mcprl)}$ \\
 Bedingung 1 ist analog zu Fall 1.2. Weiterhin liegt nun jedoch der Fall vor, dass die Fläche von \prleins in Kombination mit dem Vorgängerpolygon \predl{CP}{t_{1},t_{2}}zur Erfüllung der Anforderung genügt (2. Bedingung).
 \end{itemize}
 
 Die je nach Fall entstehenden Polygone werden anschließend an die Prozedur \daa übergeben und dort entweder Standorten zugewiesen oder durch einen rekursiven Aufruf von \noncon erneut aufgeteilt.\\
 
-\textbf{Fall 1.1:} Die Flächenanforderung von $S(\mcprl)$ kann durch das Polygon \prleins zusammen mit dem Dreieck $T$ erfüllt werden. In diesem Fall reicht es aus, mittels linearer Interpolation einen Punkt $t$ zwischen $t_{1}$ und $t_{2}$ zu finden, sodass für das Dreieck $T' = (t_{1}, t, t_{3})$ gilt: \\
+\textbf{Fall 1.1:} Die Flächenanforderung von $S(\mcprl)$ kann durch das Polygon \prleins zusammen mit dem Dreieck $T$ erfüllt werden. In diesem Fall reicht es aus, mittels linearer Interpolation einen Punkt $t$ zwischen $t_{1}$ und $t_{2}$ zu finden, sodass für das Dreieck $T' = (t_{1}, t, t_{3})$ gilt:
 \begin{align*}\mar{\mprleins+T'-PredPoly(CP,(t_{1},t))}=\marreq{S(\mcprl)} \end{align*}
 Durch diese Aufteilung entstehen die beiden Polygone $(\mprleins + T' - PredPoly(CP,(t_{1},t))$ und \hbox{$(\mprleins -T')$}, die der Prozedur \daa übergeben werden.\\
 
@@ -350,7 +351,7 @@ Durch diese Aufteilung entstehen die beiden Polygone $(\mprleins + T' - PredPoly
 
 \textbf{Fall 1.3:} Die Fläche der Vorgängerpolygone ist größer als die Flächenanforderung der Standorte. In diesem Fall muss die Fläche der Vorgängerpolygone wiederrum aufgeteilt werden. Ein Teil wird zur Erfüllung der Flächenanforderung genutzt und $S(\mcprleins)$ zugeordnet. Der übrige Teil wird im Weiteren durch einen sogenannten Pseudostandort $PS$ abgebildet. $PS$ wird auf der Kante zwischen $t_{1}$ und $t_{2}$ willkürlich hinzugefügt, sodass das Dreieck $T' = (t_{1}, PS, t_{3})$ entsteht. Es gilt:
 \begin{align*}\marreq{PS}=\marreq{S(\mcprl) - \mar{\mprleins + T'}} \end{align*}
-$PS$ bekommt also die fehlende Flächenanforderung zugewiesen. Dadurch kann \predl{CP}{t_{1},PS} ebenfalls durch \noncon aufgeteilt und ein Teilpolygon $PS$ zugewiesen werden. Das zugewiesene Teilpolygon kann dann dem Polygon $(\mprleins + T')$ hinzugefügt werden. Dieses Polygon und das Polygon $(\mplleins -T')$ werden dann an \daa übergeben. \\
+$PS$ bekommt also die fehlende Flächenanforderung zugewiesen. Dadurch kann \linebreak \predl{CP}{t_{1},PS} ebenfalls durch \noncon aufgeteilt und ein Teilpolygon $PS$ zugewiesen werden. Das zugewiesene Teilpolygon kann dann dem Polygon $(\mprleins + T')$ hinzugefügt werden. Dieses Polygon und das Polygon $(\mplleins -T')$ werden dann an \daa übergeben. \\
 
 Weiterhin muss der Fall betrachtet werden, bei dem das Liniensegment $L$ das Polygon einmal komplett durchlaufen hat.\\
 \textbf{Fall 2:} Dieser Fall tritt ein, wenn ein Teilpolygon und die Reste der Vorgängerpolygone weniger Fläche enthalten, als die Standorte beanspruchen. In diesem Fall ist \cpi Flächen-unvollständig und es muss für mindestens einen Standort aus $S(\mcprl)$ ein Pseudostandort erzeugt werden. Dazu wird ein Punkt $t$ auf der Kante $(w_{m}, w_{1})$ erzeugt, also der Kante zu \next{\mcpi}. Nun sei $L = (t, S_{i})$, wobei \si der erste Standort in $S(\mcpi)$ gegen den Uhrzeigersinn von $w_{1}$ aus ist. Nun wird $W(\mprl)$ so geordnet, dass $t = w_{1}$ gilt. Anschließend werden \prl und \pll an \daa übergeben. Hierbei entsteht entweder auf dem Liniensegment $(w_{1}, w_{2})$ ein Pseudostandort oder ein Teil von \prl wird dem Standort \si zugeordnet. Wenn ein Pseudostandort entsteht, dann wird diesem die Flächenanforderung von \si abzüglich der Fläche von \prl zugeordnet und das Polygon \prl von \cpi entfernt. Mit den restlichen Standorten von \cpi wird dasselbe Verfahren angewandt.\\
@@ -395,7 +396,7 @@ Beim Aufruf von \emph{DetachAndAssign(Poly(CP))} können 3 Fälle auftreten. Das
 \item \pred{CP} ist Flächen-unvollständig
 \item \pred{CP} ist Standort-unvollständig
 \end{itemize}
-Im ersten Fall kann es sein, dass \pred{CP} nur einen Standort besitzt. Dann kann \pred{CP} vom Polygon $Poly(CP)$ getrennt (\emph{Detach}) und komplett diesem Standort zugeteilt (\emph{Assign}) werden.
+Im ersten Fall kann es sein, dass \pred{CP} nur einen Standort besitzt. Dann kann\linebreak \pred{CP} vom Polygon $Poly(CP)$ getrennt (\emph{Detach}) und komplett diesem Standort zugeteilt (\emph{Assign}) werden.
 Falls \pred{CP}mehrere Standorte enthält, wird \pred{CP}von $Poly(CP)$ getrennt und rekursiv mittels \noncon aufgeteilt. \\
 Im zweiten Fall treten die gleichen zwei Unterfälle auf. Falls \pred{CP}nur einen Standort \si hat, kann \pred{CP}von $Poly(CP)$ getrennt und dem Standort zugeteilt werden. Da \pred{CP}Flächen-unvollständig ist, muss nun ein Pseudostandort auf der Kante zu \next{CP}erzeugt werden, der die restliche Flächenanforderung von \si enthält. Flächen, die im weiteren Verlauf dem Pseudostandort zugeteilt werden, werden so mittelbar dem Standort \si zugeteilt.
 Falls \pred{CP}mehrere Standorte hat, dann wird \pred{CP}zunächst neu geordnet, sodass $(w_{m}, w_{1})$ die Kante zu \next{CP}ist. Anschließend erfolgt wiederum ein rekursiver Aufruf von \mbox{\textit{NonConvexDivide}}, da nicht bekannt ist, durch welchen Standort die Flächen-Unvollständigkeit resultiert.\\
@@ -427,13 +428,13 @@ Zusammenfassend ergibt sich aus den Laufzeiten für \mbox{\textit{OrderPieces}},
 %Schluss und Ausblick
 \section{Schluss und Ausblick}\label{schluss}
 In dieser Arbeit wurde das \emph{Problem der verankerten Flächenaufteilung} vorgestellt und anhand von Beispielen für konvexe und nicht konvexe Polygone erläutert.
-Sowohl der beschriebene Algorithmus für ein konvexes Polygon, als auch die verallgemeinerte Version für ein nicht konvexes, nicht einfaches Polygon liefern für ein gegebenes Problem nur eine von vielen möglichen Lösungen.
+Sowohl der beschriebene Algorithmus für ein konvexes Polygon, als auch die verallgemeinerte Version für ein nicht konvexes, nicht einfaches Polygon liefern für ein gegebenes Problem eine Lösungen.
 
-Weitere Untersuchungsmöglichkeiten für die Anpassung und Optimierung des Algorithmus liegen beispielsweise für den konvexen Fall in der Reihenfolge der Punkte beziehungsweise für den nicht konvexen Fall in der Aufteilung des Polygons in konvexe Teilpolygone $CP_{i}$. Weitergehende Forschung könnte den Einfluss der Aufteilung auf die Form der entstehenden Polygone untersuchen. Unter anderem könnte es sein, dass es für die Roboterplanung von Vorteil sei, wenn die resultierenden Flächen möglichst einfach und kompakt (im Sinne des kleinesten umschließenden Durchmessers) sind, da Roboter auf solchen Flächen typischerweise effizienter arbeiten.
+Weitere Untersuchungsmöglichkeiten für die Anpassung und Optimierung des Algorithmus liegen beispielsweise für den konvexen Fall in der Reihenfolge der Punkte des Eingangspolygons beziehungsweise für den nicht konvexen Fall in derArt der Aufteilung des Polygons in konvexe Teilpolygone $CP_{i}$. Weitergehende Forschung könnte den Einfluss dieser Parameter auf die Form der entstehenden Polygone untersuchen. Unter anderem könnte es für die Roboterplanung von Vorteil sein, wenn die resultierenden Flächen möglichst einfach und kompakt (im Sinne des kleinesten umschließenden Durchmessers) sind, da Roboter auf solchen Flächen typischerweise effizienter arbeiten.
 
 
 \section{Abkürzungs- und Begriffsverzeichnis}\label{begriffe}
-\begin{tabular}[t]{ | p{ 0.3\textwidth} | p{ 0.7\textwidth } |  }
+\begin{tabular}[t]{ | p{ 0.3\textwidth} | p{ 0.65\textwidth } |  }
 \hline
  \rowcolor{lightgray} Abkürzung/Begriff & Bedeutung\\
 \hline
@@ -485,17 +486,18 @@ Nachfolger & Alle Teilpolygone $CP_{k}$, die eine größere Ordnung als \cpi hab
 \hline
 \next{\mcpi} & Ein Nachbarpolygon des Teilpolygons $\mcpi$, das ein Nachfolger von \cpi ist und die kleinste Ordnung hat \\
 \hline
-\pred{\mcpi} & \cpi und alle von \cpi aus erreichbaren Vorgänger, ohne dabei einen Nachfolger zu schneiden \\
-\hline
+
 \end{tabular}
 
-\begin{tabular}[t]{ | p{ 0.3\textwidth} | p{ 0.7\textwidth } |  }
+\begin{tabular}[t]{ | p{ 0.3\textwidth} | p{ 0.65\textwidth } |  }
 \hline
  \rowcolor{lightgray} Abkürzung/Begriff & Bedeutung\\
 \hline
+\pred{\mcpi} & \cpi und alle von \cpi aus erreichbaren Vorgänger, ohne dabei einen Nachfolger zu schneiden \\
+\hline
 \predl{\mcpi}{e} & \cpi und alle von \cpi aus über die Kante $e$ erreichbaren Vorgänger, ohne dabei einen Nachfolger zu schneiden \\
 \hline
-$Poly\mcpi)$ & \cpi und alle von \cpi aus erreichbaren Teilpolygone \\
+$Poly(\mcpi)$ & \cpi und alle von \cpi aus erreichbaren Teilpolygone \\
 \hline
 \prl & \cprl und \predl{\mcpi}{e}, für alle Kanten, die rechts der Linie $L$ verlaufen oder einen Endpunkt auf $L$ haben \\
 \hline
@@ -504,7 +506,7 @@ $Poly\mcpi)$ & \cpi und alle von \cpi aus erreichbaren Teilpolygone \\
 \end{tabular}
 
 
-\begin{figure}[h]
+\begin{figure}[hb]
 \begin{center}
     \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/3a.png}}
     \subfloat[]{\includegraphics[width=0.30\textwidth]{./Abbildungen/3b.png}}
@@ -523,7 +525,7 @@ $Poly\mcpi)$ & \cpi und alle von \cpi aus erreichbaren Teilpolygone \\
 \end{figure}
 
 
-\begin{figure}[h]
+\begin{figure}[hb]
 \begin{center}
 \includegraphics[width=1\textwidth]{./Abbildungen/5.png}   
 \end{center}
