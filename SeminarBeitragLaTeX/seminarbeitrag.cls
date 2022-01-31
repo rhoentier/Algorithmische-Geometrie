@@ -25,7 +25,7 @@
 % Seitenformat, A4-Papier, Seitenzahlen
 \RequirePackage[a4paper,left=3cm,right=3cm,top=2.5cm, bottom=3cm]{geometry}
 \pagenumbering{arabic}
-%\pagestyle{empty}
+\pagestyle{empty}
 \addto\maketitle{\thispagestyle{empty}}
 
 % Bilder
