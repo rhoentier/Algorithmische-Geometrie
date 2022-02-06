@@ -26,12 +26,12 @@ class Point:
         color = kwargs.get("color", "k")
         pos = kwargs.get('pos', [1, 1])
         marker = kwargs.get('marker', "o")
-        size = kwargs.get("size", 30)
+        size = kwargs.get("size", 50)   #vortrag hier 60
 
-        plt.scatter(self.x, self.y, color = color, s = size, marker = marker, zorder=6)
+        plt.scatter(self.x, self.y, color = color, s = size, marker = marker, zorder=6) # vortrag hier size = 1.5
 
         delta = 0.25
-        plt.annotate(self.name, (self.x + pos[0] * delta, self.y + pos[0] * delta), ha = "center", va = "center", color = color, zorder = 11)
+        plt.annotate(self.name, (self.x + pos[0] * delta, self.y + pos[1] * delta), size = size / 4, ha="center", va="center", color=color, zorder=11) # vortrag
 
     def copy(self, name_new):
         tmp = copy.deepcopy(self)

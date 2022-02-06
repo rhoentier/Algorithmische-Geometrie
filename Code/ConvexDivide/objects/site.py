@@ -20,9 +20,9 @@ class Site(point.Point):
 
         pos = kwargs.get('pos', [1, 1])
         marker = kwargs.get('marker', "o")
-        size = kwargs.get("size", 30)
+        size = kwargs.get("size", 50)   # vortrag hier 60
         col = kwargs.get("col", "r")
-        plt.scatter(self.x, self.y, color = col, s = size, marker = marker, zorder=6)
+        plt.scatter(self.x, self.y, color = col, s = size * 2, marker = marker, zorder=6)   # vortrag hier size * 3
 
         delta = 0.25
-        plt.annotate(self.name + " (" + "{:.2f}".format(self.c) + " / " + "{:.1f}".format(self.AreaRequired) + ")", (self.x + pos[0] * delta, self.y + pos[0] * delta), ha = "center", va = "center", color = col, zorder = 11)
+        plt.annotate(self.name + " (" + "{:.2f}".format(self.c) + " / " + "{:.1f}".format(self.AreaRequired) + ")", (self.x + pos[0] * delta, self.y + pos[0] * delta), size = size / 4, ha = "center", va = "center", color = col, zorder = 11) # vortrag

@@ -91,7 +91,7 @@ class ConvexPolygon:
         plt.plot(xs, ys, color = col, zorder=5)
 
         for p in self.V:
-            p.plot()
+            p.plot(pos = [1, -1])
 
     def addRandomSite(self, c):
         # Find random segment of polygon
@@ -148,7 +148,7 @@ class ConvexPolygon:
         return len(self.S)
 
     def plotS(self):
-        [s.plot(marker="x", size=70) for s in self.S]
+        [s.plot(marker="x") for s in self.S]
 
     def plotV(self, **kwargs):
         color = kwargs.get('color', "k")
@@ -165,10 +165,10 @@ class ConvexPolygon:
 
         # draw vertices
         for p in self.V:
-            p.plot(color = color)
+            p.plot(color = color, pos = [1, -1])
 
         # draw area to center
-        plt.annotate("Area = " + "{:.1f}".format(self.area()), (np.average(xs), np.average(ys)), ha="center", va="center", zorder=11, color = color)
+        #plt.annotate("Area = " + "{:.1f}".format(self.area()), (np.average(xs), np.average(ys)), ha="center", va="center", zorder=11, color = color)
 
     def print(self):
         print(self)

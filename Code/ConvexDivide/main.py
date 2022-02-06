@@ -28,7 +28,7 @@ output_configs = {
       "drawPolyn": False,
       "drawInit": True,
       "drawRaw1": False,
-      "drawRawIterative": False,
+      "drawRawIterative": True, ##
       "drawRawResult": True,
       "drawIterative": False,
       "drawResult": True,
@@ -56,12 +56,25 @@ output_configs = {
       "drawPolyn": True,
       "drawInit": True,
       "drawRaw1": True,
-      "drawRawIterative": False,
-      "drawRawResult": True,
+      "drawRawIterative": True,
+      "drawRawResult": False,
       "drawIterative": True,
       "drawResult": True,
       "drawFinal": True,
       "example": 4
+  },
+  "vortrag1": {
+      "annotateStatus": False,
+      "annotateArea": False,
+      "drawPoly1": False,
+      "drawPolyn": True,
+      "drawInit": False,
+      "drawRaw1": True,
+      "drawRawIterative": False,
+      "drawRawResult": False,
+      "drawIterative": False,
+      "drawResult": False,
+      "drawFinal": False
   }
 }
 
@@ -89,6 +102,22 @@ example_configs = {
   "video": {
       "polygon": 1,
       "output_config": "video"
+  },
+  "vortrag0": {
+      "polygon": 6,
+      "output_config": "vortrag1"
+  },
+  "vortrag1": {
+      "polygon": 2,
+      "output_config": "example2"
+  },
+  "vortrag2.1": {
+      "polygon": 3,
+      "output_config": "example2"
+  },
+  "vortrag2.2": {
+      "polygon": 4,
+      "output_config": "example2"
   }
 }
 
@@ -159,6 +188,10 @@ def getExample(index: int, *args: int) -> ConvexPolygon:
         P_init.addSite(Site(8, 1, 0.125, 6))
         P_init.addSite(Site(9, 2, 0.125, 7))
         P_init.addSite(Site(8.333333, 8, 0.125, 8))
+    elif index == 6:
+        P_init.addSite(Site(0, 5, 0.333, 1))
+        P_init.addSite(Site(3, 0, 0.333, 2))
+        P_init.addSite(Site(8, 1, 0.334, 3))
     else:
         print("getExample(" + str(index) + "), Index out of range. No example defined.")
         exit()
@@ -178,7 +211,7 @@ def initPlot():
     plt.xticks(np.arange(-1, 12, step=1))
     plt.yticks(np.arange(-1, 12, step=1))
     plt.grid(zorder=0)
-    plt.tight_layout()
+    #plt.tight_layout()
 
 def compare(val1, val2, operator):
     if operator == ">":
@@ -227,8 +260,8 @@ def ConvexDivide(CP, iter = 1):
             txt6 = ax.text(2, -1.7, status, fontsize = 12)
 
         if drawAnnotation:
-            ann1 = plt.annotate(LS.name, (LS.x - 0.25, LS.y - 0.25), ha="center", va="center", color=color, zorder=11)
-            ann2 = plt.annotate(LE.name, (LE.x - 0.25, LE.y - 0.25), ha="center", va="center", color=color, zorder=11)
+            ann1 = plt.annotate(LS.name, (LS.x - 0.25, LS.y - 0.25), size = 12.5, ha="center", va="center", color=color, zorder=11)  # vortrag hier size = 20
+            ann2 = plt.annotate(LE.name, (LE.x - 0.25, LE.y - 0.25), size = 12.5, ha="center", va="center", color=color, zorder=11)  # vortrag hier size = 20
 
             dist = 0.5
             dx = LE.x - LS.x
@@ -241,15 +274,15 @@ def ConvexDivide(CP, iter = 1):
             PlLX = centerX - dy * dist / len
             PlLY = centerY + dx * dist / len
 
-            ann3 = plt.annotate("PrL", (PrLX, PrLY), ha="center", va="center", color="k", zorder=11, bbox = dict(boxstyle=f"circle,pad={0.4}", fc="white", alpha=0.8))
-            ann4 = plt.annotate("PlL", (PlLX, PlLY), ha="center", va="center", color="k", zorder=11, bbox = dict(boxstyle=f"circle,pad={0.4}", fc="white", alpha=0.8))
+            ann3 = plt.annotate("PrL", (PrLX, PrLY), size = 12, ha="center", va="center", color="k", zorder=11, bbox = dict(boxstyle=f"circle,pad={0.4}", fc="white", alpha=0.8))  # vortrag hier size = 18
+            ann4 = plt.annotate("PlL", (PlLX, PlLY), size = 12, ha="center", va="center", color="k", zorder=11, bbox = dict(boxstyle=f"circle,pad={0.4}", fc="white", alpha=0.8))  # vortrag hier size = 18
         if highlightPoint != False:
             circle1 = plt.scatter(highlightPoint[0], highlightPoint[1], color="orange", s=300, zorder=4)
 
         plt.savefig("out/" + example + '/' + str(iter).zfill(2) + '_' + str(iimg).zfill(4) + '.png')
 
-        if removeLine:
-            ax.lines.pop()
+        if removeLine:      # vortrag hier wegnehmen
+            ax.lines.pop()  # vortrag hier wegnehmen
         if removeArea:
             txt1.remove()
             txt2.remove()
@@ -281,11 +314,11 @@ def ConvexDivide(CP, iter = 1):
 
     if CP.numSites() <= 1:
         if output.get("drawPoly1"):
-            iimg = snapshot(iimg, drawLine = False, drawAnnotation=False, drawArea=False, status="Polygon with number of sites == 1, no partitioning needed")
+            iimg = snapshot(iimg, drawLine = False, drawAnnotation=False, drawArea=False, status="Polygon mit genau einem Standort -> keine Aufteilung erforderlich")
         return [CP], iter
 
     if output.get("drawPolyn"):
-        iimg = snapshot(iimg, drawLine = False, drawAnnotation=False, drawArea=False, status="Polygon with number of sites > 1, partitioning needed")
+        iimg = snapshot(iimg, drawLine = False, drawAnnotation=False, drawArea=False, status="Polygon mit mehr als einem Standort -> Aufteilung erforderlich")
 
     # Initialize line segment L
     LS = Point(CP.W[0].x, CP.W[0].y, "Ls")      # LS at first element of list W
@@ -297,7 +330,7 @@ def ConvexDivide(CP, iter = 1):
     PrL = ConvexPolygon(V=V_PrL, S=[CP.S[0]])
 
     if output.get("drawInit"):
-        iimg = snapshot(iimg, color="darkgrey", linestyle="dotted", removeLine = False, drawArea=False, status="Line initialized from w1 to first site in W")
+        iimg = snapshot(iimg, color="darkgrey", linestyle="dotted", removeLine = False, drawArea=False, status="Initialisierung von L vom ersten Punkt in W zum ersten Standort in W")
 
     def xxx(iimg, **kwargs):
         highlight_pt = kwargs.get("highlight_pt", False)
@@ -305,17 +338,17 @@ def ConvexDivide(CP, iter = 1):
         removeLine = kwargs.get("removeLine", True)
 
         if PrL.area() < PrL.requiredArea():
-            status = "Area(PrL) < AreaRequired(S(PrL)), move Le CCW to next w"
+            status = "Area(PrL) < AreaRequired(S(PrL)), Versch. Le CCW zum nächsten PP in W"
             linestyle = "--"
         else:
             status = "Area(PrL) >= AreaRequired(S(PrL))"
             linestyle = "-"
         if highlight_pt != False:
-            status = status + ", add previous site"
+            status = status + ", vorherigen Standort zu S(PrL) hinzufügen"
         if last_pt == True:
-            status = status + ", last site reached"
+            status = status + ", letzten Standort erreicht"
         iimg = snapshot(iimg, color="royalblue", linestyle=linestyle, status=status, highlightPoint=highlight_pt, removeLine=removeLine)
-        return iimg + 1
+        return iimg
 
     if output.get("drawRaw1"):
         iimg = xxx(iimg)
@@ -349,7 +382,7 @@ def ConvexDivide(CP, iter = 1):
     else:
         case = 3
 
-    switch = {1: [">", "Ls", "CCW", "reduce"], 2: ["<", "Ls", "CW", "increase"], 3: [">", "Le", "CW", "reduce"]}
+    switch = {1: [">", "Ls", "CCW", "verkleinern"], 2: ["<", "Ls", "CW", "vergrößern"], 3: [">", "Le", "CW", "verkleinern"]}
 
     # Case 1: PrL too big from the beginning, Move LS CCW until PrL is small enough to fulfill requirement
     while compare(PrL.area(), PrL.requiredArea(), switch[case][0]):
@@ -361,7 +394,7 @@ def ConvexDivide(CP, iter = 1):
         PrL = ConvexPolygon(V=V_PrL, S=PrL.S)
 
         if output.get("drawIterative"):
-            iimg = snapshot(iimg, color = "royalblue", status= "Move " + switch[case][1] + " in " + switch[case][2] + "-direction to " + switch[case][3] + " area of PrL")
+            iimg = snapshot(iimg, color = "royalblue", status= "Verschiebe " + switch[case][1] + " in " + switch[case][2] + "-Richtung, um die Fläche von PrL zu " + switch[case][3])
 
     V_PrL, V_PlL = cut(CP.V, LS, LE, direction = "both")
 
@@ -369,7 +402,7 @@ def ConvexDivide(CP, iter = 1):
     PlL = ConvexPolygon(V=V_PlL, S=CP.S[len(PrL.S):])
 
     if output.get("drawResult"):
-        iimg = snapshot(iimg, color = "red", linestyle="-", drawAnnotation=True, status="Area(PrL) == AreaRequired(S(PrL)), execute partitioning")
+        iimg = snapshot(iimg, color = "red", linestyle="-", drawAnnotation=True, status="Area(PrL) == AreaRequired(S(PrL)), Zerteile Polygon")
 
     CPis = []
     tmp, iter = ConvexDivide(PrL, iter+1)
@@ -385,7 +418,7 @@ def ConvexDivide(CP, iter = 1):
 step = 0.01 # 0.01
 if __name__ == '__main__':
 
-    example = "example1"
+    example = "video"
     print(example)
 
     example_dict = example_configs[example]
@@ -399,6 +432,8 @@ if __name__ == '__main__':
     arr, iter = ConvexDivide(CP)
     iter += 1
 
+    fig = plt.figure(figsize=(10, 10))
+    ax = fig.add_subplot(1, 1, 1)
     initPlot()  # Initialize plot
     for CPi in arr:
         CPi.plotV()  # Plot vertices and edges of CP
